@@ -1,20 +1,20 @@
-import cv2
-from cvzone.HandTrackingModule import HandDetector
-from cvzone.ClassificationModule import Classifier
-import numpy as np
 import math
 
+import cv2
+import numpy as np
+from cvzone.ClassificationModule import Classifier
+from cvzone.HandTrackingModule import HandDetector
+
 cap = cv2.VideoCapture(0)
-detector = HandDetector(maxHands=1)
+detector = HandDetector(maxHands=2)
 classifier = Classifier("Model/keras_model.h5", "Model/labels.txt")
 
 offset = 20
 imgSize = 300
 
-folder = "Data/C"
-count = 0
-
-labels = ["A", "B", "C"]
+labels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
+          'V', 'W', 'X', 'Y', 'Z']
+# labels = [chr(i) for i in range(ord('A'), ord('Z') + 1)] jugando con posiciones ASCII
 
 while True:
     success, img = cap.read()
@@ -25,7 +25,7 @@ while True:
         hand = hands[0]
         x, y, w, h = hand['bbox']
 
-        #imgWhite = np.ones((imgSize, imgSize, 3), np.uint8)*255
+        # imgWhite = np.ones((imgSize, imgSize, 3), np.uint8)*255
         imgCrop = img[y - offset:y + h + offset, x - offset:x + w + offset]
 
         imgCropShape = imgCrop.shape
@@ -35,7 +35,7 @@ while True:
         if aspectRatio > 1:
             k = imgSize / h
             wCal = math.ceil(k * w)
-            #imgResize = cv2.resize(imgCrop, (wCal, imgSize))
+            # imgResize = cv2.resize(imgCrop, (wCal, imgSize))
             if imgCrop.size > 0:
                 imgResize = cv2.resize(imgCrop, (wCal, imgSize))
             else:
@@ -50,20 +50,21 @@ while True:
         else:
             k = imgSize / w
             hCal = math.ceil(k * h)
-            #imgResize = cv2.resize(imgCrop, (imgSize, hCal))
+            # imgResize = cv2.resize(imgCrop, (imgSize, hCal))
             if imgCrop.size > 0:
                 imgResize = cv2.resize(imgCrop, (imgSize, hCal))
             else:
                 continue
-                
+
             imgResizeShape = imgResize.shape
             hGap = math.ceil((imgSize - hCal) / 2)
             imgWhite[hGap:hCal + hGap, :] = imgResize
             prediction, index = classifier.getPrediction(imgWhite, draw=False)
             print(prediction, index)
 
-        cv2.putText(imgOutput, labels[index], (x, y - 20), cv2.FONT_HERSHEY_TRIPLEX, 2, (255, 0, 255), 2)
-        cv2.rectangle(imgOutput, (x-offset, y-offset), (x + w+offset, y + h+offset), (255, 0, 255), 2)
+        cv2.putText(imgOutput, labels[index], (x, y - 20), cv2.FONT_HERSHEY_TRIPLEX, 2,
+                    (255, 0, 255), 2)
+        cv2.rectangle(imgOutput, (x - offset, y - offset), (x + w + offset, y + h + offset), (255, 0, 255), 2)
         cv2.imshow("ImageCrop", imgCrop)
         cv2.imshow("ImageWhite", imgWhite)
 
