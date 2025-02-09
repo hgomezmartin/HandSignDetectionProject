@@ -6,7 +6,7 @@ from cvzone.ClassificationModule import Classifier
 from cvzone.HandTrackingModule import HandDetector
 
 cap = cv2.VideoCapture(0)
-detector = HandDetector(maxHands=2)
+detector = HandDetector(maxHands=1)
 classifier = Classifier("Model/keras_model.h5", "Model/labels.txt")
 
 offset = 20
@@ -21,15 +21,13 @@ while True:
     imgWhite = np.ones((imgSize, imgSize, 3), np.uint8) * 255
     imgOutput = img.copy()
     hands, img = detector.findHands(img)
+
     if hands:
         hand = hands[0]
         x, y, w, h = hand['bbox']
 
         # imgWhite = np.ones((imgSize, imgSize, 3), np.uint8)*255
         imgCrop = img[y - offset:y + h + offset, x - offset:x + w + offset]
-
-        imgCropShape = imgCrop.shape
-
         aspectRatio = h / w
 
         if aspectRatio > 1:
@@ -41,11 +39,8 @@ while True:
             else:
                 continue
 
-            imgResizeShape = imgResize.shape
             wGap = math.ceil((imgSize - wCal) / 2)
             imgWhite[:, wGap:wCal + wGap] = imgResize
-            prediction, index = classifier.getPrediction(imgWhite, draw=False)
-            print(prediction, index)
 
         else:
             k = imgSize / w
@@ -59,12 +54,20 @@ while True:
             imgResizeShape = imgResize.shape
             hGap = math.ceil((imgSize - hCal) / 2)
             imgWhite[hGap:hCal + hGap, :] = imgResize
-            prediction, index = classifier.getPrediction(imgWhite, draw=False)
-            print(prediction, index)
 
-        cv2.putText(imgOutput, labels[index], (x, y - 20), cv2.FONT_HERSHEY_TRIPLEX, 2,
+        prediction, index = classifier.getPrediction(imgWhite, draw=False)
+        prediction_percentage = [f"{p * 100:.1f}%" for p in prediction]
+        print(prediction_percentage, index)
+
+        confidence = prediction[index] * 100  # Convertir a porcentaje
+        confidence_text = f"{round(confidence, 1)}%"  # Redondeamos a 1 decimal
+
+        text = f"{labels[index]} {confidence_text}"
+
+        cv2.putText(imgOutput, text, (x, y - 20), cv2.FONT_HERSHEY_TRIPLEX, 2,
                     (255, 0, 255), 2)
         cv2.rectangle(imgOutput, (x - offset, y - offset), (x + w + offset, y + h + offset), (255, 0, 255), 2)
+
         cv2.imshow("ImageCrop", imgCrop)
         cv2.imshow("ImageWhite", imgWhite)
 
