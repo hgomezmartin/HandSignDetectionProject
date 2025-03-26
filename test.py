@@ -7,10 +7,11 @@ from cvzone.HandTrackingModule import HandDetector
 
 cap = cv2.VideoCapture(0)
 detector = HandDetector(maxHands=1)
-classifier = Classifier("Model/keras_model.h5", "Model/labels.txt")
+classifier = Classifier("Model/MyCNN/UltEntreno/224x224/my_cnn_model.h5",
+                        "Model/MyCNN/UltEntreno/224x224/class_labels.txt")
 
 offset = 20
-imgSize = 300
+imgSize = 224
 
 labels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
           'V', 'W', 'X', 'Y', 'Z']
@@ -55,7 +56,11 @@ while True:
             hGap = math.ceil((imgSize - hCal) / 2)
             imgWhite[hGap:hCal + hGap, :] = imgResize
 
-        prediction, index = classifier.getPrediction(imgWhite, draw=False)
+        # Cambio crucial: normalizar la imagen
+        # Convierte imgWhite a float32 y escala a [0,1] para que coincida con el entrenamiento.
+        imgWhite_norm = imgWhite.astype(np.float32) / 255.0
+
+        prediction, index = classifier.getPrediction(imgWhite_norm, draw=False)
         prediction_percentage = [f"{p * 100:.1f}%" for p in prediction]
         print(prediction_percentage, index)
 
@@ -64,7 +69,7 @@ while True:
 
         text = f"{labels[index]} {confidence_text}"
 
-        cv2.putText(imgOutput, text, (x, y - 20), cv2.FONT_HERSHEY_TRIPLEX, 2,
+        cv2.putText(imgOutput, text, (x, y - 20), cv2.FONT_HERSHEY_SIMPLEX, 2,
                     (255, 0, 255), 2)
         cv2.rectangle(imgOutput, (x - offset, y - offset), (x + w + offset, y + h + offset), (255, 0, 255), 2)
 

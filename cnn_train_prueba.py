@@ -2,16 +2,16 @@ import os
 
 import cv2
 import numpy as np
-from sklearn.model_selection import train_test_split
-from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Dense, Dropout, BatchNormalization, GlobalAveragePooling2D
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 # Ajusta estas constantes a tu gusto
-IMG_SIZE = 300
+IMG_SIZE = 224
 EPOCHS = 10  # Número de épocas de entrenamiento
 BATCH_SIZE = 32  # Tamaño del batch
-DATA_DIR = "Data"  # Directorio donde guardamos las carpetas A, B, C... 0, 1, 2...
+DATA_DIR = "Data"  # Directorio donde guardamos las carpetas A, B, C...
 MODEL_PATH = "Model/my_cnn_model.h5"  # Ruta donde se guardará el modelo
 
 
@@ -58,28 +58,36 @@ def load_dataset(data_dir=DATA_DIR, img_size=IMG_SIZE):
 
 
 def build_cnn_model(input_shape, num_classes):
-    """
-    Crea y devuelve un modelo CNN básico con Keras.
-    """
+    # Crea y devuelve un modelo CNN  con Keras.
     model = Sequential()
 
     # Capa convolucional 1
-    model.add(Conv2D(32, (3, 3), activation='relu', input_shape=input_shape))
+    model.add(Conv2D(filters=32, kernel_size=(3, 3), activation='relu', input_shape=input_shape))
+    model.add(BatchNormalization())
     model.add(MaxPooling2D((2, 2)))
 
     # Capa convolucional 2
-    model.add(Conv2D(64, (3, 3), activation='relu'))
+    model.add(Conv2D(filters=64, kernel_size=(3, 3), activation='relu'))
+    model.add(BatchNormalization())
     model.add(MaxPooling2D((2, 2)))
 
-    # Capa convolucional 3 (opcional, puedes añadir más)
-    model.add(Conv2D(128, (3, 3), activation='relu'))
+    # Capa convolucional 3
+    model.add(Conv2D(filters=128, kernel_size=(3, 3), activation='relu'))
+    model.add(BatchNormalization())
+    model.add(MaxPooling2D((2, 2)))
+
+    # Capa convolucional 4
+    model.add(Conv2D(filters=256, kernel_size=(3, 3), activation='relu'))
+    model.add(BatchNormalization())
     model.add(MaxPooling2D((2, 2)))
 
     # Aplanado
-    model.add(Flatten())
+    # model.add(Flatten())
+
+    model.add(GlobalAveragePooling2D())
 
     # Capa densa
-    model.add(Dense(128, activation='relu'))
+    model.add(Dense(units=512, activation='relu'))
     model.add(Dropout(0.5))
 
     # Capa de salida
@@ -94,43 +102,57 @@ def build_cnn_model(input_shape, num_classes):
 
 
 def main():
-    # 1. Carga el dataset
-    X, y, classes = load_dataset(DATA_DIR, IMG_SIZE)
-    print(f"Dataset cargado. Total imágenes: {len(X)}, Clases: {classes}")
-
-    # 2. Mezclar y dividir en train/validation
-    X_train, X_val, y_train, y_val = train_test_split(
-        X, y, test_size=0.2, random_state=42, stratify=y
+    # 1. Configurar el ImageDataGenerator con validación (20% de los datos)
+    datagen = ImageDataGenerator(
+        rescale=1. / 255,
+        validation_split=0.2
     )
 
-    print(f"Conjunto de entrenamiento: {X_train.shape}, Conjunto de validación: {X_val.shape}")
+    train_generator = datagen.flow_from_directory(
+        DATA_DIR,
+        target_size=(IMG_SIZE, IMG_SIZE),
+        batch_size=BATCH_SIZE,
+        class_mode='sparse',  # Usamos etiquetas enteras
+        subset='training'
+    )
 
-    # 3. Construir el modelo
+    validation_generator = datagen.flow_from_directory(
+        DATA_DIR,
+        target_size=(IMG_SIZE, IMG_SIZE),
+        batch_size=BATCH_SIZE,
+        class_mode='sparse',
+        subset='validation'
+    )
+
+    print(f"Clases encontradas: {train_generator.class_indices}")
+
+    # 2. Construir el modelo
     input_shape = (IMG_SIZE, IMG_SIZE, 3)
-    num_classes = len(classes)
+    num_classes = len(train_generator.class_indices)
     model = build_cnn_model(input_shape, num_classes)
     model.summary()
 
-    # 4. Entrenar el modelo
+    # 3. Entrenar el modelo usando los generadores
     history = model.fit(
-        X_train, y_train,
-        validation_data=(X_val, y_val),
+        train_generator,
+        validation_data=validation_generator,
         epochs=EPOCHS,
-        batch_size=BATCH_SIZE,
         verbose=1
     )
 
-    # 5. Guardar el modelo
+    # 4. Guardar el modelo
+    os.makedirs(os.path.dirname(MODEL_PATH), exist_ok=True)
     model.save(MODEL_PATH)
     print(f"Modelo guardado en: {MODEL_PATH}")
 
-    # 6. Evaluar en validación (o test si tuviera)
-    val_loss, val_acc = model.evaluate(X_val, y_val, verbose=0)
+    # 5. Evaluar en validación / test si tuviera
+    val_loss, val_acc = model.evaluate(validation_generator, verbose=0)
     print(f"Precisión en validación: {val_acc * 100:.2f}%, Pérdida: {val_loss:.4f}")
 
-    # 7. Guardamos también el mapeo de clases a un archivo .txt
+    # 6. Guardamos también el mapeo de clases a un archivo .txt
     with open("Model/class_labels.txt", "w") as f:
-        for cls_name in classes:
+        # Escribimos las clases ordenadas por su índice
+        for cls_name in sorted(train_generator.class_indices, key=train_generator.class_indices.get):
             f.write(f"{cls_name}\n")
     print("Se ha guardado class_labels.txt con las clases.")
 
