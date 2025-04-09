@@ -2,3 +2,5 @@ cvzone==1.5.6
 opencv-python==4.10.0.84
 numpy==1.26.4
 tensorflow==2.12.1
+keras-tuner==1.4.7
+

@@ -7,7 +7,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
-# Ajusta estas constantes a tu gusto
+# Constantes
 IMG_SIZE = 224
 EPOCHS = 10  # Número de épocas de entrenamiento
 BATCH_SIZE = 32  # Tamaño del batch

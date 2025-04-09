@@ -62,15 +62,16 @@ class RealTimeASLClassifier:
                 break
 
             # Espeja la imagen para mayor naturalidad en un futuro?, duplicar dataset espejado con data augmentation?
-            #img = cv2.flip(img, 1)
-            img_output = img.copy()
+            # img = cv2.flip(img, 1)
 
             # Detecta la mano (si la hay)
             hands, img = self.detector.findHands(img)
+            img_output = img.copy()
+
             if hands:
                 hand = hands[0]
                 bbox = hand['bbox']  # x, y, w, h
-                processed_img = self.preprocess(img_output, bbox)
+                processed_img = self.preprocess(img, bbox)
                 if processed_img is not None:
                     # Agrega dimensión batch (1, img_size, img_size, 3)
                     input_img = np.expand_dims(processed_img, axis=0)
@@ -82,14 +83,14 @@ class RealTimeASLClassifier:
 
                     # Dibuja la caja y el resultado en la imagen de salida
                     x, y, w, h = bbox
-                    cv2.rectangle(img_output, (x - self.offset, y - self.offset),
+                    cv2.rectangle(img, (x - self.offset, y - self.offset),
                                   (x + w + self.offset, y + h + self.offset), (255, 0, 255), 2)
-                    cv2.putText(img_output, f"{label} {confidence:.1f}%", (x, y - 10),
-                                cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 0, 255), 2)
+                    cv2.putText(img, f"{label} {confidence:.1f}%", (x, y - 20),
+                                cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 0, 255), 2)
                     # Muestra la imagen preprocesada (recortada y ajustada)
                     cv2.imshow("Processed", processed_img)
 
-            cv2.imshow("ASL Recognition", img_output)
+            cv2.imshow("ASL Recognition", img)
             key = cv2.waitKey(1)
             if key == ord('q'):
                 break
@@ -100,7 +101,10 @@ class RealTimeASLClassifier:
 
 if __name__ == "__main__":
     # Ruta al modelo y a las etiquetas según se han guardado tras el entrenamiento
-    model_path = "Model/my_cnn_model.h5"
-    labels_path = "Model/class_labels.txt"
+    # model_path = "Model/MyCNN/UltEntreno/224x224/my_cnn_model.h5"
+    # labels_path = "Model/MyCNN/UltEntreno/224x224/class_labels.txt"
+
+    model_path = "Model/keras_model.h5"
+    labels_path = "Model/labels.txt"
     classifier = RealTimeASLClassifier(model_path, labels_path, img_size=224, offset=20)
     classifier.run()
