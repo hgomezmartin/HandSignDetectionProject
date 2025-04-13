@@ -1,6 +1,7 @@
 import os
 
 import cv2
+import matplotlib.pyplot as plt
 import numpy as np
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Dense, Dropout, BatchNormalization, GlobalAveragePooling2D
 from tensorflow.keras.models import Sequential
@@ -156,6 +157,28 @@ def main():
             f.write(f"{cls_name}\n")
     print("Se ha guardado class_labels.txt con las clases.")
 
+    # 7. Imprimimos las graficas de funcion de pérdida y de exactitud
+    # Gráfico de la función de pérdida
+    plt.figure(figsize=(8, 6))
+    plt.title("Loss")
+    plt.plot(history.epoch, history.history["loss"], label="Training Loss")
+    plt.plot(history.epoch, history.history["val_loss"], label="Validation Loss")
+    plt.xlabel("Epoch")
+    plt.ylabel("Loss")
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
+    # Gráfico de la exactitud
+    plt.figure(figsize=(8, 6))
+    plt.title("Accuracy")
+    plt.plot(history.epoch, history.history["accuracy"], label="Training Accuracy")
+    plt.plot(history.epoch, history.history["val_accuracy"], label="Validation Accuracy")
+    plt.xlabel("Epoch")
+    plt.ylabel("Accuracy")
+    plt.legend()
+    plt.grid(True)
+    plt.show()
 
 if __name__ == "__main__":
     main()

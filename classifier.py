@@ -104,7 +104,7 @@ if __name__ == "__main__":
     # model_path = "Model/MyCNN/UltEntreno/224x224/my_cnn_model.h5"
     # labels_path = "Model/MyCNN/UltEntreno/224x224/class_labels.txt"
 
-    model_path = "Model/keras_model.h5"
-    labels_path = "Model/labels.txt"
+    model_path = "Model/TM/keras_model.h5"
+    labels_path = "Model/TM/labels.txt"
     classifier = RealTimeASLClassifier(model_path, labels_path, img_size=224, offset=20)
     classifier.run()
