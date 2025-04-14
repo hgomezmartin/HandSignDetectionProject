@@ -67,9 +67,8 @@ def copy_and_shuffle_images(src_dir, dst_dir):
     print(f"Se ha creado '{dst_dir}' con las mismas subcarpetas que '{src_dir}', pero con imágenes barajadas.")
 
 
-# Ejemplo de uso
 if __name__ == "__main__":
-    src_directory = "Data/Data_ordered"  # Tu carpeta original
+    src_directory = "Data/Data_ordered"  # Carpeta original
     dst_directory = "Data/Data_disordered"  # Nueva carpeta con imágenes desordenadas
 
     copy_and_shuffle_images(src_directory, dst_directory)
