@@ -1,9 +1,10 @@
-
 import json
 import os
+import random
 
 import cv2
 import keras_tuner as kt
+import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras.layers import (
@@ -13,15 +14,21 @@ from tensorflow.keras.layers import (
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.regularizers import l2
 
 # --- Constantes ---
 IMG_SIZE = 224
 EPOCHS = 70
 DATA_DIR = "/content/Data_disordered"
 MODEL_PATH = "/content/drive/MyDrive/HandSignDetectionProject/Model/RS/my_cnn_model_tuned.h5"  ##cambiarlo
+CLASS_LABELS_PATH = "/content/drive/MyDrive/HandSignDetectionProject/Model/RS/class_labels.txt"
 HPARAMS_JSON_PATH = "/content/drive/MyDrive/HandSignDetectionProject/Model/RS/best_hparams.json"
 HPARAMS_HTML_PATH = "/content/drive/MyDrive/HandSignDetectionProject/Model/RS/best_hparams.html"
 
+# Establecemos esras semillas para la reproducibilidad
+random.seed(42)
+np.random.seed(42)
+tf.random.set_seed(42)
 
 def load_dataset(data_dir=DATA_DIR, img_size=IMG_SIZE):
     """
@@ -57,12 +64,12 @@ def load_dataset(data_dir=DATA_DIR, img_size=IMG_SIZE):
     return images, labels, classes
 
 
-def build_model(hp, input_shape=(224, 224, 3), num_classes=26):
+def build_model(hp, input_shape, num_classes):
     model = Sequential()
 
     # Hiperparámetros para la activación #
 
-    dropout_rate = hp.Float('dropout_rate', min_value=0.0, max_value=0.7, step=0.1)
+    dropout_rate = hp.Float('dropout_rate', min_value=0.2, max_value=0.7, step=0.1)
     lr = hp.Choice('learning_rate', values=[0.0001, 0.001])
     ks = hp.Choice('kernel_size', values=[3, 5])
 
@@ -89,8 +96,11 @@ def build_model(hp, input_shape=(224, 224, 3), num_classes=26):
     # Global Average Pooling
     model.add(GlobalAveragePooling2D())
 
+    # Regularización l2
+    l2_reg = hp.Float('l2_reg', min_value=1e-6, max_value=1e-3, sampling='log')
+
     # Capa densa intermedia
-    model.add(Dense(512, activation='relu'))
+    model.add(Dense(512, activation='relu'), kernel_regularizer=l2(l2_reg))
 
     # Dropout
     model.add(Dropout(dropout_rate))
@@ -143,7 +153,7 @@ def main():
         hypermodel=lambda hp: build_model(
             hp,
             input_shape=(IMG_SIZE, IMG_SIZE, 3),
-            num_classes=num_classes
+            num_classes=len(train_generator.class_indices)
         ),
         objective='val_accuracy',
         max_trials=2,
@@ -205,8 +215,7 @@ def main():
         train_generator,
         epochs=EPOCHS,
         validation_data=validation_generator,
-        workers=4,
-        use_multiprocessing=True
+        verbose=1
     )
 
     # 6. Guardar el mejor modelo
@@ -214,15 +223,38 @@ def main():
     best_model.save(MODEL_PATH)
     print(f"Modelo guardado en: {MODEL_PATH}")
 
-    # 7. Evaluar
-    val_loss, val_acc = best_model.evaluate(validation_generator, verbose=0)
-    print(f"Precisión en validación: {val_acc * 100:.2f}%, Pérdida: {val_loss:.4f}")
-
-    # 8. Guardar mapeo de clases
-    with open("/content/drive/MyDrive/HandSignDetectionProject/Model/RS/class_labels.txt", "w") as f:
+    # 7. Guardar mapeo de clases
+    with open(CLASS_LABELS_PATH, "w") as f:
         for cls_name in sorted(train_generator.class_indices, key=train_generator.class_indices.get):
             f.write(f"{cls_name}\n")
     print("Se ha guardado class_labels.txt con las clases.")
+
+    # 8. Evaluar
+    val_loss, val_acc = best_model.evaluate(validation_generator, verbose=0)
+    print(f"Precisión en validación: {val_acc * 100:.2f}%, Pérdida: {val_loss:.4f}")
+
+    # 9. Imprimimos las graficas de funcion de pérdida y de exactitud
+    # Gráfico de la función de pérdida
+    plt.figure(figsize=(8, 6))
+    plt.title("Loss")
+    plt.plot(history.epoch, history.history["loss"], label="Training Loss")
+    plt.plot(history.epoch, history.history["val_loss"], label="Validation Loss")
+    plt.xlabel("Epoch")
+    plt.ylabel("Loss")
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
+    # Gráfico de la exactitud
+    plt.figure(figsize=(8, 6))
+    plt.title("Accuracy")
+    plt.plot(history.epoch, history.history["accuracy"], label="Training Accuracy")
+    plt.plot(history.epoch, history.history["val_accuracy"], label="Validation Accuracy")
+    plt.xlabel("Epoch")
+    plt.ylabel("Accuracy")
+    plt.legend()
+    plt.grid(True)
+    plt.show()
 
 if __name__ == "__main__":
     main()

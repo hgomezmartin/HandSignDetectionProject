@@ -1,12 +1,16 @@
 import os
+import random
 
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
+import tensorflow as tf
+from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Dense, Dropout, BatchNormalization, GlobalAveragePooling2D
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.regularizers import l2
 
 # Constantes
 IMG_SIZE = 224
@@ -14,6 +18,12 @@ EPOCHS = 70  # Número de épocas de entrenamiento
 BATCH_SIZE = 32  # Tamaño del batch
 DATA_DIR = "Data/Data_disordered"  # Directorio donde guardamos las carpetas A, B, C...
 MODEL_PATH = "Model/my_cnn_model.h5"  # Ruta donde se guardará el modelo
+CLASS_LABELS_PATH = "Model/class_labels.txt"
+
+# Establecemos esras semillas para la reproducibilidad
+random.seed(42)
+np.random.seed(42)
+tf.random.set_seed(42)
 
 
 def load_dataset(data_dir=DATA_DIR, img_size=IMG_SIZE):
@@ -82,13 +92,10 @@ def build_cnn_model(input_shape, num_classes):
     model.add(BatchNormalization())
     model.add(MaxPooling2D((2, 2)))
 
-    # Aplanado
-    # model.add(Flatten())
-
     model.add(GlobalAveragePooling2D())
 
     # Capa densa
-    model.add(Dense(units=512, activation='relu'))
+    model.add(Dense(units=512, activation='relu', kernel_regularizer=l2(1e-4)))
     model.add(Dropout(0.5))
 
     # Capa de salida
@@ -103,12 +110,36 @@ def build_cnn_model(input_shape, num_classes):
 
 
 def main():
-    # 1. Configurar el ImageDataGenerator con validación (20% de los datos)
-    datagen = ImageDataGenerator(
-        rescale=1. / 255,
-        validation_split=0.2
+    # 0. Implementacion del data augmentation
+    # Solo para entrenamiento
+    """
+    train_datagen = ImageDataGenerator(
+        rescale=1.0 / 255,
+        rotation_range=15,  # rotación ±15°
+        zoom_range=0.1,  # zoom ±10%
+        width_shift_range=0.1,  # desplazamiento horizontal ±10%
+        height_shift_range=0.1,  # desplazamiento vertical ±10%
+        brightness_range=[0.8, 1.2],  # brillo entre 80–120%
+        horizontal_flip=True,  # volteo horizontal
+        fill_mode='reflect',  # rellena bordes reflejando pixeles
+        validation_split=0.2,
+        seed=42  # fija shuffle + aug para reproducibilidad
+
     )
 
+    # 2. Solo rescale para validación
+    val_datagen = ImageDataGenerator(
+        rescale=1.0 / 255,
+        validation_split=0.2
+    )
+    """
+
+    # 1. Configurar el ImageDataGenerator con validación (20% de los datos)
+    datagen = ImageDataGenerator(
+        rescale=1.0 / 255,
+        validation_split=0.2
+    )
+    # train_generator = train_datagen.flow_from_directory(
     train_generator = datagen.flow_from_directory(
         DATA_DIR,
         target_size=(IMG_SIZE, IMG_SIZE),
@@ -117,6 +148,7 @@ def main():
         subset='training'
     )
 
+    # validation_generator = val_datagen.flow_from_directory(
     validation_generator = datagen.flow_from_directory(
         DATA_DIR,
         target_size=(IMG_SIZE, IMG_SIZE),
@@ -133,11 +165,19 @@ def main():
     model = build_cnn_model(input_shape, num_classes)
     model.summary()
 
+    earlystop_cb = EarlyStopping(
+        monitor="val_accuracy",
+        patience=5,
+        restore_best_weights=True,
+        verbose=1
+    )
+
     # 3. Entrenar el modelo usando los generadores
     history = model.fit(
         train_generator,
         epochs=EPOCHS,
         validation_data=validation_generator,
+        callbacks=[earlystop_cb],
         verbose=1
     )
 
@@ -146,16 +186,16 @@ def main():
     model.save(MODEL_PATH)
     print(f"Modelo guardado en: {MODEL_PATH}")
 
-    # 5. Evaluar en validación / test si tuviera
-    val_loss, val_acc = model.evaluate(validation_generator, verbose=0)
-    print(f"Precisión en validación: {val_acc * 100:.2f}%, Pérdida: {val_loss:.4f}")
-
-    # 6. Guardamos también el mapeo de clases a un archivo .txt
-    with open("Model/class_labels.txt", "w") as f:
+    # 5. Guardamos también el mapeo de clases a un archivo .txt
+    with open(CLASS_LABELS_PATH, "w") as f:
         # Escribimos las clases ordenadas por su índice
         for cls_name in sorted(train_generator.class_indices, key=train_generator.class_indices.get):
             f.write(f"{cls_name}\n")
     print("Se ha guardado class_labels.txt con las clases.")
+
+    # 6. Evaluar en validación / test si tuviera
+    val_loss, val_acc = model.evaluate(validation_generator, verbose=0)
+    print(f"Precisión en validación: {val_acc * 100:.2f}%, Pérdida: {val_loss:.4f}")
 
     # 7. Imprimimos las graficas de funcion de pérdida y de exactitud
     # Gráfico de la función de pérdida
