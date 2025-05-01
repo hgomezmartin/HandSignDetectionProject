@@ -22,6 +22,7 @@ EPOCHS = 70
 DATA_DIR = "/content/Data_disordered"
 MODEL_PATH = "/content/drive/MyDrive/HandSignDetectionProject/Model/RS/my_cnn_model_tuned.h5"  ##cambiarlo
 CLASS_LABELS_PATH = "/content/drive/MyDrive/HandSignDetectionProject/Model/RS/class_labels.txt"
+PLOTS_PATH = "Model/Model_NotAugmented/Plots"
 HPARAMS_JSON_PATH = "/content/drive/MyDrive/HandSignDetectionProject/Model/RS/best_hparams.json"
 HPARAMS_HTML_PATH = "/content/drive/MyDrive/HandSignDetectionProject/Model/RS/best_hparams.html"
 
@@ -109,7 +110,6 @@ def build_model(hp, input_shape, num_classes):
     model.add(Dense(num_classes, activation='softmax'))
 
     # Learning rate
-
     model.compile(
         optimizer=Adam(learning_rate=lr),
         loss='sparse_categorical_crossentropy',
@@ -143,7 +143,7 @@ def main():
     )
 
     num_classes = len(train_generator.class_indices)
-    print("Clases encontradas:", train_generator.class_indices)
+    print(f"Clases encontradas (en total {num_classes}): {train_generator.class_indices}")
 
     # 1.5. verificamos si esta utilizando la gpu
     print("Dispositivos GPU disponibles:", tf.config.list_physical_devices('GPU'))
@@ -153,7 +153,7 @@ def main():
         hypermodel=lambda hp: build_model(
             hp,
             input_shape=(IMG_SIZE, IMG_SIZE, 3),
-            num_classes=len(train_generator.class_indices)
+            num_classes=num_classes
         ),
         objective='val_accuracy',
         max_trials=2,
@@ -234,6 +234,8 @@ def main():
     print(f"Precisión en validación: {val_acc * 100:.2f}%, Pérdida: {val_loss:.4f}")
 
     # 9. Imprimimos las graficas de funcion de pérdida y de exactitud
+    os.makedirs(PLOTS_PATH, exist_ok=True)
+
     # Gráfico de la función de pérdida
     plt.figure(figsize=(8, 6))
     plt.title("Loss")
@@ -243,6 +245,9 @@ def main():
     plt.ylabel("Loss")
     plt.legend()
     plt.grid(True)
+    loss_path = os.path.join(PLOTS_PATH, "loss.png")
+    plt.savefig(loss_path, dpi=150)
+    print(f"Guardado gráfico de Pérdida/Loss en: {loss_path}")
     plt.show()
 
     # Gráfico de la exactitud
@@ -254,6 +259,9 @@ def main():
     plt.ylabel("Accuracy")
     plt.legend()
     plt.grid(True)
+    acc_path = os.path.join(PLOTS_PATH, "accuracy.png")
+    plt.savefig(acc_path, dpi=150)
+    print(f"Guardado gráfico de Exactitud/Accuracy en: {acc_path}")
     plt.show()
 
 if __name__ == "__main__":

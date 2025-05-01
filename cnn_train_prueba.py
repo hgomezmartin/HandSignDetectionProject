@@ -17,8 +17,9 @@ IMG_SIZE = 224
 EPOCHS = 70  # Número de épocas de entrenamiento
 BATCH_SIZE = 32  # Tamaño del batch
 DATA_DIR = "Data/Data_disordered"  # Directorio donde guardamos las carpetas A, B, C...
-MODEL_PATH = "Model/my_cnn_model.h5"  # Ruta donde se guardará el modelo
-CLASS_LABELS_PATH = "Model/class_labels.txt"
+MODEL_PATH = "Model/Model_NotAugmented/my_cnn_model.h5"  # Ruta donde se guardará el modelo
+CLASS_LABELS_PATH = "Model/Model_NotAugmented/class_labels.txt"
+PLOTS_PATH = "Model/Model_NotAugmented/Plots"
 
 # Establecemos esras semillas para la reproducibilidad
 random.seed(42)
@@ -157,11 +158,12 @@ def main():
         subset='validation'
     )
 
-    print(f"Clases encontradas: {train_generator.class_indices}")
+    num_classes = len(train_generator.class_indices)
+    print(f"Clases encontradas (en total {num_classes}): {train_generator.class_indices}")
 
     # 2. Construir el modelo
     input_shape = (IMG_SIZE, IMG_SIZE, 3)
-    num_classes = len(train_generator.class_indices)
+    num_classes = num_classes
     model = build_cnn_model(input_shape, num_classes)
     model.summary()
 
@@ -198,6 +200,8 @@ def main():
     print(f"Precisión en validación: {val_acc * 100:.2f}%, Pérdida: {val_loss:.4f}")
 
     # 7. Imprimimos las graficas de funcion de pérdida y de exactitud
+    os.makedirs(PLOTS_PATH, exist_ok=True)
+
     # Gráfico de la función de pérdida
     plt.figure(figsize=(8, 6))
     plt.title("Loss")
@@ -207,6 +211,9 @@ def main():
     plt.ylabel("Loss")
     plt.legend()
     plt.grid(True)
+    loss_path = os.path.join(PLOTS_PATH, "loss.png")
+    plt.savefig(loss_path, dpi=150)
+    print(f"Guardado gráfico de Pérdida/Loss en: {loss_path}")
     plt.show()
 
     # Gráfico de la exactitud
@@ -218,6 +225,9 @@ def main():
     plt.ylabel("Accuracy")
     plt.legend()
     plt.grid(True)
+    acc_path = os.path.join(PLOTS_PATH, "accuracy.png")
+    plt.savefig(acc_path, dpi=150)
+    print(f"Guardado gráfico de Exactitud/Accuracy en: {acc_path}")
     plt.show()
 
 if __name__ == "__main__":
