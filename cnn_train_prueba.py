@@ -10,9 +10,9 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 # Constantes
 IMG_SIZE = 224
-EPOCHS = 10  # Número de épocas de entrenamiento
+EPOCHS = 70  # Número de épocas de entrenamiento
 BATCH_SIZE = 32  # Tamaño del batch
-DATA_DIR = "Data"  # Directorio donde guardamos las carpetas A, B, C...
+DATA_DIR = "Data/Data_disordered"  # Directorio donde guardamos las carpetas A, B, C...
 MODEL_PATH = "Model/my_cnn_model.h5"  # Ruta donde se guardará el modelo
 
 
@@ -136,8 +136,8 @@ def main():
     # 3. Entrenar el modelo usando los generadores
     history = model.fit(
         train_generator,
-        validation_data=validation_generator,
         epochs=EPOCHS,
+        validation_data=validation_generator,
         verbose=1
     )
 

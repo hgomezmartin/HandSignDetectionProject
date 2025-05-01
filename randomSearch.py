@@ -18,7 +18,7 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 IMG_SIZE = 224
 EPOCHS = 70
 DATA_DIR = "/content/Data_disordered"
-MODEL_PATH = "/content/drive/MyDrive/HandSignDetectionProject/Model/RS/my_cnn_model_tuned.h5"
+MODEL_PATH = "/content/drive/MyDrive/HandSignDetectionProject/Model/RS/my_cnn_model_tuned.h5"  ##cambiarlo
 HPARAMS_JSON_PATH = "/content/drive/MyDrive/HandSignDetectionProject/Model/RS/best_hparams.json"
 HPARAMS_HTML_PATH = "/content/drive/MyDrive/HandSignDetectionProject/Model/RS/best_hparams.html"
 
@@ -61,41 +61,28 @@ def build_model(hp, input_shape=(224, 224, 3), num_classes=26):
     model = Sequential()
 
     # Hiperparámetros para la activación #
-    conv_activation = hp.Choice('conv_activation', values=['relu', 'tanh', 'sigmoid'])
-    dense_activation = hp.Choice('dense_activation', values=['relu', 'tanh', 'sigmoid'])
-    filters_1 = hp.Int('filters_1', min_value=32, max_value=256, step=32)
-    filters_2 = hp.Int('filters_2', min_value=32, max_value=256, step=32)
-    filters_3 = hp.Int('filters_3', min_value=64, max_value=512, step=64)
-    filters_4 = hp.Int('filters_4', min_value=64, max_value=512, step=64)
-    dense_units = hp.Int('dense_units', min_value=128, max_value=1024, step=128)
+
     dropout_rate = hp.Float('dropout_rate', min_value=0.0, max_value=0.7, step=0.1)
-    lr = hp.Choice('learning_rate', values=[0.0001, 0.0005, 0.001])
+    lr = hp.Choice('learning_rate', values=[0.0001, 0.001])
     ks = hp.Choice('kernel_size', values=[3, 5])
 
-    # Capa conv 1
-
-    model.add(Conv2D(filters=filters_1,
-                     kernel_size=(ks, ks),
-                     activation=conv_activation,
-                     input_shape=input_shape))
+    # Capa convolucional 1
+    model.add(Conv2D(filters=32, kernel_size=(ks, ks), activation='relu', input_shape=input_shape))
     model.add(BatchNormalization())
     model.add(MaxPooling2D((2, 2)))
 
-    # Capa conv 2
-
-    model.add(Conv2D(filters=filters_2, kernel_size=(ks, ks), activation=conv_activation))
+    # Capa convolucional 2
+    model.add(Conv2D(filters=64, kernel_size=(ks, ks), activation='relu'))
     model.add(BatchNormalization())
     model.add(MaxPooling2D((2, 2)))
 
-    # Capa conv 3
-
-    model.add(Conv2D(filters=filters_3, kernel_size=(ks, ks), activation=conv_activation))
+    # Capa convolucional 3
+    model.add(Conv2D(filters=128, kernel_size=(ks, ks), activation='relu'))
     model.add(BatchNormalization())
     model.add(MaxPooling2D((2, 2)))
 
-    # Capa conv 4
-
-    model.add(Conv2D(filters=filters_4, kernel_size=(ks, ks), activation=conv_activation))
+    # Capa convolucional 4
+    model.add(Conv2D(filters=256, kernel_size=(ks, ks), activation='relu'))
     model.add(BatchNormalization())
     model.add(MaxPooling2D((2, 2)))
 
@@ -103,11 +90,9 @@ def build_model(hp, input_shape=(224, 224, 3), num_classes=26):
     model.add(GlobalAveragePooling2D())
 
     # Capa densa intermedia
-
-    model.add(Dense(dense_units, activation=dense_activation))
+    model.add(Dense(512, activation='relu'))
 
     # Dropout
-
     model.add(Dropout(dropout_rate))
 
     # Capa de salida
