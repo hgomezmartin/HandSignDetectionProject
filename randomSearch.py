@@ -98,7 +98,7 @@ def build_model(hp, input_shape, num_classes):
     model.add(GlobalAveragePooling2D())
 
     # Regularización l2
-    l2_reg = hp.Float('l2_reg', min_value=1e-6, max_value=1e-3, sampling='log')
+    l2_reg = hp.Float('l2_reg', min_value=0.000001, max_value=0.001, sampling='log')
 
     # Capa densa intermedia
     model.add(Dense(512, activation='relu'), kernel_regularizer=l2(l2_reg))

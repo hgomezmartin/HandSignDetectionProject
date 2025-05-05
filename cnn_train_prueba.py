@@ -5,6 +5,7 @@ import cv2
 import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
+from keras.callbacks import ReduceLROnPlateau
 from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Dense, Dropout, BatchNormalization, GlobalAveragePooling2D
 from tensorflow.keras.models import Sequential
@@ -17,9 +18,9 @@ IMG_SIZE = 224
 EPOCHS = 70  # Número de épocas de entrenamiento
 BATCH_SIZE = 32  # Tamaño del batch
 DATA_DIR = "Data/Data_disordered"  # Directorio donde guardamos las carpetas A, B, C...
-MODEL_PATH = "Model/Model_NotAugmented/my_cnn_model.h5"  # Ruta donde se guardará el modelo
-CLASS_LABELS_PATH = "Model/Model_NotAugmented/class_labels.txt"
-PLOTS_PATH = "Model/Model_NotAugmented/Plots"
+MODEL_PATH = "Model/Augmented_vs_NotAugmented/Model_Augmented/my_cnn_model.h5"  # Ruta donde se guardará el modelo
+CLASS_LABELS_PATH = "Model/Augmented_vs_NotAugmented/Model_Augmented/class_labels.txt"
+PLOTS_PATH = "Model/Augmented_vs_NotAugmented/Model_Augmented/Plots"
 
 # Establecemos esras semillas para la reproducibilidad
 random.seed(42)
@@ -96,7 +97,7 @@ def build_cnn_model(input_shape, num_classes):
     model.add(GlobalAveragePooling2D())
 
     # Capa densa
-    model.add(Dense(units=512, activation='relu', kernel_regularizer=l2(1e-4)))
+    model.add(Dense(units=512, activation='relu', kernel_regularizer=l2(0.0004)))
     model.add(Dropout(0.5))
 
     # Capa de salida
@@ -113,7 +114,7 @@ def build_cnn_model(input_shape, num_classes):
 def main():
     # 0. Implementacion del data augmentation
     # Solo para entrenamiento
-    """
+
     train_datagen = ImageDataGenerator(
         rescale=1.0 / 255,
         rotation_range=15,  # rotación ±15°
@@ -123,8 +124,7 @@ def main():
         brightness_range=[0.8, 1.2],  # brillo entre 80–120%
         horizontal_flip=True,  # volteo horizontal
         fill_mode='reflect',  # rellena bordes reflejando pixeles
-        validation_split=0.2,
-        seed=42  # fija shuffle + aug para reproducibilidad
+        validation_split=0.2
 
     )
 
@@ -133,29 +133,32 @@ def main():
         rescale=1.0 / 255,
         validation_split=0.2
     )
-    """
+
 
     # 1. Configurar el ImageDataGenerator con validación (20% de los datos)
+    '''
     datagen = ImageDataGenerator(
         rescale=1.0 / 255,
         validation_split=0.2
-    )
-    # train_generator = train_datagen.flow_from_directory(
-    train_generator = datagen.flow_from_directory(
+    )'''
+    train_generator = train_datagen.flow_from_directory(
+    #train_generator = datagen.flow_from_directory(
         DATA_DIR,
         target_size=(IMG_SIZE, IMG_SIZE),
         batch_size=BATCH_SIZE,
         class_mode='sparse',  # Usamos etiquetas enteras
-        subset='training'
+        subset='training',
+        seed = 42  # fija shuffle + aug para reproducibilidad
     )
 
-    # validation_generator = val_datagen.flow_from_directory(
-    validation_generator = datagen.flow_from_directory(
+    validation_generator = val_datagen.flow_from_directory(
+    #validation_generator = datagen.flow_from_directory(
         DATA_DIR,
         target_size=(IMG_SIZE, IMG_SIZE),
         batch_size=BATCH_SIZE,
         class_mode='sparse',
-        subset='validation'
+        subset='validation',
+        seed = 42  # fija shuffle + aug para reproducibilidad
     )
 
     num_classes = len(train_generator.class_indices)
@@ -167,10 +170,19 @@ def main():
     model = build_cnn_model(input_shape, num_classes)
     model.summary()
 
+    # 2.1 Introduccion del EarlyStopping y del ReduceLr
     earlystop_cb = EarlyStopping(
         monitor="val_accuracy",
-        patience=5,
+        patience=7,
         restore_best_weights=True,
+        verbose=1
+    )
+
+    reduce_lr_cb = ReduceLROnPlateau(
+        monitor="val_accuracy",
+        factor=0.5,
+        patience=3,
+        min_lr=0.000001,
         verbose=1
     )
 
@@ -179,7 +191,7 @@ def main():
         train_generator,
         epochs=EPOCHS,
         validation_data=validation_generator,
-        callbacks=[earlystop_cb],
+        callbacks=[earlystop_cb, reduce_lr_cb],
         verbose=1
     )
 
