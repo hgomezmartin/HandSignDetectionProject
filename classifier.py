@@ -59,6 +59,7 @@ class RealTimeASLClassifier:
         while True:
             ret, img = self.cap.read()
             if not ret:
+                print("ERROR: cámara no disponible, saliendo...")
                 break
 
             # Espeja la imagen para mayor naturalidad en un futuro?, duplicar dataset espejado con data augmentation?
@@ -71,10 +72,12 @@ class RealTimeASLClassifier:
             if hands:
                 hand = hands[0]
                 bbox = hand['bbox']  # x, y, w, h
-                processed_img = self.preprocess(img, bbox)
+                processed_img = self.preprocess(img, bbox)  # BGR
+
                 if processed_img is not None:
+                    proc_img_rgb = processed_img[:, :, ::-1]
                     # Agrega dimensión batch (1, img_size, img_size, 3)
-                    input_img = np.expand_dims(processed_img, axis=0)
+                    input_img = np.expand_dims(proc_img_rgb, axis=0)
                     # Realiza la predicción
                     prediction = self.model.predict(input_img)
                     index = np.argmax(prediction)
@@ -83,16 +86,21 @@ class RealTimeASLClassifier:
 
                     # Dibuja la caja y el resultado en la imagen de salida
                     x, y, w, h = bbox
+                    if w < 20 or h < 20:
+                        continue
+
                     cv2.rectangle(img, (x - self.offset, y - self.offset),
                                   (x + w + self.offset, y + h + self.offset), (255, 0, 255), 2)
+
                     cv2.putText(img, f"{label} {confidence:.1f}%", (x, y - 20),
                                 cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 0, 255), 2)
                     # Muestra la imagen preprocesada (recortada y ajustada)
-                    cv2.imshow("Processed", processed_img)
+                    # cv2.imshow("Processed", processed_img)
+                    cv2.imshow("Processed", (proc_img_rgb * 255).astype(np.uint8))
 
             cv2.imshow("ASL Recognition", img)
             key = cv2.waitKey(1)
-            if key == ord('q'):
+            if key in (ord('q'), 27):
                 break
 
         self.cap.release()
@@ -104,8 +112,8 @@ if __name__ == "__main__":
     # model_path = "Model/MyCNN/UltEntreno/224x224/my_cnn_model.h5"
     # labels_path = "Model/MyCNN/UltEntreno/224x224/class_labels.txt"
 
-    model_path = "Model/TM/keras_model.h5"
-    labels_path = "Model/TM/labels.txt"
+    model_path = "Model/Augmented_vs_NotAugmented/Model_Augmented/my_cnn_model.h5"
+    labels_path = "Model/Augmented_vs_NotAugmented/Model_Augmented/class_labels.txt"
 
     classifier = RealTimeASLClassifier(model_path, labels_path, img_size=224, offset=20)
     classifier.run()
