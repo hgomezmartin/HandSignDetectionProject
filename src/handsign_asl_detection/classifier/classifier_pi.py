@@ -3,6 +3,7 @@ from pathlib import Path
 
 import cv2
 import numpy as np
+import tensorflow as tf
 from cvzone.HandTrackingModule import HandDetector
 from tensorflow.keras.models import load_model
 
@@ -10,8 +11,18 @@ from tensorflow.keras.models import load_model
 class RealTimeASLClassifier:
     def __init__(self, model_path, labels_path, img_size=224, offset=20):
         # Carga del modelo entrenado
-        self.model = load_model(model_path)
-        
+        self.model_path = Path(model_path)
+        self.is_tflite = self.model_path.suffix == ".tflite"
+
+        # ---------- 1. Carga del modelo ----------
+        if self.is_tflite:
+            self.interpreter = tf.lite.Interpreter(model_path=str(self.model_path))
+            self.interpreter.allocate_tensors()
+            self.input_details = self.interpreter.get_input_details()
+            self.output_details = self.interpreter.get_output_details()
+        else:
+            self.model = load_model(self.model_path)
+
         # Carga de etiquetas (una por línea)
         with open(labels_path, "r") as f:
             self.labels = [line.strip() for line in f.readlines()]
@@ -81,9 +92,20 @@ class RealTimeASLClassifier:
                 if processed_img is not None:
                     proc_img_rgb = processed_img[:, :, ::-1]
                     # Agrega dimensión batch (1, img_size, img_size, 3)
-                    input_img = np.expand_dims(proc_img_rgb, axis=0)
+                    in_dtype = self.input_details[0]['dtype']  # float32, float16, uint8, int8…
+                    input_img = np.expand_dims(proc_img_rgb, 0).astype(in_dtype)
                     # Realiza la predicción
-                    prediction = self.model.predict(input_img)
+                    if self.is_tflite:  # NUEVO
+                        self.interpreter.set_tensor(
+                            self.input_details[0]['index'], input_img
+                        )
+                        self.interpreter.invoke()
+                        prediction = self.interpreter.get_tensor(
+                            self.output_details[0]['index']
+                        )
+                    else:  # Keras .h5
+                        prediction = self.model.predict(input_img, verbose=0)
+
                     index = np.argmax(prediction)
                     confidence = prediction[0][index] * 100
                     label = self.labels[index]
@@ -115,9 +137,9 @@ if __name__ == "__main__":
     # Ruta al modelo y a las etiquetas según se han guardado tras el entrenamiento
     this_file = Path(__file__).resolve()
     project_root = this_file.parents[3]
-    model_dir = project_root / "models" / "Augmented_vs_NotAugmented" / "Model_Augmented"
-    model_path = model_dir / "my_cnn_model.h5"
-    labels_path = model_dir / "class_labels.txt"
+    model_dir = project_root / "models" / "TM" / "TM_RPI"
+    model_path = model_dir / "keras_model_fp16.tflite"
+    labels_path = model_dir / "labels.txt"
 
     classifier = RealTimeASLClassifier(model_path, labels_path, img_size=224, offset=20)
     classifier.run()

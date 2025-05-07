@@ -1,17 +1,18 @@
-import os
-import cv2
-from cvzone.HandTrackingModule import HandDetector
-import numpy as np
 import math
+import os
 import time
+
+import cv2
+import numpy as np
+from cvzone.HandTrackingModule import HandDetector
 
 
 def collect_dataset():
     while True:
-        folder_name = input("Introduce la letra o número que quieres guardar (A-Z, 0-9): ").strip().upper()
+        folder_name = input("Introduce la letra o número que quieres guardar (A-Z): ").strip().upper()
         if len(folder_name) == 1 and folder_name.isalnum():
             break
-        print("Entrada no válida. Por favor, introduce una única letra (A-Z) o número (0-9).")
+        print("Entrada no válida. Por favor, introduce una única letra (A-Z).")
 
     # Crear la carpeta si no existe
     folder = f"Data/{folder_name}"
