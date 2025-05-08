@@ -51,7 +51,8 @@ class RealTimeASLClassifier:
         aspect_ratio = h / w
         if aspect_ratio > 1:
             k = self.img_size / h
-            new_w = math.ceil(k * w)
+            # new_w = math.ceil(k * w)
+            new_w = min(self.img_size, math.ceil(k * w))
             if img_crop.size == 0:
                 return None
             img_resize = cv2.resize(img_crop, (new_w, self.img_size))
@@ -59,7 +60,8 @@ class RealTimeASLClassifier:
             img_white[:, w_gap:w_gap + new_w] = img_resize
         else:
             k = self.img_size / w
-            new_h = math.ceil(k * h)
+            # new_h = math.ceil(k * h)
+            new_h = min(self.img_size, math.ceil(k * h))  # nunca mayor que img_size
             if img_crop.size == 0:
                 return None
             img_resize = cv2.resize(img_crop, (self.img_size, new_h))
@@ -87,13 +89,14 @@ class RealTimeASLClassifier:
             if hands:
                 hand = hands[0]
                 bbox = hand['bbox']  # x, y, w, h
-                processed_img = self.preprocess(img, bbox)  # BGR
+                hand_type = hand['type']
+                processed_img = self.preprocess(img, bbox)  # BGR para TM
+                proc_img_rgb = processed_img[:, :, ::-1]  # RGB para nuestro modelo, no el de TM
 
                 if processed_img is not None:
-                    proc_img_rgb = processed_img[:, :, ::-1]
                     # Agrega dimensión batch (1, img_size, img_size, 3)
                     in_dtype = self.input_details[0]['dtype']  # float32, float16, uint8, int8…
-                    input_img = np.expand_dims(proc_img_rgb, 0).astype(in_dtype)
+                    input_img = np.expand_dims(proc_img_rgb, 0).astype(in_dtype)  # proc_img_rgb
                     # Realiza la predicción
                     if self.is_tflite:  # NUEVO
                         self.interpreter.set_tensor(
@@ -114,15 +117,17 @@ class RealTimeASLClassifier:
                     x, y, w, h = bbox
                     if w < 20 or h < 20:
                         continue
-
                     cv2.rectangle(img, (x - self.offset, y - self.offset),
-                                  (x + w + self.offset, y + h + self.offset), (255, 0, 255), 2)
-
-                    cv2.putText(img, f"{label} {confidence:.1f}%", (x, y - 20),
-                                cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 0, 255), 2)
+                                  (x + w + self.offset, y + h + self.offset), (0, 0, 0), 6)
+                    cv2.rectangle(img, (x - self.offset, y - self.offset),
+                                  (x + w + self.offset, y + h + self.offset), (255, 255, 255), 2)
+                    cv2.putText(img, f"{label} {confidence:.1f}%", (x + 60, y - 30),
+                                cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 6)
+                    cv2.putText(img, f"{label} {confidence:.1f}%", (x + 60, y - 30),
+                                cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 2)
                     # Muestra la imagen preprocesada (recortada y ajustada)
                     # cv2.imshow("Processed", processed_img)
-                    cv2.imshow("Processed", (proc_img_rgb * 255).astype(np.uint8))
+                    cv2.imshow("Processed", (proc_img_rgb * 255).astype(np.uint8))  # proc_img_rgb
 
             cv2.imshow("ASL Recognition", img)
             key = cv2.waitKey(1)
@@ -135,9 +140,8 @@ class RealTimeASLClassifier:
 
 if __name__ == "__main__":
     # Ruta al modelo y a las etiquetas según se han guardado tras el entrenamiento
-    this_file = Path(__file__).resolve()
-    project_root = this_file.parents[3]
-    model_dir = project_root / "models" / "TM" / "TM_RPI"
+
+    model_dir = Path("TM_RPI")
     model_path = model_dir / "keras_model_fp16.tflite"
     labels_path = model_dir / "labels.txt"
 

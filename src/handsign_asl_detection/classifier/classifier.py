@@ -40,7 +40,8 @@ class RealTimeASLClassifier:
         aspect_ratio = h / w
         if aspect_ratio > 1:
             k = self.img_size / h
-            new_w = math.ceil(k * w)
+            # new_w = math.ceil(k * w)
+            new_w = min(self.img_size, math.ceil(k * w))
             if img_crop.size == 0:
                 return None
             img_resize = cv2.resize(img_crop, (new_w, self.img_size))
@@ -48,7 +49,8 @@ class RealTimeASLClassifier:
             img_white[:, w_gap:w_gap + new_w] = img_resize
         else:
             k = self.img_size / w
-            new_h = math.ceil(k * h)
+            # new_h = math.ceil(k * h)
+            new_h = min(self.img_size, math.ceil(k * h))  # nunca mayor que img_size
             if img_crop.size == 0:
                 return None
             img_resize = cv2.resize(img_crop, (self.img_size, new_h))
@@ -94,10 +96,13 @@ class RealTimeASLClassifier:
                         continue
 
                     cv2.rectangle(img, (x - self.offset, y - self.offset),
-                                  (x + w + self.offset, y + h + self.offset), (255, 0, 255), 2)
-
-                    cv2.putText(img, f"{label} {confidence:.1f}%", (x, y - 20),
-                                cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 0, 255), 2)
+                                  (x + w + self.offset, y + h + self.offset), (0, 0, 0), 6)
+                    cv2.rectangle(img, (x - self.offset, y - self.offset),
+                                  (x + w + self.offset, y + h + self.offset), (255, 255, 255), 2)
+                    cv2.putText(img, f"{label} {confidence:.1f}%", (x + 60, y - 30),
+                                cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 6)
+                    cv2.putText(img, f"{label} {confidence:.1f}%", (x + 60, y - 30),
+                                cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 2)
                     # Muestra la imagen preprocesada (recortada y ajustada)
                     # cv2.imshow("Processed", processed_img)
                     cv2.imshow("Processed", (proc_img_rgb * 255).astype(np.uint8))
