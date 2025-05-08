@@ -33,7 +33,7 @@ class RealTimeASLClassifier:
         # Inicializa el detector de manos (máximo 1 mano)
         self.detector = HandDetector(maxHands=1)
         # Inicializa la cámara
-        self.cap = cv2.VideoCapture(0)
+        self.cap = cv2.VideoCapture(8)
 
     def preprocess(self, img, bbox):
         """
@@ -135,9 +135,8 @@ class RealTimeASLClassifier:
 
 if __name__ == "__main__":
     # Ruta al modelo y a las etiquetas según se han guardado tras el entrenamiento
-    this_file = Path(__file__).resolve()
-    project_root = this_file.parents[3]
-    model_dir = project_root / "models" / "TM" / "TM_RPI"
+
+    model_dir = Path("TM_RPI")
     model_path = model_dir / "keras_model_fp16.tflite"
     labels_path = model_dir / "labels.txt"
 
