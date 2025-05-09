@@ -33,7 +33,7 @@ class RealTimeASLClassifier:
         # Inicializa el detector de manos (máximo 1 mano)
         self.detector = HandDetector(maxHands=1)
         # Inicializa la cámara
-        self.cap = cv2.VideoCapture(0)
+        self.cap = cv2.VideoCapture(8)
 
     def preprocess(self, img, bbox):
         """
