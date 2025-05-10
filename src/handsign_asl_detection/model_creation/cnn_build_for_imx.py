@@ -12,13 +12,18 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.regularizers import l2
 
+from HandSignDetectionProject.src.handsign_asl_detection.dataset.sample_rep_dataset import PROJECT_ROOT
+
 # ---------- hiper‑parámetros ----------
 IMG_SIZE = 224
 EPOCHS = 70
 BATCH_SIZE = 32
-DATA_DIR = Path("Data/Data_disordered")
+THIS_FILE = Path(__file__).resolve()
 
-OUT_DIR = Path("Model/IMX_ready")
+PROJECT_ROOT = THIS_FILE.parents[3]
+DATA_DIR = PROJECT_ROOT / "Data" / "Data_disordered"
+
+OUT_DIR = PROJECT_ROOT / "Model"/ "IMX_ready"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 MODEL_PATH = OUT_DIR / "asl_cnn.keras"  # *** .keras ***
 LABELS_TXT = OUT_DIR / "class_labels.txt"
@@ -74,13 +79,13 @@ x = Dropout(0.5)(x)
 outputs = Dense(NUM_CLASSES, activation='softmax', name="output")(x)
 
 model = tf.keras.Model(inputs, outputs, name="asl_cnn_imx")
-model.compile(Adam(1e-4), loss="sparse_categorical_crossentropy", metrics=["accuracy"])
+model.compile(Adam(0.0001), loss="sparse_categorical_crossentropy", metrics=["accuracy"])
 model.summary()
 
 # ---------- callbacks ----------
 early = EarlyStopping(monitor="val_accuracy", patience=7, restore_best_weights=True, verbose=1)
 redlr = ReduceLROnPlateau(monitor="val_accuracy", factor=0.5, patience=3,
-                          min_lr=1e-6, verbose=1)
+                          min_lr=0.000001, verbose=1)
 
 # ---------- entrenamiento ----------
 hist = model.fit(train_ds, epochs=EPOCHS, validation_data=val_ds,

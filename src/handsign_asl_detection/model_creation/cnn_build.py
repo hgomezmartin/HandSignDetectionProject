@@ -201,7 +201,7 @@ def main():
     print(f"Modelo guardado en: {MODEL_PATH}")
 
     # 5. Guardamos también el mapeo de clases a un archivo .txt
-    with open(CLASS_LABELS_PATH, "w") as f:
+    with open(CLASS_LPATH, "w") as f:
         # Escribimos las clases ordenadas por su índice
         for cls_name in sorted(train_generator.class_indices, key=train_generator.class_indices.get):
             f.write(f"{cls_name}\n")
