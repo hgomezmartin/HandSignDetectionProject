@@ -20,7 +20,7 @@ from tensorflow.keras.regularizers import l2
 IMG_SIZE = 224
 EPOCHS = 70
 DATA_DIR = "/content/Data_disordered"
-MODEL_PATH = "/content/drive/MyDrive/HandSignDetectionProject/Model/RS/my_cnn_model_tuned.h5"  ##cambiarlo
+MODEL_PATH = "/content/drive/MyDrive/HandSignDetectionProject/Model/RS/my_cnn_model_tuned.keras"  ##cambiarlo
 CLASS_LABELS_PATH = "/content/drive/MyDrive/HandSignDetectionProject/Model/RS/class_labels.txt"
 PLOTS_PATH = "Model/Model_NotAugmented/Plots"
 HPARAMS_JSON_PATH = "/content/drive/MyDrive/HandSignDetectionProject/Model/RS/best_hparams.json"

@@ -18,8 +18,8 @@ IMG_SIZE = 224
 EPOCHS = 70  # Número de épocas de entrenamiento
 BATCH_SIZE = 32  # Tamaño del batch
 DATA_DIR = "Data/Data_disordered"  # Directorio donde guardamos las carpetas A, B, C...
-MODEL_PATH = "Model/Augmented_vs_NotAugmented/Model_Augmented/my_cnn_model.h5"  # Ruta donde se guardará el modelo
-CLASS_LABELS_PATH = "Model/Augmented_vs_NotAugmented/Model_Augmented/class_labels.txt"
+MODEL_PATH = "ModABELS_el/Augmented_vs_NotAugmented/Model_Augmented/my_cnn_model.h5"  # Ruta donde se guardará el modelo
+CLASS_LPATH = "Model/Augmented_vs_NotAugmented/Model_Augmented/class_labels.txt"
 PLOTS_PATH = "Model/Augmented_vs_NotAugmented/Model_Augmented/Plots"
 
 # Establecemos esras semillas para la reproducibilidad
