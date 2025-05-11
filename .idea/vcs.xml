@@ -3,5 +3,6 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Doc" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/handsign_asl_detection/instalacionMCT/model_optimization" vcs="Git" />
   </component>
 </project>
