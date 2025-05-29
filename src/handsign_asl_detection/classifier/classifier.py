@@ -120,7 +120,7 @@ if __name__ == "__main__":
     # Ruta al modelo y a las etiquetas según se han guardado tras el entrenamiento
     this_file = Path(__file__).resolve()
     project_root = this_file.parents[3]
-    model_dir = project_root / "models" / "Augmented_vs_NotAugmented" / "Model_Augmented"
+    model_dir = project_root / "models" / "Augmented_vs_NotAugmented" / "augmented"
     model_path = model_dir / "my_cnn_model.h5"
     labels_path = model_dir / "class_labels.txt"
 

@@ -5,8 +5,8 @@ import cv2
 import numpy as np
 from tensorflow.keras.models import load_model
 
-MODEL_PATH = "Model/Augmented_vs_NotAugmented/Model_Augmented/my_cnn_model.h5"
-LABELS_PATH = "Model/Augmented_vs_NotAugmented/Model_Augmented/class_labels.txt"
+MODEL_PATH = "Model/Augmented_vs_NotAugmented/augmented/my_cnn_model.h5"
+LABELS_PATH = "Model/Augmented_vs_NotAugmented/augmented/class_labels.txt"
 
 # carga modelo + etiquetas
 model = load_model(MODEL_PATH)
