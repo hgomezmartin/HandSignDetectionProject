@@ -141,7 +141,7 @@ class RealTimeASLClassifier:
 if __name__ == "__main__":
     # Ruta al modelo y a las etiquetas según se han guardado tras el entrenamiento
 
-    model_dir = Path("teachable_machine_rpi")
+    model_dir = Path("rpi_tflite")
     model_path = model_dir / "keras_model_fp16.tflite"
     labels_path = model_dir / "labels.txt"
 
