@@ -1,17 +1,22 @@
 import math
-from pathlib import Path
 
 import cv2
 import numpy as np
 from cvzone.HandTrackingModule import HandDetector
 from tensorflow.keras.models import load_model
 
+from handsign_asl_detection.config import TEACHABLE_DIR, IMG_SIZE, OFFSET
+
+MODEL_PATH = TEACHABLE_DIR / "keras_model.h5"  # models/augmented/my_cnn_model.h5
+LABELS_PATH = TEACHABLE_DIR / "labels.txt"
+
 
 class RealTimeASLClassifier:
-    def __init__(self, model_path, labels_path, img_size=224, offset=20):
+    def __init__(self, model_path: str = MODEL_PATH, labels_path: str = LABELS_PATH, img_size: int = IMG_SIZE,
+                 offset: int = OFFSET):
         # Carga del modelo entrenado
         self.model = load_model(model_path)
-        
+
         # Carga de etiquetas (una por línea)
         with open(labels_path, "r") as f:
             self.labels = [line.strip() for line in f.readlines()]
@@ -117,12 +122,5 @@ class RealTimeASLClassifier:
 
 
 if __name__ == "__main__":
-    # Ruta al modelo y a las etiquetas según se han guardado tras el entrenamiento
-    this_file = Path(__file__).resolve()
-    project_root = this_file.parents[3]
-    model_dir = project_root / "models" / "Augmented_vs_NotAugmented" / "augmented"
-    model_path = model_dir / "my_cnn_model.h5"
-    labels_path = model_dir / "class_labels.txt"
-
-    classifier = RealTimeASLClassifier(model_path, labels_path, img_size=224, offset=20)
+    classifier = RealTimeASLClassifier()
     classifier.run()

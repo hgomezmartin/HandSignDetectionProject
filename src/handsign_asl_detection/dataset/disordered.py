@@ -3,37 +3,38 @@ import random
 import shutil
 import sys
 
-def copy_and_shuffle_images(src_dir, dst_dir):
-    """
-    Copia todas las imágenes desde src_dir hasta dst_dir,
-    manteniendo la estructura de subcarpetas, pero en un orden aleatorio.
-    Cada imagen se renombra a shuffled_XXXXX con su extensión original.
-    """
+from handsign_asl_detection.config import ORDERED_DATADIR, DISORDERED_DATADIR
+
+SOURCE_DIR = ORDERED_DATADIR
+DESTINY_DIR = DISORDERED_DATADIR
+
+
+def copy_and_shuffle_images():
     # Verificar que src_dir existe
-    if not os.path.isdir(src_dir):
-        print(f"Error: El directorio de origen '{src_dir}' no existe o no es una carpeta.")
+    if not os.path.isdir(SOURCE_DIR):
+        print(f"Error: El directorio de origen '{SOURCE_DIR}' no existe o no es una carpeta.")
         sys.exit(1)
 
     # Si dst_dir existe, lo borramos entero
-    if os.path.exists(dst_dir):
-        print(f"Borrando carpeta existente: {dst_dir}")
-        shutil.rmtree(dst_dir)
+    if os.path.exists(DESTINY_DIR):
+        print(f"Borrando carpeta existente: {DESTINY_DIR}")
+        shutil.rmtree(DESTINY_DIR)
 
     # Crear la carpeta de destino vacía
-    os.makedirs(dst_dir, exist_ok=True)
+    os.makedirs(DESTINY_DIR, exist_ok=True)
 
     # Listar subcarpetas (clases) en src_dir
-    classes = sorted(os.listdir(src_dir))
+    classes = sorted(os.listdir(SOURCE_DIR))
 
     for cls_name in classes:
-        cls_folder_src = os.path.join(src_dir, cls_name)
+        cls_folder_src = os.path.join(SOURCE_DIR, cls_name)
 
         # Omitir si no es una carpeta
         if not os.path.isdir(cls_folder_src):
             continue
 
         # Crear la carpeta de destino para esa clase
-        cls_folder_dst = os.path.join(dst_dir, cls_name)
+        cls_folder_dst = os.path.join(DESTINY_DIR, cls_name)
         os.makedirs(cls_folder_dst, exist_ok=True)
 
         # Listar imágenes en la carpeta origen
@@ -64,11 +65,8 @@ def copy_and_shuffle_images(src_dir, dst_dir):
             shutil.copy2(src_path, dst_path)  # copy2 para preservar metadata si se quiere
 
     print("\n¡Proceso completado!")
-    print(f"Se ha creado '{dst_dir}' con las mismas subcarpetas que '{src_dir}', pero con imágenes barajadas.")
+    print(f"Se ha creado '{DESTINY_DIR}' con las mismas subcarpetas que '{SOURCE_DIR}', pero con imágenes barajadas.")
 
 
 if __name__ == "__main__":
-    src_directory = "Data/data_ordered"  # Carpeta original
-    dst_directory = "Data/disordered"  # Nueva carpeta con imágenes desordenadas
-
-    copy_and_shuffle_images(src_directory, dst_directory)
+    copy_and_shuffle_images()

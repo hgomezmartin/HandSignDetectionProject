@@ -1,47 +1,58 @@
 import tkinter as tk
+from pathlib import Path
 from tkinter import filedialog
 
 import cv2
 import numpy as np
 from tensorflow.keras.models import load_model
 
-MODEL_PATH = "Model/Augmented_vs_NotAugmented/augmented/my_cnn_model.h5"
-LABELS_PATH = "Model/Augmented_vs_NotAugmented/augmented/class_labels.txt"
+from handsign_asl_detection.config import TEACHABLE_DIR, IMG_SIZE
 
-# carga modelo + etiquetas
+MODEL_PATH = TEACHABLE_DIR / "keras_model.h5"
+LABELS_PATH = TEACHABLE_DIR / "labels.txt"
+
+
 model = load_model(MODEL_PATH)
 with open(LABELS_PATH, encoding="utf-8") as f:
-    labels = [l.strip() for l in f]
+    labels = [line.strip() for line in f]
 
-# abre diálogo de selección
-root = tk.Tk()
-root.withdraw()  # sin ventana raíz
-filetypes = [("Imágenes", "*.jpg *.jpeg *.png *.bmp"), ("Todos los archivos", "*.*")]
-img_path = filedialog.askopenfilename(
-    title="Selecciona una imagen de tu dataset",
-    filetypes=filetypes)
 
-if not img_path:
-    print("No se seleccionó ninguna imagen.")
-    exit()
+def _select_image_via_dialog() -> str | None:
+    root = tk.Tk();
+    root.withdraw()
+    filetypes = [("Imágenes", "*.jpg *.jpeg *.png *.bmp"),
+                 ("Todos los archivos", "*.*")]
+    return filedialog.askopenfilename(
+        title="Selecciona una imagen de tu dataset",
+        filetypes=filetypes
+    )
 
-# lee y procesa la imagen
-IMG_SIZE = 224
-img = cv2.imread(img_path)  # BGR
-if img is None:
-    print("Error: No se pudo abrir la imagen.")
-    exit()
 
-img = cv2.resize(img, (IMG_SIZE, IMG_SIZE))
-img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)  # BGR → RGB
-img = img.astype(np.float32) / 255.0
-input_tensor = np.expand_dims(img, 0)  # (1,224,224,3)
+def main():
+    img_path = _select_image_via_dialog()
+    if not img_path:
+        print("No se seleccionó ninguna imagen.");
+        return
 
-# inferencia
-preds = model.predict(input_tensor, verbose=0)
-idx = int(np.argmax(preds))
-conf = preds[0][idx] * 100
+    label, conf = classify_image(img_path)
+    print(f"Imagen: {img_path}")
+    print(f"Clase:  {label}")
+    print(f"Confianza: {conf:.1f} %")
 
-print(f"Imagen:  {img_path}")
-print(f"Clase:   {labels[idx]}")
-print(f"Confianza: {conf:.1f} %")
+
+def classify_image(img_path: str):
+    """Devuelve (label, confidence) para una sola imagen."""
+    img_path = Path(img_path)
+    img = cv2.imread(str(img_path))
+    if img is None:
+        raise FileNotFoundError(img_path)
+
+    img = cv2.resize(img, (IMG_SIZE, IMG_SIZE))
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB).astype(np.float32) / 255.0
+    preds = model.predict(np.expand_dims(img, 0), verbose=0)[0]
+    idx = int(np.argmax(preds))
+    return labels[idx], float(preds[idx] * 100)
+
+
+if __name__ == "__main__":
+    main()

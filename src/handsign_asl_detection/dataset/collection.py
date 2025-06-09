@@ -6,6 +6,8 @@ import cv2
 import numpy as np
 from cvzone.HandTrackingModule import HandDetector
 
+from handsign_asl_detection.config import IMG_SIZE_DS, OFFSET, MAX_IMAGES_DS
+
 
 def collect_dataset():
     while True:
@@ -22,35 +24,31 @@ def collect_dataset():
     cap = cv2.VideoCapture(0)
     detector = HandDetector(maxHands=1)
 
-    offset = 20
-    imgSize = 300
-
     count = 0
-    max_images = 500
 
     while True:
         success, img = cap.read()
-        imgWhite = np.ones((imgSize, imgSize, 3), np.uint8) * 255
+        imgWhite = np.ones((IMG_SIZE_DS, IMG_SIZE_DS, 3), np.uint8) * 255
         hands, img = detector.findHands(img)
         if hands:
             hand = hands[0]
             x, y, w, h = hand['bbox']
 
-            imgCrop = img[y - offset:y + h + offset, x - offset:x + w + offset]
+            imgCrop = img[y - OFFSET:y + h + OFFSET, x - OFFSET:x + w + OFFSET]
             aspectRatio = h / w
 
             if aspectRatio > 1:
-                k = imgSize / h
+                k = IMG_SIZE_DS / h
                 wCal = math.ceil(k * w)
-                imgResize = cv2.resize(imgCrop, (wCal, imgSize))
-                wGap = math.ceil((imgSize - wCal) / 2)
+                imgResize = cv2.resize(imgCrop, (wCal, IMG_SIZE_DS))
+                wGap = math.ceil((IMG_SIZE_DS - wCal) / 2)
                 imgWhite[:, wGap:wCal + wGap] = imgResize
 
             else:
-                k = imgSize / w
+                k = IMG_SIZE_DS / w
                 hCal = math.ceil(k * h)
-                imgResize = cv2.resize(imgCrop, (imgSize, hCal))
-                hGap = math.ceil((imgSize - hCal) / 2)
+                imgResize = cv2.resize(imgCrop, (IMG_SIZE_DS, hCal))
+                hGap = math.ceil((IMG_SIZE_DS - hCal) / 2)
                 imgWhite[hGap:hCal + hGap, :] = imgResize
 
             cv2.imshow("ImageCrop", imgCrop)
@@ -61,8 +59,8 @@ def collect_dataset():
         if key == ord("s"):
             count += 1
             cv2.imwrite(f'{folder}/Image_{time.time()}.jpg', imgWhite)
-            print(f"Image saved: {count}/{max_images}")
-            if count >= max_images:
+            print(f"Image saved: {count}/{MAX_IMAGES_DS}")
+            if count >= MAX_IMAGES_DS:
                 print("Límite de imágenes alcanzado.")
                 break
 
@@ -88,4 +86,5 @@ def main_menu():
 
 
 # Inicia el programa con el menú principal
-main_menu()
+if __name__ == "__main__":
+    main_menu()

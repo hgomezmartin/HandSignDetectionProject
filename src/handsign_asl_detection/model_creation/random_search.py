@@ -16,22 +16,23 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.regularizers import l2
 
+from handsign_asl_detection.config import RANDOM_SEARCH_DIR, DISORDERED_DATADIR, IMG_SIZE, SEED, EPOCHS
+
 # --- Constantes ---
-IMG_SIZE = 224
-EPOCHS = 70
-DATA_DIR = "/content/disordered"
-MODEL_PATH = "/content/drive/MyDrive/HandSignDetectionProject/Model/random_search/my_cnn_model_tuned.keras"  ##cambiarlo
-CLASS_LABELS_PATH = "/content/drive/MyDrive/HandSignDetectionProject/Model/random_search/class_labels.txt"
-PLOTS_PATH = "Model/not_augmented/plots"
-HPARAMS_JSON_PATH = "/content/drive/MyDrive/HandSignDetectionProject/Model/random_search/best_hparams.json"
-HPARAMS_HTML_PATH = "/content/drive/MyDrive/HandSignDetectionProject/Model/random_search/best_hparams.html"
+DATA_DIR = DISORDERED_DATADIR
+MODEL_PATH = RANDOM_SEARCH_DIR / "my_cnn_model.h5"  # …/models/augmented/my_cnn_model.h5
+LABELS_PATH = RANDOM_SEARCH_DIR / "class_labels.txt"  # …/models/augmented/class_labels.txt
+PLOTS_DIR = RANDOM_SEARCH_DIR / "plots"
+HPARAMS_JSON_PATH = RANDOM_SEARCH_DIR / "hparams" / "best_hparams.json"
+HPARAMS_HTML_PATH = RANDOM_SEARCH_DIR / "hparams" / "best_hparams.html"
 
 # Establecemos esras semillas para la reproducibilidad
-random.seed(42)
-np.random.seed(42)
-tf.random.set_seed(42)
+random.seed(SEED)
+np.random.seed(SEED)
+tf.random.set_seed(SEED)
 
-def load_dataset(data_dir=DATA_DIR, img_size=IMG_SIZE):
+
+def load_dataset(data_dir=DISORDERED_DATADIR, img_size=IMG_SIZE):
     """
     Carga las imágenes del directorio 'Data' donde cada subcarpeta es una clase (A, B, C, etc.)
     Devuelve arrays de numpy para X (imágenes) e y (etiquetas).
@@ -101,7 +102,7 @@ def build_model(hp, input_shape, num_classes):
     l2_reg = hp.Float('l2_reg', min_value=0.000001, max_value=0.001, sampling='log')
 
     # Capa densa intermedia
-    model.add(Dense(512, activation='relu'), kernel_regularizer=l2(l2_reg))
+    model.add(Dense(512, activation='relu', kernel_regularizer=l2(l2_reg)))
 
     # Dropout
     model.add(Dropout(dropout_rate))
@@ -224,7 +225,7 @@ def main():
     print(f"Modelo guardado en: {MODEL_PATH}")
 
     # 7. Guardar mapeo de clases
-    with open(CLASS_LABELS_PATH, "w") as f:
+    with open(LABELS_PATH, "w") as f:
         for cls_name in sorted(train_generator.class_indices, key=train_generator.class_indices.get):
             f.write(f"{cls_name}\n")
     print("Se ha guardado class_labels.txt con las clases.")
@@ -234,7 +235,7 @@ def main():
     print(f"Precisión en validación: {val_acc * 100:.2f}%, Pérdida: {val_loss:.4f}")
 
     # 9. Imprimimos las graficas de funcion de pérdida y de exactitud
-    os.makedirs(PLOTS_PATH, exist_ok=True)
+    os.makedirs(PLOTS_DIR, exist_ok=True)
 
     # Gráfico de la función de pérdida
     plt.figure(figsize=(8, 6))
@@ -245,7 +246,7 @@ def main():
     plt.ylabel("Loss")
     plt.legend()
     plt.grid(True)
-    loss_path = os.path.join(PLOTS_PATH, "loss.png")
+    loss_path = os.path.join(PLOTS_DIR, "loss.png")
     plt.savefig(loss_path, dpi=150)
     print(f"Guardado gráfico de Pérdida/Loss en: {loss_path}")
     plt.show()
@@ -259,7 +260,7 @@ def main():
     plt.ylabel("Accuracy")
     plt.legend()
     plt.grid(True)
-    acc_path = os.path.join(PLOTS_PATH, "accuracy.png")
+    acc_path = os.path.join(PLOTS_DIR, "accuracy.png")
     plt.savefig(acc_path, dpi=150)
     print(f"Guardado gráfico de Exactitud/Accuracy en: {acc_path}")
     plt.show()

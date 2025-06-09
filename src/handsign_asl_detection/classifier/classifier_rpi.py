@@ -7,14 +7,20 @@ import tensorflow as tf
 from cvzone.HandTrackingModule import HandDetector
 from tensorflow.keras.models import load_model
 
+from handsign_asl_detection.config import TEACHABLE_TFL_DIR, IMG_SIZE, OFFSET
+
+MODEL_PATH = TEACHABLE_TFL_DIR / "keras_model_fp16.tflite"
+LABELS_PATH = TEACHABLE_TFL_DIR / "labels.txt"
+
 
 class RealTimeASLClassifier:
-    def __init__(self, model_path, labels_path, img_size=224, offset=20):
+    def __init__(self, model_path: str = MODEL_PATH, labels_path: str = LABELS_PATH, img_size: int = IMG_SIZE,
+                 offset: int = OFFSET):
         # Carga del modelo entrenado
         self.model_path = Path(model_path)
         self.is_tflite = self.model_path.suffix == ".tflite"
 
-        # ---------- 1. Carga del modelo ----------
+        # Carga del modelo -
         if self.is_tflite:
             self.interpreter = tf.lite.Interpreter(model_path=str(self.model_path))
             self.interpreter.allocate_tensors()
@@ -139,11 +145,5 @@ class RealTimeASLClassifier:
 
 
 if __name__ == "__main__":
-    # Ruta al modelo y a las etiquetas según se han guardado tras el entrenamiento
-
-    model_dir = Path("rpi_tflite")
-    model_path = model_dir / "keras_model_fp16.tflite"
-    labels_path = model_dir / "labels.txt"
-
-    classifier = RealTimeASLClassifier(model_path, labels_path, img_size=224, offset=20)
+    classifier = RealTimeASLClassifier()
     classifier.run()

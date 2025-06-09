@@ -13,19 +13,17 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.regularizers import l2
 
-# Constantes
-IMG_SIZE = 224
-EPOCHS = 70  # Número de épocas de entrenamiento
-BATCH_SIZE = 32  # Tamaño del batch
-DATA_DIR = "Data/disordered"  # Directorio donde guardamos las carpetas A, B, C...
-MODEL_PATH = "ModABELS_el/Augmented_vs_NotAugmented/augmented/my_cnn_model.h5"  # Ruta donde se guardará el modelo
-CLASS_LPATH = "Model/Augmented_vs_NotAugmented/augmented/class_labels.txt"
-PLOTS_PATH = "Model/Augmented_vs_NotAugmented/augmented/plots"
+from handsign_asl_detection.config import IMG_SIZE, BATCH_SIZE, EPOCHS, SEED, DISORDERED_DATADIR, AUGMENTED_DIR
 
-# Establecemos esras semillas para la reproducibilidad
-random.seed(42)
-np.random.seed(42)
-tf.random.set_seed(42)
+DATA_DIR = DISORDERED_DATADIR
+MODEL_PATH = AUGMENTED_DIR / "my_cnn_model.h5"  # …/models/augmented/my_cnn_model.h5
+LABELS_PATH = AUGMENTED_DIR / "class_labels.txt"  # …/models/augmented/class_labels.txt
+PLOTS_DIR = AUGMENTED_DIR / "plots"
+
+# Establecemos semillas para la reproducibilidad
+random.seed(SEED)
+np.random.seed(SEED)
+tf.random.set_seed(SEED)
 
 
 def load_dataset(data_dir=DATA_DIR, img_size=IMG_SIZE):
@@ -201,7 +199,7 @@ def main():
     print(f"Modelo guardado en: {MODEL_PATH}")
 
     # 5. Guardamos también el mapeo de clases a un archivo .txt
-    with open(CLASS_LPATH, "w") as f:
+    with open(LABELS_PATH, "w") as f:
         # Escribimos las clases ordenadas por su índice
         for cls_name in sorted(train_generator.class_indices, key=train_generator.class_indices.get):
             f.write(f"{cls_name}\n")
@@ -212,7 +210,7 @@ def main():
     print(f"Precisión en validación: {val_acc * 100:.2f}%, Pérdida: {val_loss:.4f}")
 
     # 7. Imprimimos las graficas de funcion de pérdida y de exactitud
-    os.makedirs(PLOTS_PATH, exist_ok=True)
+    os.makedirs(PLOTS_DIR, exist_ok=True)
 
     # Gráfico de la función de pérdida
     plt.figure(figsize=(8, 6))
@@ -223,7 +221,7 @@ def main():
     plt.ylabel("Loss")
     plt.legend()
     plt.grid(True)
-    loss_path = os.path.join(PLOTS_PATH, "loss.png")
+    loss_path = os.path.join(PLOTS_DIR, "loss.png")
     plt.savefig(loss_path, dpi=150)
     print(f"Guardado gráfico de Pérdida/Loss en: {loss_path}")
     plt.show()
@@ -237,10 +235,11 @@ def main():
     plt.ylabel("Accuracy")
     plt.legend()
     plt.grid(True)
-    acc_path = os.path.join(PLOTS_PATH, "accuracy.png")
+    acc_path = os.path.join(PLOTS_DIR, "accuracy.png")
     plt.savefig(acc_path, dpi=150)
     print(f"Guardado gráfico de Exactitud/Accuracy en: {acc_path}")
     plt.show()
+
 
 if __name__ == "__main__":
     main()
