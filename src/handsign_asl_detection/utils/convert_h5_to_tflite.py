@@ -13,19 +13,19 @@ FP16_PATH = TEACHABLE_TFL_DIR / "keras_model_fp16.tflite"
 def convert_h5_to_tflite(verbose: bool = True):
     TEACHABLE_TFL_DIR.mkdir(parents=True, exist_ok=True)
 
-    if verbose: print("• Cargando modelo", H5_PATH)
+    if verbose: print("Cargando modelo", H5_PATH)
     model = tf.keras.models.load_model(H5_PATH)
 
     # FP32
     conv = tf.lite.TFLiteConverter.from_keras_model(model)
     FP32_PATH.write_bytes(conv.convert())
-    if verbose: print("  ↳ Guardado FP32 en", FP32_PATH)
+    if verbose: print("Guardado FP32 en", FP32_PATH)
 
     # FP16
     conv.optimizations = [tf.lite.Optimize.DEFAULT]
     conv.target_spec.supported_types = [tf.float16]
     FP16_PATH.write_bytes(conv.convert())
-    if verbose: print("  ↳ Guardado FP16 en", FP16_PATH)
+    if verbose: print("Guardado FP16 en", FP16_PATH)
 
     # test rápido
     def _quick(path: Path):
@@ -36,7 +36,7 @@ def convert_h5_to_tflite(verbose: bool = True):
                        np.zeros(shape, dtype=np.float32))
         itp.invoke()
         if verbose:
-            print(f"  ✓ {path.name} ok – out shape",
+            print(f"{path.name} ok – out shape",
                   itp.get_output_details()[0]["shape"])
 
     _quick(FP32_PATH)

@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "handsign_asl_detection"
+version = "1.0.0"
+description = "Hand Sign Detection"
+requires-python = ">=3.10"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+packages = ["handsign_asl_detection"]

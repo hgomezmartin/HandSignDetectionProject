@@ -1,58 +1,71 @@
-import tkinter as tk
+"""
+Clasificación de una sola imagen.
+
+La primera llamada con una ruta de modelo lo carga (TFLite ó .h5)
+y lo deja cacheado; las siguientes llamadas reutilizan la misma
+instancia sin re-abrir archivo.
+"""
+
 from pathlib import Path
-from tkinter import filedialog
 
 import cv2
 import numpy as np
-from tensorflow.keras.models import load_model
+import streamlit as st
+import tensorflow as tf
 
-from handsign_asl_detection.config import TEACHABLE_DIR, IMG_SIZE
-
-MODEL_PATH = TEACHABLE_DIR / "keras_model.h5"
-LABELS_PATH = TEACHABLE_DIR / "labels.txt"
+from handsign_asl_detection.config import IMG_SIZE, TEACHABLE_TFL_DIR
 
 
-model = load_model(MODEL_PATH)
-with open(LABELS_PATH, encoding="utf-8") as f:
-    labels = [line.strip() for line in f]
+# ────────────────────────────── Cacheadores ──────────────────────────────
 
 
-def _select_image_via_dialog() -> str | None:
-    root = tk.Tk();
-    root.withdraw()
-    filetypes = [("Imágenes", "*.jpg *.jpeg *.png *.bmp"),
-                 ("Todos los archivos", "*.*")]
-    return filedialog.askopenfilename(
-        title="Selecciona una imagen de tu dataset",
-        filetypes=filetypes
-    )
+@st.cache_resource
+def load_tflite(model_path: str | Path):
+    interpreter = tf.lite.Interpreter(model_path=str(model_path))
+    interpreter.allocate_tensors()
+    inp_det = interpreter.get_input_details()
+    out_det = interpreter.get_output_details()
+    return interpreter, inp_det, out_det
 
 
-def main():
-    img_path = _select_image_via_dialog()
-    if not img_path:
-        print("No se seleccionó ninguna imagen.");
-        return
+@st.cache_resource
+def load_h5(model_path: str | Path):
+    from tensorflow.keras.models import load_model
 
-    label, conf = classify_image(img_path)
-    print(f"Imagen: {img_path}")
-    print(f"Clase:  {label}")
-    print(f"Confianza: {conf:.1f} %")
+    model = load_model(str(model_path))
+    return model
 
 
-def classify_image(img_path: str):
-    """Devuelve (label, confidence) para una sola imagen."""
-    img_path = Path(img_path)
-    img = cv2.imread(str(img_path))
-    if img is None:
-        raise FileNotFoundError(img_path)
+# Etiquetas (las comparte todo modelo)
+with open((TEACHABLE_TFL_DIR / "labels.txt")) as f:
+    labels = [ln.strip() for ln in f]
 
-    img = cv2.resize(img, (IMG_SIZE, IMG_SIZE))
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB).astype(np.float32) / 255.0
-    preds = model.predict(np.expand_dims(img, 0), verbose=0)[0]
+
+def classify_image(img_bgr: np.ndarray, model_path: str | Path) -> tuple[str, float]:
+    """
+    Devuelve (label, confianza %) para una sola imagen BGR usando el modelo indicado.
+    El modelo puede ser .tflite (FP16 / FP32) o .h5.
+    """
+    model_path = Path(model_path)
+    if not model_path.exists():
+        raise FileNotFoundError(model_path)
+
+    # Pre-procesado común: resize 224×224, RGB, [0-1]
+    img_resized = cv2.resize(img_bgr, (IMG_SIZE, IMG_SIZE))
+    img_rgb = cv2.cvtColor(img_resized, cv2.COLOR_BGR2RGB).astype(np.float32) / 255.0
+    inp = np.expand_dims(img_rgb, 0)
+
+    if model_path.suffix == ".tflite":
+        interpreter, inp_det, out_det = load_tflite(model_path)
+        inp = inp.astype(inp_det[0]["dtype"])
+        interpreter.set_tensor(inp_det[0]["index"], inp)
+        interpreter.invoke()
+        preds = interpreter.get_tensor(out_det[0]["index"])[0]
+    else:  # .h5
+        model = load_h5(model_path)
+        preds = model.predict(inp, verbose=0)[0]
+
     idx = int(np.argmax(preds))
-    return labels[idx], float(preds[idx] * 100)
-
-
-if __name__ == "__main__":
-    main()
+    label = labels[idx]
+    conf = float(preds[idx] * 100)
+    return label, conf

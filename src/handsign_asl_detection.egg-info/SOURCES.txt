@@ -1,0 +1,8 @@
+README.md
+pyproject.toml
+src/handsign_asl_detection/__init__.py
+src/handsign_asl_detection/config.py
+src/handsign_asl_detection.egg-info/PKG-INFO
+src/handsign_asl_detection.egg-info/SOURCES.txt
+src/handsign_asl_detection.egg-info/dependency_links.txt
+src/handsign_asl_detection.egg-info/top_level.txt
