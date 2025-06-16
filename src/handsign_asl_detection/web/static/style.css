@@ -1,37 +1,19 @@
-[role="radiogroup"] input[type="radio"] {
-  display: none;
+footer {visibility:hidden;}
+
+.custom-footer{
+  position:fixed;
+  left:0; bottom:0; width:100%;
+
+  background:#C51D4A;
+  color:#FAFAFA;
+
+  padding:8px 0;
+  text-align:center;
+  font-size:0.85rem;
+
+  z-index:9999;
 }
 
-/* Apunta al contenedor del sidebar para no liarla en el main */
-[data-testid="stSidebar"] .option-menu {
-  padding: 0 !important;
-  background-color: #f8f9fa;
-}
 
-/* Links del menú */
-[data-testid="stSidebar"] .option-menu .nav-link {
-  font-size: 16px;
-  text-align: left;
-  margin: 0;
-  color: inherit;         /* hereda color de st.theme */
-  --hover-color: #eee;    /* var usada internamente */
-}
-
-/* Hover */
-[data-testid="stSidebar"] .option-menu .nav-link:hover {
-  background-color: var(--hover-color);
-}
-
-/* Opción seleccionada */
-[data-testid="stSidebar"] .option-menu .nav-link-selected {
-  background-color: #e9ecef;
-}
-
-/* Aplica a todo st.expander */
-[data-testid="stExpander"] {
-  border: 1px solid #444;      /* Borde gris oscuro */
-  border-radius: 8px;          /* Esquinas redondeadas */
-  margin-bottom: 16px;         /* Separación entre bloques */
-}
 
 

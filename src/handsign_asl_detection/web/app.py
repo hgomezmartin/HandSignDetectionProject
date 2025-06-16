@@ -8,7 +8,7 @@ from handsign_asl_detection.web.components.trainer import trainer_v2_section
 
 # Configuración base
 st.set_page_config(
-    page_title="Hand Sign Detection",
+    page_title="ASL Detection",
     page_icon="✌️",
     layout="wide"
 )
@@ -22,7 +22,7 @@ else:
 
 # SIDEBAR CON OPTION_MENU
 with st.sidebar:
-    st.title("✌️ Hand Sign Detection")
+    st.title("✌️ ASL Detection")
 
     # menú principal idéntico al de streamlit-geospatial
     seleccion = option_menu(
@@ -50,3 +50,8 @@ elif seleccion == "Foto":
     photo_section(model_path)
 else:
     trainer_v2_section()
+
+st.markdown(
+    '<div class="custom-footer">ASL Detection Project · 2025</div>',
+    unsafe_allow_html=True,
+)
