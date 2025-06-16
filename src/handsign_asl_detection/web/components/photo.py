@@ -22,7 +22,7 @@ def photo_section(model_path: str | Path):
     label, conf = classify_image(img_bgr, model_path)
 
     # UI
-    st.image(img_bgr[:, :, ::-1], caption="Imagen subida", use_column_width=True)
+    st.image(img_bgr[:, :, ::-1], caption="Imagen subida", use_container_width=True)
     st.markdown(f"### Predicción: **{label}** &nbsp; ({conf:.1f} %)")
     st.progress(int(conf))
 

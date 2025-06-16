@@ -171,7 +171,7 @@ def main():
     # 2.1 Introduccion del EarlyStopping y del ReduceLr
     earlystop_cb = EarlyStopping(
         monitor="val_accuracy",
-        patience=7,
+        patience=10,
         restore_best_weights=True,
         verbose=1
     )

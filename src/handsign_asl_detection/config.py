@@ -9,7 +9,7 @@ from pathlib import Path
 
 # RUTAS
 
-# Directorio raíz del proyecto  (<repo>/src/handsign_asl_detection/config.py → subimos 2 niveles)
+# Directorio raíz del proyecto  (<repo>/src/handsign_asl_detection/config.py -> subimos 2 niveles)
 ROOT = Path(__file__).resolve().parents[2]
 
 # Datos
@@ -26,6 +26,11 @@ IMX_READY_DIR = MODELS_DIR / "imx_ready"
 RANDOM_SEARCH_DIR = MODELS_DIR / "random_search"
 TEACHABLE_DIR = MODELS_DIR / "teachable_machine"
 TEACHABLE_TFL_DIR = TEACHABLE_DIR / "rpi_tflite"
+
+# Web
+WEB_MODULE_DIR = ROOT / "src" / "handsign_asl_detection" / "web"
+STATIC_DIR = WEB_MODULE_DIR / "static"
+CSS_DIR = STATIC_DIR
 
 # Hiperparámetros globales
 # De los Modelos:

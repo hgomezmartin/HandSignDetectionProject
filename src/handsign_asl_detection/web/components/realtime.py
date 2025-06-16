@@ -1,9 +1,3 @@
-"""
-Componente “Tiempo real” con OpenCV.
-Todo el código es exactamente el mismo que funcionaba en app.py,
-simplemente empaquetado en una función `realtime_section(model_path)`
-para que app.py quede limpio.
-"""
 from __future__ import annotations
 
 import platform
@@ -19,7 +13,7 @@ import streamlit as st
 
 from handsign_asl_detection.classifier.classifier_rpi import RealTimeASLClassifier
 
-# ───────── helpers idénticos ────────────────────────────────────────────
+# helpers idénticos
 METRICS_BUFFER = deque(maxlen=120)  # mismo buffer que antes
 
 
@@ -32,7 +26,7 @@ def _read_temp() -> Optional[float]:
 
 
 def initialize_camera():
-    """Inicializa cámara compatible Win / Linux (igual que antes)."""
+    # Inicializa cámara compatible Win / Linux (igual que antes)
     if platform.system() == "Windows":
         cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
     else:
@@ -45,7 +39,7 @@ def initialize_camera():
 
 # sección pública
 def realtime_section(model_path):
-    """Muestra toda la interfaz de tiempo real EXACTAMENTE como antes."""
+    # Muestra toda la interfaz de tiempo real EXACTAMENTE como antes
     st.header("🔴 Reconocimiento en tiempo real")
 
     # Estado persistente para la cámara
