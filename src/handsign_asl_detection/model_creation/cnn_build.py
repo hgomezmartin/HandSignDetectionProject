@@ -19,6 +19,8 @@ MODEL_PATH = AUGMENTED_DIR / "my_cnn_model.h5"  # …/models/augmented/my_cnn_mo
 LABELS_PATH = AUGMENTED_DIR / "labels.txt"  # …/models/augmented/class_labels.txt
 PLOTS_DIR = AUGMENTED_DIR / "plots"
 
+AUTOTUNE = tf.data.AUTOTUNE
+
 # Establecemos semillas para la reproducibilidad
 random.seed(SEED)
 np.random.seed(SEED)
