@@ -1,0 +1,14 @@
+# carpetas y archivos que no hacen falta dentro de la imagen
+.git/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+.idea/
+*.ipynb
+notebook/
+data/
+doc/
+*.zip
+*.h5

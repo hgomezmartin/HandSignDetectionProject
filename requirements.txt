@@ -10,7 +10,6 @@ mediapipe~=0.10.18
 streamlit~=1.45.1
 streamlit_autorefresh~=1.0.1
 streamlit-option-menu~=0.4.0
-keras~=2.12.0
 onnxruntime~=1.19.2
 av~=14.4.0
 pandas~=2.3.0

@@ -1,7 +1,6 @@
 import os
 import random
 
-import cv2
 import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
@@ -17,55 +16,13 @@ from handsign_asl_detection.config import IMG_SIZE, BATCH_SIZE, EPOCHS, SEED, DI
 
 DATA_DIR = DISORDERED_DATADIR
 MODEL_PATH = AUGMENTED_DIR / "my_cnn_model.h5"  # …/models/augmented/my_cnn_model.h5
-LABELS_PATH = AUGMENTED_DIR / "class_labels.txt"  # …/models/augmented/class_labels.txt
+LABELS_PATH = AUGMENTED_DIR / "labels.txt"  # …/models/augmented/class_labels.txt
 PLOTS_DIR = AUGMENTED_DIR / "plots"
 
 # Establecemos semillas para la reproducibilidad
 random.seed(SEED)
 np.random.seed(SEED)
 tf.random.set_seed(SEED)
-
-
-def load_dataset(data_dir=DATA_DIR, img_size=IMG_SIZE):
-    """
-    Carga las imágenes del directorio 'Data' donde cada subcarpeta es una clase (A, B, C, 0, 1, etc.)
-    Devuelve arrays de numpy para X (imágenes) e y (etiquetas).
-    """
-    labels = []
-    images = []
-
-    # Lista de carpetas (clases)
-    classes = sorted(os.listdir(data_dir))
-
-    # Mapeamos cada clase a un índice entero
-    class_to_idx = {cls_name: idx for idx, cls_name in enumerate(classes)}
-
-    # Recorremos cada clase y cargamos sus imágenes
-    for cls_name in classes:
-        cls_folder = os.path.join(data_dir, cls_name)
-        if not os.path.isdir(cls_folder):
-            continue
-
-        for img_name in os.listdir(cls_folder):
-            img_path = os.path.join(cls_folder, img_name)
-            # Lee la imagen
-            img = cv2.imread(img_path)
-            if img is None:
-                continue
-            # Aseguramos que la imagen sea del tamaño deseado
-            img = cv2.resize(img, (img_size, img_size))
-            # Convertimos a array numpy
-            img = np.array(img, dtype=np.float32)
-            # Normalizamos a [0,1]
-            img = img / 255.0
-
-            images.append(img)
-            labels.append(class_to_idx[cls_name])
-
-    images = np.array(images)
-    labels = np.array(labels)
-
-    return images, labels, classes
 
 
 def build_cnn_model(input_shape, num_classes):
@@ -146,7 +103,7 @@ def main():
         batch_size=BATCH_SIZE,
         class_mode='sparse',  # Usamos etiquetas enteras
         subset='training',
-        seed = 42  # fija shuffle + aug para reproducibilidad
+        seed=SEED  # fija shuffle + aug para reproducibilidad
     )
 
     validation_generator = val_datagen.flow_from_directory(
@@ -156,7 +113,7 @@ def main():
         batch_size=BATCH_SIZE,
         class_mode='sparse',
         subset='validation',
-        seed = 42  # fija shuffle + aug para reproducibilidad
+        seed=SEED  # fija shuffle + aug para reproducibilidad
     )
 
     num_classes = len(train_generator.class_indices)
@@ -171,7 +128,7 @@ def main():
     # 2.1 Introduccion del EarlyStopping y del ReduceLr
     earlystop_cb = EarlyStopping(
         monitor="val_accuracy",
-        patience=10,
+        patience=15,
         restore_best_weights=True,
         verbose=1
     )
@@ -179,7 +136,7 @@ def main():
     reduce_lr_cb = ReduceLROnPlateau(
         monitor="val_accuracy",
         factor=0.5,
-        patience=3,
+        patience=4,
         min_lr=0.000001,
         verbose=1
     )
@@ -203,7 +160,7 @@ def main():
         # Escribimos las clases ordenadas por su índice
         for cls_name in sorted(train_generator.class_indices, key=train_generator.class_indices.get):
             f.write(f"{cls_name}\n")
-    print("Se ha guardado class_labels.txt con las clases.")
+    print("Se ha guardado en labels.txt con las clases.")
 
     # 6. Evaluar en validación / test si tuviera
     val_loss, val_acc = model.evaluate(validation_generator, verbose=0)

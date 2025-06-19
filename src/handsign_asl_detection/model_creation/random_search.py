@@ -2,7 +2,6 @@ import json
 import os
 import random
 
-import cv2
 import keras_tuner as kt
 import matplotlib.pyplot as plt
 import numpy as np
@@ -18,13 +17,14 @@ from tensorflow.keras.regularizers import l2
 
 from handsign_asl_detection.config import RANDOM_SEARCH_DIR, DISORDERED_DATADIR, IMG_SIZE, SEED, EPOCHS
 
-# --- Constantes ---
+# Constantes
 DATA_DIR = DISORDERED_DATADIR
-MODEL_PATH = RANDOM_SEARCH_DIR / "my_cnn_model.h5"  # …/models/augmented/my_cnn_model.h5
-LABELS_PATH = RANDOM_SEARCH_DIR / "class_labels.txt"  # …/models/augmented/class_labels.txt
+MODEL_PATH = RANDOM_SEARCH_DIR / "my_cnn_randomsearch.h5"
+LABELS_PATH = RANDOM_SEARCH_DIR / "labels.txt"
 PLOTS_DIR = RANDOM_SEARCH_DIR / "plots"
 HPARAMS_JSON_PATH = RANDOM_SEARCH_DIR / "hparams" / "best_hparams.json"
 HPARAMS_HTML_PATH = RANDOM_SEARCH_DIR / "hparams" / "best_hparams.html"
+TUNER_DIR = RANDOM_SEARCH_DIR / "tuner_dir"
 
 # Establecemos esras semillas para la reproducibilidad
 random.seed(SEED)
@@ -32,48 +32,15 @@ np.random.seed(SEED)
 tf.random.set_seed(SEED)
 
 
-def load_dataset(data_dir=DISORDERED_DATADIR, img_size=IMG_SIZE):
-    """
-    Carga las imágenes del directorio 'Data' donde cada subcarpeta es una clase (A, B, C, etc.)
-    Devuelve arrays de numpy para X (imágenes) e y (etiquetas).
-    """
-    labels = []
-    images = []
-
-    # Lista de carpetas (clases)
-    classes = sorted(os.listdir(data_dir))
-    class_to_idx = {cls_name: idx for idx, cls_name in enumerate(classes)}
-
-    for cls_name in classes:
-        cls_folder = os.path.join(data_dir, cls_name)
-        if not os.path.isdir(cls_folder):
-            continue
-
-        for img_name in os.listdir(cls_folder):
-            img_path = os.path.join(cls_folder, img_name)
-            img = cv2.imread(img_path)
-            if img is None:
-                continue
-            img = cv2.resize(img, (img_size, img_size))
-            img = np.array(img, dtype=np.float32)
-            img = img / 255.0
-
-            images.append(img)
-            labels.append(class_to_idx[cls_name])
-
-    images = np.array(images)
-    labels = np.array(labels)
-    return images, labels, classes
-
-
 def build_model(hp, input_shape, num_classes):
     model = Sequential()
 
     # Hiperparámetros para la activación #
 
-    dropout_rate = hp.Float('dropout_rate', min_value=0.2, max_value=0.7, step=0.1)
-    lr = hp.Choice('learning_rate', values=[0.0001, 0.001])
+    dropout_rate = hp.Float('dropout_rate', min_value=0.2, max_value=0.6, step=0.1)
+    lr = hp.Choice('learning_rate', values=[0.0001, 0.0003, 0.001])
     ks = hp.Choice('kernel_size', values=[3, 5])
+    l2_reg = hp.Float('l2_reg', min_value=0.000001, max_value=0.001, sampling='log')
 
     # Capa convolucional 1
     model.add(Conv2D(filters=32, kernel_size=(ks, ks), activation='relu', input_shape=input_shape))
@@ -99,7 +66,6 @@ def build_model(hp, input_shape, num_classes):
     model.add(GlobalAveragePooling2D())
 
     # Regularización l2
-    l2_reg = hp.Float('l2_reg', min_value=0.000001, max_value=0.001, sampling='log')
 
     # Capa densa intermedia
     model.add(Dense(512, activation='relu', kernel_regularizer=l2(l2_reg)))
@@ -122,25 +88,39 @@ def build_model(hp, input_shape, num_classes):
 
 def main():
     # 1. Generadores de datos con validación (20%)
-    datagen = ImageDataGenerator(
+    train_datagen = ImageDataGenerator(
         rescale=1. / 255,
-        validation_split=0.2
+        rotation_range=15,
+        zoom_range=0.1,
+        width_shift_range=0.1,
+        height_shift_range=0.1,
+        brightness_range=[0.8, 1.2],
+        horizontal_flip=True,
+        fill_mode='reflect',
+        validation_split=0.2  # 20 % para validación
     )
 
-    train_generator = datagen.flow_from_directory(
+    val_datagen = ImageDataGenerator(
+        rescale=1. / 255,
+        validation_split=0.20
+    )
+
+    train_generator = train_datagen.flow_from_directory(
         DATA_DIR,
         target_size=(IMG_SIZE, IMG_SIZE),
-        batch_size=32,  # Aumentar dependiendo de la GPU usada
+        batch_size=32,  # o 64 si tu GPU lo admite
         class_mode='sparse',
-        subset='training'
+        subset='training',
+        seed=SEED  # mismo seed → reproducible
     )
 
-    validation_generator = datagen.flow_from_directory(
+    validation_generator = val_datagen.flow_from_directory(
         DATA_DIR,
         target_size=(IMG_SIZE, IMG_SIZE),
         batch_size=32,
         class_mode='sparse',
-        subset='validation'
+        subset='validation',
+        seed=SEED
     )
 
     num_classes = len(train_generator.class_indices)
@@ -157,11 +137,11 @@ def main():
             num_classes=num_classes
         ),
         objective='val_accuracy',
-        max_trials=2,
+        max_trials=24,
         executions_per_trial=1,
         overwrite=True,
-        directory='Model/random_search/tuner_dir',
-        project_name='my_cnn_randomSearch'
+        directory=str(TUNER_DIR),
+        project_name='my_cnn_randomsearch'
     )
 
     # 3. Lanzamos la búsqueda de hiperparámetros
@@ -169,7 +149,7 @@ def main():
         train_generator,
         epochs=EPOCHS,
         validation_data=validation_generator,
-        callbacks=[tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=5)]
+        callbacks=[tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=8)]
     )
 
     # 4. Obtenemos los mejores hiperparámetros
@@ -228,7 +208,7 @@ def main():
     with open(LABELS_PATH, "w") as f:
         for cls_name in sorted(train_generator.class_indices, key=train_generator.class_indices.get):
             f.write(f"{cls_name}\n")
-    print("Se ha guardado class_labels.txt con las clases.")
+    print("Se ha guardado labels.txt con las clases.")
 
     # 8. Evaluar
     val_loss, val_acc = best_model.evaluate(validation_generator, verbose=0)
@@ -264,6 +244,7 @@ def main():
     plt.savefig(acc_path, dpi=150)
     print(f"Guardado gráfico de Exactitud/Accuracy en: {acc_path}")
     plt.show()
+
 
 if __name__ == "__main__":
     main()
