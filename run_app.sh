@@ -1,11 +1,16 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -e                        # aborta ante cualquier error
 
-set -e
-
+# 1. Posiciónate en la carpeta del script
 cd "$(dirname "$0")"
-export PYTHONPATH="$PWD/src:$PYTHONPATH"
 
-python3 -m pip install --upgrade --no-cache-dir pip
-python3 -m pip install --no-cache-dir -r requirements.txt
+# 2. Crea (si no existe) y activa el entorno virtual .venv
+[ -d .venv ] || python3 -m venv .venv
+source .venv/bin/activate
 
-streamlit run src/handsign_asl_detection/web/app.py
+# 3. Instala dependencias y paquete
+pip install -r requirements.txt
+pip install -e .
+
+# 4. Lanza Streamlit
+exec streamlit run src/handsign_asl_detection/web/app.py

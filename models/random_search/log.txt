@@ -1,0 +1,1953 @@
+/usr/local/bin/python3.11 /Users/macprodehugo/Documents/TFG/HandSignDetectionProject/src/handsign_asl_detection/model_creation/random_search.py
+Found 26000 files belonging to 26 classes.
+Using 20800 files for training.
+Metal device set to: AMD Radeon HD - FirePro D700
+
+systemMemory: 64.00 GB
+maxCacheSize: 3.00 GB
+
+Found 26000 files belonging to 26 classes.
+Using 5200 files for validation.
+Clases encontradas (en total 26): {'A': 0, 'B': 1, 'C': 2, 'D': 3, 'E': 4, 'F': 5, 'G': 6, 'H': 7, 'I': 8, 'J': 9, 'K': 10, 'L': 11, 'M': 12, 'N': 13, 'O': 14, 'P': 15, 'Q': 16, 'R': 17, 'S': 18, 'T': 19, 'U': 20, 'V': 21, 'W': 22, 'X': 23, 'Y': 24, 'Z': 25}
+GPUs/MPS disponibles: [PhysicalDevice(name='/physical_device:GPU:0', device_type='GPU')]
+
+Search: Running Trial #1
+
+Value             |Best Value So Far |Hyperparameter
+0.6               |0.6               |dropout_rate
+0.001             |0.001             |learning_rate
+5                 |5                 |kernel_size
+0.0001            |0.0001            |l2_reg
+
+Epoch 1/10
+2025-06-19 23:46:15.255264: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+  6/650 [..............................] - ETA: 5:00 - loss: 3.4053 - accuracy: 0.1198WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.1539s vs `on_train_batch_end` time: 0.2857s). Check your callbacks.
+650/650 [==============================] - 328s 500ms/step - loss: 1.1258 - accuracy: 0.6436 - val_loss: 15.6643 - val_accuracy: 0.1631
+Epoch 2/10
+650/650 [==============================] - 321s 494ms/step - loss: 0.3333 - accuracy: 0.9044 - val_loss: 3.3597 - val_accuracy: 0.4583
+Epoch 3/10
+650/650 [==============================] - 321s 495ms/step - loss: 0.1682 - accuracy: 0.9624 - val_loss: 0.6618 - val_accuracy: 0.8310
+Epoch 4/10
+650/650 [==============================] - 321s 494ms/step - loss: 0.1177 - accuracy: 0.9783 - val_loss: 0.2306 - val_accuracy: 0.9363
+Epoch 5/10
+650/650 [==============================] - 321s 494ms/step - loss: 0.0997 - accuracy: 0.9827 - val_loss: 0.2386 - val_accuracy: 0.9348
+Epoch 6/10
+650/650 [==============================] - 321s 494ms/step - loss: 0.0788 - accuracy: 0.9903 - val_loss: 2.0354 - val_accuracy: 0.6425
+Epoch 7/10
+650/650 [==============================] - 321s 494ms/step - loss: 0.0942 - accuracy: 0.9845 - val_loss: 2.4229 - val_accuracy: 0.5413
+
+Trial 1 Complete [00h 37m 35s]
+val_accuracy: 0.936346173286438
+
+Best val_accuracy So Far: 0.936346173286438
+Total elapsed time: 00h 37m 35s
+
+Search: Running Trial #2
+
+Value             |Best Value So Far |Hyperparameter
+0.6               |0.6               |dropout_rate
+0.0003            |0.001             |learning_rate
+3                 |5                 |kernel_size
+0.0001            |0.0001            |l2_reg
+
+Epoch 1/10
+2025-06-20 00:23:50.106460: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+  6/650 [..............................] - ETA: 2:53 - loss: 3.8195 - accuracy: 0.0833WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.0922s vs `on_train_batch_end` time: 0.1581s). Check your callbacks.
+650/650 [==============================] - 188s 286ms/step - loss: 1.3769 - accuracy: 0.5724 - val_loss: 5.3012 - val_accuracy: 0.1825
+Epoch 2/10
+650/650 [==============================] - 187s 288ms/step - loss: 0.4841 - accuracy: 0.8623 - val_loss: 4.1966 - val_accuracy: 0.3733
+Epoch 3/10
+650/650 [==============================] - 187s 288ms/step - loss: 0.2423 - accuracy: 0.9446 - val_loss: 0.6836 - val_accuracy: 0.7852
+Epoch 4/10
+650/650 [==============================] - 187s 287ms/step - loss: 0.1441 - accuracy: 0.9767 - val_loss: 2.1565 - val_accuracy: 0.7046
+Epoch 5/10
+650/650 [==============================] - 187s 287ms/step - loss: 0.0954 - accuracy: 0.9912 - val_loss: 1.2283 - val_accuracy: 0.7294
+Epoch 6/10
+650/650 [==============================] - 187s 288ms/step - loss: 0.0714 - accuracy: 0.9963 - val_loss: 0.2656 - val_accuracy: 0.9244
+Epoch 7/10
+650/650 [==============================] - 187s 287ms/step - loss: 0.0625 - accuracy: 0.9970 - val_loss: 1.5110 - val_accuracy: 0.6852
+Epoch 8/10
+650/650 [==============================] - 187s 287ms/step - loss: 0.0839 - accuracy: 0.9887 - val_loss: 0.3402 - val_accuracy: 0.9027
+Epoch 9/10
+650/650 [==============================] - 186s 287ms/step - loss: 0.0573 - accuracy: 0.9960 - val_loss: 1.5963 - val_accuracy: 0.6933
+
+Trial 2 Complete [00h 28m 03s]
+val_accuracy: 0.924423098564148
+
+Best val_accuracy So Far: 0.936346173286438
+Total elapsed time: 01h 05m 38s
+
+Search: Running Trial #3
+
+Value             |Best Value So Far |Hyperparameter
+0.6               |0.6               |dropout_rate
+0.0003            |0.001             |learning_rate
+3                 |5                 |kernel_size
+0.0005            |0.0001            |l2_reg
+
+Epoch 1/10
+2025-06-20 00:51:53.319772: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+  6/650 [..............................] - ETA: 2:53 - loss: 3.8955 - accuracy: 0.0729WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.0932s vs `on_train_batch_end` time: 0.1631s). Check your callbacks.
+650/650 [==============================] - 189s 287ms/step - loss: 1.4659 - accuracy: 0.5782 - val_loss: 2.1126 - val_accuracy: 0.4592
+Epoch 2/10
+650/650 [==============================] - 186s 287ms/step - loss: 0.6147 - accuracy: 0.8593 - val_loss: 2.1685 - val_accuracy: 0.5323
+Epoch 3/10
+650/650 [==============================] - 186s 286ms/step - loss: 0.3716 - accuracy: 0.9438 - val_loss: 4.3071 - val_accuracy: 0.4108
+Epoch 4/10
+650/650 [==============================] - 186s 287ms/step - loss: 0.2615 - accuracy: 0.9753 - val_loss: 0.3975 - val_accuracy: 0.9187
+Epoch 5/10
+650/650 [==============================] - 186s 286ms/step - loss: 0.1969 - accuracy: 0.9895 - val_loss: 1.9892 - val_accuracy: 0.6338
+Epoch 6/10
+650/650 [==============================] - 186s 287ms/step - loss: 0.1530 - accuracy: 0.9965 - val_loss: 0.3124 - val_accuracy: 0.9267
+Epoch 7/10
+650/650 [==============================] - 186s 286ms/step - loss: 0.1222 - accuracy: 0.9986 - val_loss: 0.3910 - val_accuracy: 0.8967
+Epoch 8/10
+650/650 [==============================] - 187s 288ms/step - loss: 0.0938 - accuracy: 0.9999 - val_loss: 0.2135 - val_accuracy: 0.9527
+Epoch 9/10
+650/650 [==============================] - 187s 288ms/step - loss: 0.1145 - accuracy: 0.9871 - val_loss: 0.2454 - val_accuracy: 0.9431
+Epoch 10/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.0768 - accuracy: 0.9980 - val_loss: 0.1160 - val_accuracy: 0.9787
+
+Trial 3 Complete [00h 31m 08s]
+val_accuracy: 0.9786538481712341
+
+Best val_accuracy So Far: 0.9786538481712341
+Total elapsed time: 01h 36m 46s
+
+Search: Running Trial #4
+
+Value             |Best Value So Far |Hyperparameter
+0.2               |0.6               |dropout_rate
+0.001             |0.0003            |learning_rate
+3                 |3                 |kernel_size
+0.001             |0.0005            |l2_reg
+
+Epoch 1/10
+121/650 [====>.........................] - ETA: 2:23 - loss: 2.0835 - accuracy: 0.42512025-06-20 01:23:00.966634: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.0949s vs `on_train_batch_end` time: 0.1636s). Check your callbacks.
+650/650 [==============================] - 190s 289ms/step - loss: 1.1836 - accuracy: 0.6961 - val_loss: 2.6506 - val_accuracy: 0.4667
+Epoch 2/10
+650/650 [==============================] - 187s 288ms/step - loss: 0.4480 - accuracy: 0.9245 - val_loss: 6.0912 - val_accuracy: 0.2502
+Epoch 3/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.2371 - accuracy: 0.9725 - val_loss: 0.7551 - val_accuracy: 0.7952
+Epoch 4/10
+650/650 [==============================] - 187s 288ms/step - loss: 0.1535 - accuracy: 0.9866 - val_loss: 11.5014 - val_accuracy: 0.2017
+Epoch 5/10
+650/650 [==============================] - 187s 288ms/step - loss: 0.1336 - accuracy: 0.9858 - val_loss: 14.2678 - val_accuracy: 0.2129
+Epoch 6/10
+650/650 [==============================] - 187s 288ms/step - loss: 0.1084 - accuracy: 0.9911 - val_loss: 2.4926 - val_accuracy: 0.5590
+
+Trial 4 Complete [00h 18m 48s]
+val_accuracy: 0.795192301273346
+
+Best val_accuracy So Far: 0.9786538481712341
+Total elapsed time: 01h 55m 34s
+
+Search: Running Trial #5
+
+Value             |Best Value So Far |Hyperparameter
+0.6               |0.6               |dropout_rate
+0.001             |0.0003            |learning_rate
+5                 |3                 |kernel_size
+0.001             |0.0005            |l2_reg
+
+Epoch 1/10
+ 66/650 [==>...........................] - ETA: 4:31 - loss: 2.6757 - accuracy: 0.27562025-06-20 01:41:48.513103: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.1524s vs `on_train_batch_end` time: 0.3010s). Check your callbacks.
+650/650 [==============================] - 326s 499ms/step - loss: 1.3404 - accuracy: 0.6574 - val_loss: 7.9067 - val_accuracy: 0.2663
+Epoch 2/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.4578 - accuracy: 0.9231 - val_loss: 0.4663 - val_accuracy: 0.8971
+Epoch 3/10
+650/650 [==============================] - 322s 495ms/step - loss: 0.2315 - accuracy: 0.9756 - val_loss: 0.3296 - val_accuracy: 0.9335
+Epoch 4/10
+650/650 [==============================] - 322s 495ms/step - loss: 0.1325 - accuracy: 0.9912 - val_loss: 0.1719 - val_accuracy: 0.9688
+Epoch 5/10
+650/650 [==============================] - 322s 495ms/step - loss: 0.1114 - accuracy: 0.9905 - val_loss: 0.1283 - val_accuracy: 0.9817
+Epoch 6/10
+650/650 [==============================] - 322s 495ms/step - loss: 0.1078 - accuracy: 0.9884 - val_loss: 1.0169 - val_accuracy: 0.7046
+Epoch 7/10
+650/650 [==============================] - 322s 495ms/step - loss: 0.0739 - accuracy: 0.9959 - val_loss: 0.0549 - val_accuracy: 0.9956
+Epoch 8/10
+650/650 [==============================] - 323s 497ms/step - loss: 0.0535 - accuracy: 0.9957 - val_loss: 5.0986 - val_accuracy: 0.3263
+Epoch 9/10
+650/650 [==============================] - 323s 497ms/step - loss: 0.1587 - accuracy: 0.9778 - val_loss: 0.0774 - val_accuracy: 0.9960
+Epoch 10/10
+650/650 [==============================] - 322s 496ms/step - loss: 0.0465 - accuracy: 0.9992 - val_loss: 0.0407 - val_accuracy: 0.9965
+
+Trial 5 Complete [00h 53m 48s]
+val_accuracy: 0.9965384602546692
+
+Best val_accuracy So Far: 0.9965384602546692
+Total elapsed time: 02h 49m 22s
+
+Search: Running Trial #6
+
+Value             |Best Value So Far |Hyperparameter
+0.5               |0.6               |dropout_rate
+0.001             |0.001             |learning_rate
+3                 |5                 |kernel_size
+0.0001            |0.001             |l2_reg
+
+Epoch 1/10
+2025-06-20 02:35:36.621749: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+  6/650 [..............................] - ETA: 2:54 - loss: 3.4365 - accuracy: 0.1146WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.0943s vs `on_train_batch_end` time: 0.1635s). Check your callbacks.
+650/650 [==============================] - 189s 288ms/step - loss: 1.1971 - accuracy: 0.6189 - val_loss: 10.9795 - val_accuracy: 0.1758
+Epoch 2/10
+650/650 [==============================] - 187s 287ms/step - loss: 0.4534 - accuracy: 0.8658 - val_loss: 9.0350 - val_accuracy: 0.2260
+Epoch 3/10
+650/650 [==============================] - 188s 290ms/step - loss: 0.2462 - accuracy: 0.9394 - val_loss: 2.2720 - val_accuracy: 0.5652
+Epoch 4/10
+650/650 [==============================] - 186s 286ms/step - loss: 0.1782 - accuracy: 0.9612 - val_loss: 1.1466 - val_accuracy: 0.8140
+Epoch 5/10
+650/650 [==============================] - 186s 286ms/step - loss: 0.1461 - accuracy: 0.9731 - val_loss: 10.2794 - val_accuracy: 0.2938
+Epoch 6/10
+650/650 [==============================] - 186s 286ms/step - loss: 0.1405 - accuracy: 0.9753 - val_loss: 0.2208 - val_accuracy: 0.9487
+Epoch 7/10
+650/650 [==============================] - 186s 286ms/step - loss: 0.1040 - accuracy: 0.9866 - val_loss: 2.8166 - val_accuracy: 0.5635
+Epoch 8/10
+650/650 [==============================] - 186s 286ms/step - loss: 0.0983 - accuracy: 0.9873 - val_loss: 4.7659 - val_accuracy: 0.5088
+Epoch 9/10
+650/650 [==============================] - 186s 286ms/step - loss: 0.0968 - accuracy: 0.9864 - val_loss: 3.8190 - val_accuracy: 0.7008
+
+Trial 6 Complete [00h 28m 00s]
+val_accuracy: 0.9486538767814636
+
+Best val_accuracy So Far: 0.9965384602546692
+Total elapsed time: 03h 17m 22s
+
+Search: Running Trial #7
+
+Value             |Best Value So Far |Hyperparameter
+0.5               |0.6               |dropout_rate
+0.0001            |0.001             |learning_rate
+3                 |5                 |kernel_size
+0.0001            |0.001             |l2_reg
+
+Epoch 1/10
+2025-06-20 03:03:36.612912: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+  6/650 [..............................] - ETA: 2:53 - loss: 3.6454 - accuracy: 0.0625WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.0930s vs `on_train_batch_end` time: 0.1613s). Check your callbacks.
+650/650 [==============================] - 188s 287ms/step - loss: 1.7071 - accuracy: 0.4786 - val_loss: 1.4616 - val_accuracy: 0.5012
+Epoch 2/10
+650/650 [==============================] - 186s 286ms/step - loss: 0.8213 - accuracy: 0.7643 - val_loss: 0.6843 - val_accuracy: 0.8046
+Epoch 3/10
+650/650 [==============================] - 186s 286ms/step - loss: 0.4779 - accuracy: 0.8867 - val_loss: 0.9066 - val_accuracy: 0.7252
+Epoch 4/10
+650/650 [==============================] - 186s 286ms/step - loss: 0.3048 - accuracy: 0.9403 - val_loss: 0.8001 - val_accuracy: 0.7413
+Epoch 5/10
+650/650 [==============================] - 186s 286ms/step - loss: 0.2085 - accuracy: 0.9666 - val_loss: 0.7449 - val_accuracy: 0.7619
+
+Trial 7 Complete [00h 15m 32s]
+val_accuracy: 0.8046153783798218
+
+Best val_accuracy So Far: 0.9965384602546692
+Total elapsed time: 03h 32m 54s
+
+Search: Running Trial #8
+
+Value             |Best Value So Far |Hyperparameter
+0.5               |0.6               |dropout_rate
+0.0003            |0.001             |learning_rate
+3                 |5                 |kernel_size
+0.0005            |0.001             |l2_reg
+
+Epoch 1/10
+2025-06-20 03:19:08.977341: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+  6/650 [..............................] - ETA: 2:54 - loss: 3.6061 - accuracy: 0.0781WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.0947s vs `on_train_batch_end` time: 0.1627s). Check your callbacks.
+650/650 [==============================] - 189s 288ms/step - loss: 1.4010 - accuracy: 0.6056 - val_loss: 1.0536 - val_accuracy: 0.7171
+Epoch 2/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.5775 - accuracy: 0.8767 - val_loss: 1.4546 - val_accuracy: 0.6094
+Epoch 3/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.3546 - accuracy: 0.9490 - val_loss: 1.1506 - val_accuracy: 0.6915
+Epoch 4/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.2518 - accuracy: 0.9783 - val_loss: 12.9593 - val_accuracy: 0.4527
+
+Trial 8 Complete [00h 12m 33s]
+val_accuracy: 0.7171154022216797
+
+Best val_accuracy So Far: 0.9965384602546692
+Total elapsed time: 03h 45m 27s
+
+Search: Running Trial #9
+
+Value             |Best Value So Far |Hyperparameter
+0.6               |0.6               |dropout_rate
+0.0003            |0.001             |learning_rate
+5                 |5                 |kernel_size
+0.0005            |0.001             |l2_reg
+
+Epoch 1/10
+ 69/650 [==>...........................] - ETA: 4:30 - loss: 2.6982 - accuracy: 0.24372025-06-20 03:31:41.694927: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.1528s vs `on_train_batch_end` time: 0.2989s). Check your callbacks.
+650/650 [==============================] - 326s 499ms/step - loss: 1.3272 - accuracy: 0.6338 - val_loss: 5.1644 - val_accuracy: 0.3960
+Epoch 2/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.4310 - accuracy: 0.9272 - val_loss: 2.6328 - val_accuracy: 0.6308
+Epoch 3/10
+650/650 [==============================] - 323s 497ms/step - loss: 0.2518 - accuracy: 0.9795 - val_loss: 8.4239 - val_accuracy: 0.4142
+Epoch 4/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.1825 - accuracy: 0.9934 - val_loss: 1.1685 - val_accuracy: 0.7652
+Epoch 5/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.1390 - accuracy: 0.9987 - val_loss: 0.1465 - val_accuracy: 0.9873
+Epoch 6/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.1052 - accuracy: 0.9997 - val_loss: 0.1193 - val_accuracy: 0.9908
+Epoch 7/10
+650/650 [==============================] - 322s 495ms/step - loss: 0.0770 - accuracy: 0.9999 - val_loss: 0.0893 - val_accuracy: 0.9912
+Epoch 8/10
+650/650 [==============================] - 321s 495ms/step - loss: 0.1179 - accuracy: 0.9832 - val_loss: 0.1154 - val_accuracy: 0.9852
+Epoch 9/10
+650/650 [==============================] - 322s 495ms/step - loss: 0.0685 - accuracy: 0.9969 - val_loss: 0.0686 - val_accuracy: 0.9960
+Epoch 10/10
+650/650 [==============================] - 322s 496ms/step - loss: 0.0435 - accuracy: 1.0000 - val_loss: 0.0456 - val_accuracy: 0.9967
+
+Trial 9 Complete [00h 53m 52s]
+val_accuracy: 0.9967307448387146
+
+Best val_accuracy So Far: 0.9967307448387146
+Total elapsed time: 04h 39m 18s
+
+Search: Running Trial #10
+
+Value             |Best Value So Far |Hyperparameter
+0.2               |0.6               |dropout_rate
+0.001             |0.0003            |learning_rate
+5                 |5                 |kernel_size
+0.0005            |0.0005            |l2_reg
+
+Epoch 1/10
+ 42/650 [>.............................] - ETA: 4:43 - loss: 2.4006 - accuracy: 0.31992025-06-20 04:25:33.250236: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.1530s vs `on_train_batch_end` time: 0.2992s). Check your callbacks.
+650/650 [==============================] - 326s 498ms/step - loss: 0.9642 - accuracy: 0.7386 - val_loss: 5.7546 - val_accuracy: 0.1875
+Epoch 2/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.3505 - accuracy: 0.9398 - val_loss: 4.6379 - val_accuracy: 0.4825
+Epoch 3/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.1940 - accuracy: 0.9797 - val_loss: 0.3237 - val_accuracy: 0.9369
+Epoch 4/10
+650/650 [==============================] - 323s 497ms/step - loss: 0.1188 - accuracy: 0.9918 - val_loss: 1.2791 - val_accuracy: 0.6890
+Epoch 5/10
+650/650 [==============================] - 323s 497ms/step - loss: 0.0872 - accuracy: 0.9934 - val_loss: 0.2706 - val_accuracy: 0.9217
+Epoch 6/10
+650/650 [==============================] - 323s 497ms/step - loss: 0.0875 - accuracy: 0.9899 - val_loss: 0.4832 - val_accuracy: 0.8615
+
+Trial 10 Complete [00h 32m 23s]
+val_accuracy: 0.936923086643219
+
+Best val_accuracy So Far: 0.9967307448387146
+Total elapsed time: 05h 11m 42s
+
+Search: Running Trial #11
+
+Value             |Best Value So Far |Hyperparameter
+0.2               |0.6               |dropout_rate
+0.001             |0.0003            |learning_rate
+5                 |5                 |kernel_size
+0.001             |0.0005            |l2_reg
+
+Epoch 1/10
+ 45/650 [=>............................] - ETA: 4:41 - loss: 2.5476 - accuracy: 0.29172025-06-20 04:57:56.584605: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.1546s vs `on_train_batch_end` time: 0.2987s). Check your callbacks.
+650/650 [==============================] - 326s 499ms/step - loss: 1.0665 - accuracy: 0.7458 - val_loss: 1.5553 - val_accuracy: 0.6162
+Epoch 2/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.3486 - accuracy: 0.9547 - val_loss: 2.9110 - val_accuracy: 0.4844
+Epoch 3/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.1653 - accuracy: 0.9866 - val_loss: 0.1318 - val_accuracy: 0.9808
+Epoch 4/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.1012 - accuracy: 0.9941 - val_loss: 0.0893 - val_accuracy: 0.9896
+Epoch 5/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.0951 - accuracy: 0.9908 - val_loss: 0.0930 - val_accuracy: 0.9883
+Epoch 6/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.0597 - accuracy: 0.9972 - val_loss: 0.0462 - val_accuracy: 0.9967
+Epoch 7/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.0792 - accuracy: 0.9908 - val_loss: 37.3475 - val_accuracy: 0.0883
+Epoch 8/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.0780 - accuracy: 0.9925 - val_loss: 0.0446 - val_accuracy: 0.9960
+Epoch 9/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.0280 - accuracy: 0.9997 - val_loss: 0.0220 - val_accuracy: 0.9990
+Epoch 10/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.0628 - accuracy: 0.9898 - val_loss: 8.9317 - val_accuracy: 0.3396
+
+Trial 11 Complete [00h 54m 02s]
+val_accuracy: 0.9990384578704834
+
+Best val_accuracy So Far: 0.9990384578704834
+Total elapsed time: 06h 05m 43s
+
+Search: Running Trial #12
+
+Value             |Best Value So Far |Hyperparameter
+0.6               |0.2               |dropout_rate
+0.0003            |0.001             |learning_rate
+5                 |5                 |kernel_size
+0.001             |0.001             |l2_reg
+
+Epoch 1/10
+ 39/650 [>.............................] - ETA: 4:44 - loss: 3.0533 - accuracy: 0.20432025-06-20 05:51:58.433853: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.1537s vs `on_train_batch_end` time: 0.2979s). Check your callbacks.
+650/650 [==============================] - 326s 499ms/step - loss: 1.3893 - accuracy: 0.6633 - val_loss: 1.2576 - val_accuracy: 0.7115
+Epoch 2/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.5218 - accuracy: 0.9368 - val_loss: 0.7517 - val_accuracy: 0.8652
+Epoch 3/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.3299 - accuracy: 0.9821 - val_loss: 2.2168 - val_accuracy: 0.6563
+Epoch 4/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.2262 - accuracy: 0.9960 - val_loss: 1.7202 - val_accuracy: 0.6406
+Epoch 5/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.1574 - accuracy: 0.9987 - val_loss: 0.3399 - val_accuracy: 0.9246
+Epoch 6/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.1170 - accuracy: 0.9981 - val_loss: 0.2384 - val_accuracy: 0.9537
+Epoch 7/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.0963 - accuracy: 0.9955 - val_loss: 1.3689 - val_accuracy: 0.6583
+Epoch 8/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.0647 - accuracy: 0.9991 - val_loss: 0.0611 - val_accuracy: 0.9942
+Epoch 9/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.0400 - accuracy: 1.0000 - val_loss: 0.0428 - val_accuracy: 0.9958
+Epoch 10/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.0272 - accuracy: 1.0000 - val_loss: 0.0294 - val_accuracy: 0.9987
+
+Trial 12 Complete [00h 54m 04s]
+val_accuracy: 0.9986538290977478
+
+Best val_accuracy So Far: 0.9990384578704834
+Total elapsed time: 06h 59m 47s
+
+Search: Running Trial #13
+
+Value             |Best Value So Far |Hyperparameter
+0.5               |0.2               |dropout_rate
+0.001             |0.001             |learning_rate
+5                 |5                 |kernel_size
+0.0001            |0.001             |l2_reg
+
+Epoch 1/10
+ 45/650 [=>............................] - ETA: 4:41 - loss: 2.4466 - accuracy: 0.25352025-06-20 06:46:02.225681: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.1553s vs `on_train_batch_end` time: 0.2974s). Check your callbacks.
+650/650 [==============================] - 326s 499ms/step - loss: 0.9805 - accuracy: 0.6881 - val_loss: 8.5694 - val_accuracy: 0.2058
+Epoch 2/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.2581 - accuracy: 0.9328 - val_loss: 1.1866 - val_accuracy: 0.7194
+Epoch 3/10
+650/650 [==============================] - 323s 498ms/step - loss: 0.1334 - accuracy: 0.9725 - val_loss: 2.5696 - val_accuracy: 0.5727
+Epoch 4/10
+650/650 [==============================] - 323s 498ms/step - loss: 0.0940 - accuracy: 0.9850 - val_loss: 2.3027 - val_accuracy: 0.6662
+Epoch 5/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.0773 - accuracy: 0.9896 - val_loss: 0.1343 - val_accuracy: 0.9731
+Epoch 6/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.0720 - accuracy: 0.9908 - val_loss: 0.3692 - val_accuracy: 0.9200
+Epoch 7/10
+650/650 [==============================] - 323s 498ms/step - loss: 0.0849 - accuracy: 0.9856 - val_loss: 0.2297 - val_accuracy: 0.9419
+Epoch 8/10
+650/650 [==============================] - 323s 498ms/step - loss: 0.0628 - accuracy: 0.9924 - val_loss: 0.1997 - val_accuracy: 0.9569
+
+Trial 13 Complete [00h 43m 11s]
+val_accuracy: 0.9730769395828247
+
+Best val_accuracy So Far: 0.9990384578704834
+Total elapsed time: 07h 42m 58s
+
+Search: Running Trial #14
+
+Value             |Best Value So Far |Hyperparameter
+0.6               |0.2               |dropout_rate
+0.0001            |0.001             |learning_rate
+3                 |5                 |kernel_size
+0.0001            |0.001             |l2_reg
+
+Epoch 1/10
+ 80/650 [==>...........................] - ETA: 2:34 - loss: 3.0251 - accuracy: 0.13982025-06-20 07:29:13.328318: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.0956s vs `on_train_batch_end` time: 0.1612s). Check your callbacks.
+650/650 [==============================] - 190s 289ms/step - loss: 1.8201 - accuracy: 0.4417 - val_loss: 1.3382 - val_accuracy: 0.6000
+Epoch 2/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.8851 - accuracy: 0.7364 - val_loss: 0.7565 - val_accuracy: 0.7394
+Epoch 3/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.5443 - accuracy: 0.8549 - val_loss: 0.4780 - val_accuracy: 0.8631
+Epoch 4/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.3614 - accuracy: 0.9183 - val_loss: 0.4186 - val_accuracy: 0.8815
+Epoch 5/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.2522 - accuracy: 0.9523 - val_loss: 0.3730 - val_accuracy: 0.8958
+Epoch 6/10
+650/650 [==============================] - 187s 288ms/step - loss: 0.1805 - accuracy: 0.9740 - val_loss: 0.4354 - val_accuracy: 0.8690
+Epoch 7/10
+650/650 [==============================] - 187s 288ms/step - loss: 0.1351 - accuracy: 0.9862 - val_loss: 0.3981 - val_accuracy: 0.8685
+Epoch 8/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.1050 - accuracy: 0.9926 - val_loss: 0.2311 - val_accuracy: 0.9429
+Epoch 9/10
+650/650 [==============================] - 187s 288ms/step - loss: 0.0832 - accuracy: 0.9975 - val_loss: 0.2515 - val_accuracy: 0.9237
+Epoch 10/10
+650/650 [==============================] - 187s 288ms/step - loss: 0.0691 - accuracy: 0.9991 - val_loss: 0.3267 - val_accuracy: 0.8906
+
+Trial 14 Complete [00h 31m 18s]
+val_accuracy: 0.942884624004364
+
+Best val_accuracy So Far: 0.9990384578704834
+Total elapsed time: 08h 14m 16s
+
+Search: Running Trial #15
+
+Value             |Best Value So Far |Hyperparameter
+0.5               |0.2               |dropout_rate
+0.001             |0.001             |learning_rate
+3                 |5                 |kernel_size
+0.001             |0.001             |l2_reg
+
+Epoch 1/10
+ 71/650 [==>...........................] - ETA: 2:36 - loss: 2.6261 - accuracy: 0.28522025-06-20 08:00:31.313411: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.0974s vs `on_train_batch_end` time: 0.1597s). Check your callbacks.
+650/650 [==============================] - 190s 289ms/step - loss: 1.4313 - accuracy: 0.6206 - val_loss: 1.0376 - val_accuracy: 0.7442
+Epoch 2/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.5880 - accuracy: 0.8840 - val_loss: 5.1756 - val_accuracy: 0.4062
+Epoch 3/10
+650/650 [==============================] - 187s 288ms/step - loss: 0.3014 - accuracy: 0.9601 - val_loss: 1.7932 - val_accuracy: 0.6790
+Epoch 4/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.1837 - accuracy: 0.9833 - val_loss: 0.5541 - val_accuracy: 0.8565
+Epoch 5/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.1298 - accuracy: 0.9908 - val_loss: 0.4090 - val_accuracy: 0.8800
+Epoch 6/10
+650/650 [==============================] - 187s 288ms/step - loss: 0.1200 - accuracy: 0.9886 - val_loss: 1.9479 - val_accuracy: 0.5815
+Epoch 7/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.1033 - accuracy: 0.9922 - val_loss: 0.1259 - val_accuracy: 0.9779
+Epoch 8/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.0760 - accuracy: 0.9951 - val_loss: 30.9183 - val_accuracy: 0.0975
+Epoch 9/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.1095 - accuracy: 0.9877 - val_loss: 0.4145 - val_accuracy: 0.8915
+Epoch 10/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.0616 - accuracy: 0.9971 - val_loss: 0.0642 - val_accuracy: 0.9925
+
+Trial 15 Complete [00h 31m 19s]
+val_accuracy: 0.9925000071525574
+
+Best val_accuracy So Far: 0.9990384578704834
+Total elapsed time: 08h 45m 35s
+
+Search: Running Trial #16
+
+Value             |Best Value So Far |Hyperparameter
+0.6               |0.2               |dropout_rate
+0.0003            |0.001             |learning_rate
+3                 |5                 |kernel_size
+0.001             |0.001             |l2_reg
+
+Epoch 1/10
+106/650 [===>..........................] - ETA: 2:27 - loss: 2.7967 - accuracy: 0.26092025-06-20 08:31:50.410578: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.0973s vs `on_train_batch_end` time: 0.1598s). Check your callbacks.
+650/650 [==============================] - 190s 290ms/step - loss: 1.6425 - accuracy: 0.5767 - val_loss: 4.5313 - val_accuracy: 0.3715
+Epoch 2/10
+650/650 [==============================] - 188s 290ms/step - loss: 0.7255 - accuracy: 0.8695 - val_loss: 2.4389 - val_accuracy: 0.5519
+Epoch 3/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.4584 - accuracy: 0.9490 - val_loss: 0.8907 - val_accuracy: 0.7983
+Epoch 4/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.3227 - accuracy: 0.9791 - val_loss: 2.8903 - val_accuracy: 0.6092
+Epoch 5/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.2365 - accuracy: 0.9919 - val_loss: 2.7552 - val_accuracy: 0.6256
+Epoch 6/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.1730 - accuracy: 0.9979 - val_loss: 2.5650 - val_accuracy: 0.5913
+
+Trial 16 Complete [00h 18m 51s]
+val_accuracy: 0.7982692122459412
+
+Best val_accuracy So Far: 0.9990384578704834
+Total elapsed time: 09h 04m 26s
+
+Search: Running Trial #17
+
+Value             |Best Value So Far |Hyperparameter
+0.6               |0.2               |dropout_rate
+0.0001            |0.001             |learning_rate
+3                 |5                 |kernel_size
+0.0005            |0.001             |l2_reg
+
+Epoch 1/10
+ 93/650 [===>..........................] - ETA: 2:30 - loss: 3.1004 - accuracy: 0.15832025-06-20 08:50:41.420777: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.0957s vs `on_train_batch_end` time: 0.1611s). Check your callbacks.
+650/650 [==============================] - 190s 290ms/step - loss: 1.9114 - accuracy: 0.4664 - val_loss: 1.3205 - val_accuracy: 0.6560
+Epoch 2/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.9941 - accuracy: 0.7460 - val_loss: 1.0552 - val_accuracy: 0.7254
+Epoch 3/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.6683 - accuracy: 0.8576 - val_loss: 0.9341 - val_accuracy: 0.7496
+Epoch 4/10
+650/650 [==============================] - 187s 288ms/step - loss: 0.4866 - accuracy: 0.9190 - val_loss: 1.0772 - val_accuracy: 0.7221
+Epoch 5/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.3742 - accuracy: 0.9546 - val_loss: 0.8518 - val_accuracy: 0.7840
+Epoch 6/10
+650/650 [==============================] - 187s 288ms/step - loss: 0.3010 - accuracy: 0.9755 - val_loss: 0.8978 - val_accuracy: 0.7677
+Epoch 7/10
+650/650 [==============================] - 188s 288ms/step - loss: 0.2512 - accuracy: 0.9871 - val_loss: 1.1620 - val_accuracy: 0.7113
+Epoch 8/10
+650/650 [==============================] - 187s 288ms/step - loss: 0.2160 - accuracy: 0.9936 - val_loss: 1.5588 - val_accuracy: 0.6669
+
+Trial 17 Complete [00h 25m 03s]
+val_accuracy: 0.7840384840965271
+
+Best val_accuracy So Far: 0.9990384578704834
+Total elapsed time: 09h 29m 30s
+
+Search: Running Trial #18
+
+Value             |Best Value So Far |Hyperparameter
+0.2               |0.2               |dropout_rate
+0.0003            |0.001             |learning_rate
+3                 |5                 |kernel_size
+0.0005            |0.001             |l2_reg
+
+Epoch 1/10
+116/650 [====>.........................] - ETA: 2:24 - loss: 2.1891 - accuracy: 0.39302025-06-20 09:15:44.804892: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.0956s vs `on_train_batch_end` time: 0.1613s). Check your callbacks.
+650/650 [==============================] - 190s 290ms/step - loss: 1.2109 - accuracy: 0.6729 - val_loss: 1.1911 - val_accuracy: 0.6442
+Epoch 2/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.4743 - accuracy: 0.9124 - val_loss: 0.7099 - val_accuracy: 0.8156
+Epoch 3/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.2967 - accuracy: 0.9672 - val_loss: 0.3525 - val_accuracy: 0.9438
+Epoch 4/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.2178 - accuracy: 0.9862 - val_loss: 0.6926 - val_accuracy: 0.8196
+Epoch 5/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.1680 - accuracy: 0.9947 - val_loss: 1.7328 - val_accuracy: 0.6931
+Epoch 6/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.1296 - accuracy: 0.9981 - val_loss: 0.4574 - val_accuracy: 0.8756
+
+Trial 18 Complete [00h 18m 51s]
+val_accuracy: 0.9438461661338806
+
+Best val_accuracy So Far: 0.9990384578704834
+Total elapsed time: 09h 48m 21s
+
+Search: Running Trial #19
+
+Value             |Best Value So Far |Hyperparameter
+0.2               |0.2               |dropout_rate
+0.0003            |0.001             |learning_rate
+5                 |5                 |kernel_size
+0.0005            |0.001             |l2_reg
+
+Epoch 1/10
+ 59/650 [=>............................] - ETA: 4:35 - loss: 2.3432 - accuracy: 0.34222025-06-20 09:34:35.808160: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.1550s vs `on_train_batch_end` time: 0.2976s). Check your callbacks.
+650/650 [==============================] - 327s 500ms/step - loss: 1.0157 - accuracy: 0.7389 - val_loss: 1.0831 - val_accuracy: 0.7094
+Epoch 2/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.3276 - accuracy: 0.9582 - val_loss: 0.8431 - val_accuracy: 0.7923
+Epoch 3/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.2060 - accuracy: 0.9887 - val_loss: 0.4617 - val_accuracy: 0.8992
+Epoch 4/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.1523 - accuracy: 0.9966 - val_loss: 0.1721 - val_accuracy: 0.9825
+Epoch 5/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.1285 - accuracy: 0.9951 - val_loss: 0.1705 - val_accuracy: 0.9717
+Epoch 6/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.0860 - accuracy: 0.9994 - val_loss: 0.0725 - val_accuracy: 0.9994
+Epoch 7/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.0586 - accuracy: 0.9999 - val_loss: 0.0508 - val_accuracy: 0.9990
+Epoch 8/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.0877 - accuracy: 0.9881 - val_loss: 1.5133 - val_accuracy: 0.7627
+Epoch 9/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.0451 - accuracy: 0.9995 - val_loss: 0.0387 - val_accuracy: 0.9990
+
+Trial 19 Complete [00h 48m 41s]
+val_accuracy: 0.999423086643219
+
+Best val_accuracy So Far: 0.999423086643219
+Total elapsed time: 10h 37m 02s
+
+Search: Running Trial #20
+
+Value             |Best Value So Far |Hyperparameter
+0.2               |0.2               |dropout_rate
+0.0001            |0.0003            |learning_rate
+3                 |5                 |kernel_size
+0.0001            |0.0005            |l2_reg
+
+Epoch 1/10
+102/650 [===>..........................] - ETA: 2:28 - loss: 2.5626 - accuracy: 0.27182025-06-20 10:23:16.654104: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.0963s vs `on_train_batch_end` time: 0.1626s). Check your callbacks.
+650/650 [==============================] - 190s 290ms/step - loss: 1.4793 - accuracy: 0.5684 - val_loss: 1.0951 - val_accuracy: 0.6538
+Epoch 2/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.6553 - accuracy: 0.8248 - val_loss: 0.5456 - val_accuracy: 0.8525
+Epoch 3/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.3912 - accuracy: 0.9116 - val_loss: 0.3735 - val_accuracy: 0.9044
+Epoch 4/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.2555 - accuracy: 0.9514 - val_loss: 0.2442 - val_accuracy: 0.9500
+Epoch 5/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.1786 - accuracy: 0.9725 - val_loss: 0.2381 - val_accuracy: 0.9387
+Epoch 6/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.1315 - accuracy: 0.9842 - val_loss: 0.5705 - val_accuracy: 0.8354
+Epoch 7/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.1025 - accuracy: 0.9916 - val_loss: 0.1660 - val_accuracy: 0.9633
+Epoch 8/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.0817 - accuracy: 0.9964 - val_loss: 0.1522 - val_accuracy: 0.9677
+Epoch 9/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.0672 - accuracy: 0.9989 - val_loss: 0.1375 - val_accuracy: 0.9698
+Epoch 10/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.0579 - accuracy: 0.9997 - val_loss: 0.1230 - val_accuracy: 0.9706
+
+Trial 20 Complete [00h 31m 21s]
+val_accuracy: 0.9705769419670105
+
+Best val_accuracy So Far: 0.999423086643219
+Total elapsed time: 11h 08m 23s
+
+Search: Running Trial #21
+
+Value             |Best Value So Far |Hyperparameter
+0.6               |0.2               |dropout_rate
+0.0001            |0.0003            |learning_rate
+5                 |5                 |kernel_size
+0.0005            |0.0005            |l2_reg
+
+Epoch 1/10
+ 65/650 [==>...........................] - ETA: 4:32 - loss: 2.9554 - accuracy: 0.18852025-06-20 10:54:37.658539: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.1554s vs `on_train_batch_end` time: 0.2969s). Check your callbacks.
+650/650 [==============================] - 326s 499ms/step - loss: 1.6568 - accuracy: 0.5403 - val_loss: 1.0987 - val_accuracy: 0.7288
+Epoch 2/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.6829 - accuracy: 0.8574 - val_loss: 0.8383 - val_accuracy: 0.7698
+Epoch 3/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.3971 - accuracy: 0.9490 - val_loss: 0.5420 - val_accuracy: 0.8648
+Epoch 4/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.2788 - accuracy: 0.9807 - val_loss: 2.8389 - val_accuracy: 0.6360
+Epoch 5/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.2194 - accuracy: 0.9938 - val_loss: 0.8394 - val_accuracy: 0.7977
+Epoch 6/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.1844 - accuracy: 0.9987 - val_loss: 0.2317 - val_accuracy: 0.9771
+Epoch 7/10
+650/650 [==============================] - 322s 496ms/step - loss: 0.1597 - accuracy: 0.9996 - val_loss: 0.1947 - val_accuracy: 0.9837
+Epoch 8/10
+650/650 [==============================] - 322s 495ms/step - loss: 0.1425 - accuracy: 0.9993 - val_loss: 0.5854 - val_accuracy: 0.8665
+Epoch 9/10
+650/650 [==============================] - 322s 496ms/step - loss: 0.1510 - accuracy: 0.9949 - val_loss: 0.1643 - val_accuracy: 0.9860
+Epoch 10/10
+650/650 [==============================] - 322s 496ms/step - loss: 0.1120 - accuracy: 0.9999 - val_loss: 0.1334 - val_accuracy: 0.9913
+
+Trial 21 Complete [00h 53m 55s]
+val_accuracy: 0.9913461804389954
+
+Best val_accuracy So Far: 0.999423086643219
+Total elapsed time: 12h 02m 17s
+
+Search: Running Trial #22
+
+Value             |Best Value So Far |Hyperparameter
+0.6               |0.2               |dropout_rate
+0.001             |0.0003            |learning_rate
+5                 |5                 |kernel_size
+0.0005            |0.0005            |l2_reg
+
+Epoch 1/10
+2025-06-20 11:48:32.302556: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+  6/650 [..............................] - ETA: 4:59 - loss: 3.6749 - accuracy: 0.0885WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.1520s vs `on_train_batch_end` time: 0.2962s). Check your callbacks.
+650/650 [==============================] - 324s 496ms/step - loss: 1.2178 - accuracy: 0.6554 - val_loss: 11.8639 - val_accuracy: 0.1394
+Epoch 2/10
+650/650 [==============================] - 322s 496ms/step - loss: 0.3837 - accuracy: 0.9284 - val_loss: 0.5784 - val_accuracy: 0.8244
+Epoch 3/10
+650/650 [==============================] - 322s 495ms/step - loss: 0.2061 - accuracy: 0.9772 - val_loss: 2.1816 - val_accuracy: 0.6690
+Epoch 4/10
+650/650 [==============================] - 322s 496ms/step - loss: 0.1318 - accuracy: 0.9902 - val_loss: 1.8375 - val_accuracy: 0.6710
+Epoch 5/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.1004 - accuracy: 0.9920 - val_loss: 4.0035 - val_accuracy: 0.5817
+
+Trial 22 Complete [00h 26m 55s]
+val_accuracy: 0.82442307472229
+
+Best val_accuracy So Far: 0.999423086643219
+Total elapsed time: 12h 29m 12s
+
+Search: Running Trial #23
+
+Value             |Best Value So Far |Hyperparameter
+0.2               |0.2               |dropout_rate
+0.0001            |0.0003            |learning_rate
+3                 |5                 |kernel_size
+0.0005            |0.0005            |l2_reg
+
+Epoch 1/10
+  2/650 [..............................] - ETA: 2:58 - loss: 3.7284 - accuracy: 0.0625 2025-06-20 12:15:27.392313: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+  6/650 [..............................] - ETA: 2:59 - loss: 3.5869 - accuracy: 0.0833WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.1045s vs `on_train_batch_end` time: 0.1602s). Check your callbacks.
+650/650 [==============================] - 190s 290ms/step - loss: 1.6292 - accuracy: 0.5713 - val_loss: 1.1370 - val_accuracy: 0.7200
+Epoch 2/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.7729 - accuracy: 0.8303 - val_loss: 0.6409 - val_accuracy: 0.8713
+Epoch 3/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.5088 - accuracy: 0.9173 - val_loss: 0.4395 - val_accuracy: 0.9377
+Epoch 4/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.3774 - accuracy: 0.9549 - val_loss: 0.3903 - val_accuracy: 0.9387
+Epoch 5/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.3023 - accuracy: 0.9733 - val_loss: 0.3593 - val_accuracy: 0.9365
+Epoch 6/10
+650/650 [==============================] - 187s 287ms/step - loss: 0.2530 - accuracy: 0.9845 - val_loss: 0.3383 - val_accuracy: 0.9442
+Epoch 7/10
+650/650 [==============================] - 187s 287ms/step - loss: 0.2171 - accuracy: 0.9912 - val_loss: 0.3288 - val_accuracy: 0.9406
+Epoch 8/10
+650/650 [==============================] - 187s 288ms/step - loss: 0.1880 - accuracy: 0.9967 - val_loss: 0.2661 - val_accuracy: 0.9596
+Epoch 9/10
+650/650 [==============================] - 187s 287ms/step - loss: 0.1652 - accuracy: 0.9987 - val_loss: 0.3417 - val_accuracy: 0.9246
+Epoch 10/10
+650/650 [==============================] - 187s 288ms/step - loss: 0.1443 - accuracy: 0.9994 - val_loss: 0.2317 - val_accuracy: 0.9612
+
+Trial 23 Complete [00h 31m 17s]
+val_accuracy: 0.9611538648605347
+
+Best val_accuracy So Far: 0.999423086643219
+Total elapsed time: 13h 00m 29s
+
+Search: Running Trial #24
+
+Value             |Best Value So Far |Hyperparameter
+0.2               |0.2               |dropout_rate
+0.0001            |0.0003            |learning_rate
+5                 |5                 |kernel_size
+0.001             |0.0005            |l2_reg
+
+Epoch 1/10
+2025-06-20 12:46:43.874977: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+  6/650 [..............................] - ETA: 5:01 - loss: 3.7685 - accuracy: 0.0625WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.1585s vs `on_train_batch_end` time: 0.2941s). Check your callbacks.
+650/650 [==============================] - 325s 497ms/step - loss: 1.3746 - accuracy: 0.6937 - val_loss: 0.9951 - val_accuracy: 0.7837
+Epoch 2/10
+650/650 [==============================] - 322s 496ms/step - loss: 0.6122 - accuracy: 0.9314 - val_loss: 0.6949 - val_accuracy: 0.8852
+Epoch 3/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.4244 - accuracy: 0.9787 - val_loss: 0.5690 - val_accuracy: 0.9125
+Epoch 4/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.3353 - accuracy: 0.9935 - val_loss: 0.4034 - val_accuracy: 0.9544
+Epoch 5/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.2775 - accuracy: 0.9984 - val_loss: 0.2903 - val_accuracy: 0.9813
+Epoch 6/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.2256 - accuracy: 0.9995 - val_loss: 0.2519 - val_accuracy: 0.9831
+Epoch 7/10
+650/650 [==============================] - 323s 496ms/step - loss: 0.1804 - accuracy: 0.9998 - val_loss: 0.1973 - val_accuracy: 0.9869
+Epoch 8/10
+650/650 [==============================] - 322s 496ms/step - loss: 0.1385 - accuracy: 0.9999 - val_loss: 0.1885 - val_accuracy: 0.9767
+Epoch 9/10
+650/650 [==============================] - 322s 496ms/step - loss: 0.1369 - accuracy: 0.9934 - val_loss: 0.6360 - val_accuracy: 0.8398
+Epoch 10/10
+650/650 [==============================] - 322s 496ms/step - loss: 0.0895 - accuracy: 0.9998 - val_loss: 0.1138 - val_accuracy: 0.9881
+
+Trial 24 Complete [00h 53m 54s]
+val_accuracy: 0.98807692527771
+
+Best val_accuracy So Far: 0.999423086643219
+Total elapsed time: 13h 54m 23s
+
+Search: Running Trial #25
+
+Value             |Best Value So Far |Hyperparameter
+0.5               |0.2               |dropout_rate
+0.0001            |0.0003            |learning_rate
+5                 |5                 |kernel_size
+0.001             |0.0005            |l2_reg
+
+Epoch 1/10
+2025-06-20 13:40:37.816666: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+  6/650 [..............................] - ETA: 5:02 - loss: 3.9592 - accuracy: 0.0521WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.1586s vs `on_train_batch_end` time: 0.2879s). Check your callbacks.
+650/650 [==============================] - 324s 496ms/step - loss: 1.7429 - accuracy: 0.5670 - val_loss: 1.0410 - val_accuracy: 0.8202
+Epoch 2/10
+650/650 [==============================] - 322s 496ms/step - loss: 0.7886 - accuracy: 0.8741 - val_loss: 0.8321 - val_accuracy: 0.8198
+Epoch 3/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.5157 - accuracy: 0.9576 - val_loss: 0.5947 - val_accuracy: 0.9190
+Epoch 4/10
+650/650 [==============================] - 323s 496ms/step - loss: 0.3953 - accuracy: 0.9844 - val_loss: 0.5128 - val_accuracy: 0.9325
+Epoch 5/10
+650/650 [==============================] - 322s 496ms/step - loss: 0.3244 - accuracy: 0.9943 - val_loss: 0.4433 - val_accuracy: 0.9481
+Epoch 6/10
+650/650 [==============================] - 322s 496ms/step - loss: 0.2706 - accuracy: 0.9989 - val_loss: 0.3492 - val_accuracy: 0.9635
+Epoch 7/10
+650/650 [==============================] - 322s 496ms/step - loss: 0.2251 - accuracy: 0.9997 - val_loss: 0.2794 - val_accuracy: 0.9758
+Epoch 8/10
+650/650 [==============================] - 323s 498ms/step - loss: 0.1830 - accuracy: 0.9999 - val_loss: 0.2240 - val_accuracy: 0.9815
+Epoch 9/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.1440 - accuracy: 0.9999 - val_loss: 0.2199 - val_accuracy: 0.9748
+Epoch 10/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.1459 - accuracy: 0.9922 - val_loss: 0.2371 - val_accuracy: 0.9610
+
+Trial 25 Complete [00h 53m 52s]
+val_accuracy: 0.9815384745597839
+
+Best val_accuracy So Far: 0.999423086643219
+Total elapsed time: 14h 48m 15s
+
+Search: Running Trial #26
+
+Value             |Best Value So Far |Hyperparameter
+0.6               |0.2               |dropout_rate
+0.001             |0.0003            |learning_rate
+3                 |5                 |kernel_size
+0.0001            |0.0005            |l2_reg
+
+Epoch 1/10
+132/650 [=====>........................] - ETA: 2:20 - loss: 2.1516 - accuracy: 0.33972025-06-20 14:34:30.125737: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.0997s vs `on_train_batch_end` time: 0.1608s). Check your callbacks.
+650/650 [==============================] - 191s 291ms/step - loss: 1.2952 - accuracy: 0.5884 - val_loss: 1.8595 - val_accuracy: 0.5302
+Epoch 2/10
+650/650 [==============================] - 188s 290ms/step - loss: 0.5074 - accuracy: 0.8471 - val_loss: 3.2382 - val_accuracy: 0.4848
+Epoch 3/10
+650/650 [==============================] - 188s 290ms/step - loss: 0.2858 - accuracy: 0.9239 - val_loss: 15.2129 - val_accuracy: 0.1542
+Epoch 4/10
+650/650 [==============================] - 188s 290ms/step - loss: 0.1905 - accuracy: 0.9578 - val_loss: 4.4745 - val_accuracy: 0.4104
+
+Trial 26 Complete [00h 12m 36s]
+val_accuracy: 0.5301923155784607
+
+Best val_accuracy So Far: 0.999423086643219
+Total elapsed time: 15h 00m 51s
+
+Search: Running Trial #27
+
+Value             |Best Value So Far |Hyperparameter
+0.5               |0.2               |dropout_rate
+0.0001            |0.0003            |learning_rate
+5                 |5                 |kernel_size
+0.0005            |0.0005            |l2_reg
+
+Epoch 1/10
+ 38/650 [>.............................] - ETA: 4:45 - loss: 3.1396 - accuracy: 0.14562025-06-20 14:47:06.200704: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.1580s vs `on_train_batch_end` time: 0.2929s). Check your callbacks.
+650/650 [==============================] - 327s 500ms/step - loss: 1.5246 - accuracy: 0.5840 - val_loss: 0.9441 - val_accuracy: 0.7606
+Epoch 2/10
+650/650 [==============================] - 322s 496ms/step - loss: 0.5838 - accuracy: 0.8920 - val_loss: 0.4616 - val_accuracy: 0.9269
+Epoch 3/10
+650/650 [==============================] - 322s 496ms/step - loss: 0.3400 - accuracy: 0.9658 - val_loss: 0.4267 - val_accuracy: 0.9156
+Epoch 4/10
+650/650 [==============================] - 322s 496ms/step - loss: 0.2457 - accuracy: 0.9891 - val_loss: 0.5073 - val_accuracy: 0.8860
+Epoch 5/10
+650/650 [==============================] - 322s 496ms/step - loss: 0.1994 - accuracy: 0.9968 - val_loss: 0.4149 - val_accuracy: 0.9192
+
+Trial 27 Complete [00h 26m 56s]
+val_accuracy: 0.9269230961799622
+
+Best val_accuracy So Far: 0.999423086643219
+Total elapsed time: 15h 27m 47s
+
+Search: Running Trial #28
+
+Value             |Best Value So Far |Hyperparameter
+0.5               |0.2               |dropout_rate
+0.001             |0.0003            |learning_rate
+5                 |5                 |kernel_size
+0.0005            |0.0005            |l2_reg
+
+Epoch 1/10
+2025-06-20 15:14:01.987080: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+  6/650 [..............................] - ETA: 5:00 - loss: 3.6970 - accuracy: 0.0729WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.1572s vs `on_train_batch_end` time: 0.2818s). Check your callbacks.
+650/650 [==============================] - 326s 499ms/step - loss: 1.1904 - accuracy: 0.6649 - val_loss: 4.1028 - val_accuracy: 0.3725
+Epoch 2/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.3787 - accuracy: 0.9327 - val_loss: 2.4777 - val_accuracy: 0.5194
+Epoch 3/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.2043 - accuracy: 0.9775 - val_loss: 0.2328 - val_accuracy: 0.9567
+Epoch 4/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.1320 - accuracy: 0.9892 - val_loss: 1.5096 - val_accuracy: 0.6819
+Epoch 5/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.0793 - accuracy: 0.9975 - val_loss: 0.0644 - val_accuracy: 0.9963
+Epoch 6/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.0983 - accuracy: 0.9867 - val_loss: 14.7509 - val_accuracy: 0.1335
+Epoch 7/10
+650/650 [==============================] - 322s 496ms/step - loss: 0.0788 - accuracy: 0.9934 - val_loss: 0.0481 - val_accuracy: 0.9981
+Epoch 8/10
+650/650 [==============================] - 322s 496ms/step - loss: 0.0390 - accuracy: 0.9991 - val_loss: 0.4522 - val_accuracy: 0.8671
+Epoch 9/10
+650/650 [==============================] - 322s 495ms/step - loss: 0.1053 - accuracy: 0.9820 - val_loss: 1.0484 - val_accuracy: 0.7748
+Epoch 10/10
+650/650 [==============================] - 323s 497ms/step - loss: 0.0666 - accuracy: 0.9963 - val_loss: 0.0440 - val_accuracy: 0.9977
+
+Trial 28 Complete [00h 53m 57s]
+val_accuracy: 0.9980769157409668
+
+Best val_accuracy So Far: 0.999423086643219
+Total elapsed time: 16h 21m 44s
+
+Search: Running Trial #29
+
+Value             |Best Value So Far |Hyperparameter
+0.5               |0.2               |dropout_rate
+0.001             |0.0003            |learning_rate
+3                 |5                 |kernel_size
+0.0005            |0.0005            |l2_reg
+
+Epoch 1/10
+ 81/650 [==>...........................] - ETA: 2:34 - loss: 2.3108 - accuracy: 0.32792025-06-20 16:07:58.547745: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.0996s vs `on_train_batch_end` time: 0.1606s). Check your callbacks.
+650/650 [==============================] - 191s 290ms/step - loss: 1.2265 - accuracy: 0.6483 - val_loss: 2.3821 - val_accuracy: 0.5210
+Epoch 2/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.4627 - accuracy: 0.9015 - val_loss: 2.7185 - val_accuracy: 0.4169
+Epoch 3/10
+650/650 [==============================] - 188s 290ms/step - loss: 0.2520 - accuracy: 0.9657 - val_loss: 1.9489 - val_accuracy: 0.6013
+Epoch 4/10
+650/650 [==============================] - 188s 290ms/step - loss: 0.1656 - accuracy: 0.9827 - val_loss: 0.3044 - val_accuracy: 0.9229
+Epoch 5/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.1231 - accuracy: 0.9883 - val_loss: 2.3679 - val_accuracy: 0.5746
+Epoch 6/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.1102 - accuracy: 0.9886 - val_loss: 19.4754 - val_accuracy: 0.1806
+Epoch 7/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.0981 - accuracy: 0.9900 - val_loss: 5.0375 - val_accuracy: 0.4512
+
+Trial 29 Complete [00h 22m 00s]
+val_accuracy: 0.9228846430778503
+
+Best val_accuracy So Far: 0.999423086643219
+Total elapsed time: 16h 43m 44s
+
+Search: Running Trial #30
+
+Value             |Best Value So Far |Hyperparameter
+0.2               |0.2               |dropout_rate
+0.0003            |0.0003            |learning_rate
+5                 |5                 |kernel_size
+0.001             |0.0005            |l2_reg
+
+Epoch 1/10
+ 71/650 [==>...........................] - ETA: 4:30 - loss: 2.3744 - accuracy: 0.38512025-06-20 16:29:58.531572: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.1594s vs `on_train_batch_end` time: 0.2971s). Check your callbacks.
+650/650 [==============================] - 327s 500ms/step - loss: 1.1202 - accuracy: 0.7609 - val_loss: 0.5734 - val_accuracy: 0.9369
+Epoch 2/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.4310 - accuracy: 0.9618 - val_loss: 0.6630 - val_accuracy: 0.8481
+Epoch 3/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.2753 - accuracy: 0.9883 - val_loss: 0.9433 - val_accuracy: 0.7763
+Epoch 4/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.1812 - accuracy: 0.9972 - val_loss: 0.1846 - val_accuracy: 0.9842
+Epoch 5/10
+650/650 [==============================] - 323s 497ms/step - loss: 0.1242 - accuracy: 0.9981 - val_loss: 0.1581 - val_accuracy: 0.9762
+Epoch 6/10
+650/650 [==============================] - 322s 496ms/step - loss: 0.0780 - accuracy: 0.9995 - val_loss: 0.1691 - val_accuracy: 0.9635
+Epoch 7/10
+650/650 [==============================] - 322s 496ms/step - loss: 0.0857 - accuracy: 0.9925 - val_loss: 0.0564 - val_accuracy: 0.9988
+Epoch 8/10
+650/650 [==============================] - 322s 495ms/step - loss: 0.0438 - accuracy: 0.9998 - val_loss: 0.0381 - val_accuracy: 0.9979
+Epoch 9/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.0315 - accuracy: 0.9998 - val_loss: 0.0287 - val_accuracy: 0.9981
+Epoch 10/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.0220 - accuracy: 1.0000 - val_loss: 0.0223 - val_accuracy: 0.9987
+
+Trial 30 Complete [00h 53m 56s]
+val_accuracy: 0.998846173286438
+
+Best val_accuracy So Far: 0.999423086643219
+Total elapsed time: 17h 37m 40s
+
+Search: Running Trial #31
+
+Value             |Best Value So Far |Hyperparameter
+0.5               |0.2               |dropout_rate
+0.0003            |0.0003            |learning_rate
+5                 |5                 |kernel_size
+0.0005            |0.0005            |l2_reg
+
+Epoch 1/10
+ 15/650 [..............................] - ETA: 4:58 - loss: 3.3487 - accuracy: 0.11042025-06-20 17:23:54.611790: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.1607s vs `on_train_batch_end` time: 0.2941s). Check your callbacks.
+650/650 [==============================] - 327s 500ms/step - loss: 1.1573 - accuracy: 0.6908 - val_loss: 1.2313 - val_accuracy: 0.6454
+Epoch 2/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.3780 - accuracy: 0.9433 - val_loss: 0.3648 - val_accuracy: 0.9319
+Epoch 3/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.2259 - accuracy: 0.9844 - val_loss: 0.8887 - val_accuracy: 0.7506
+Epoch 4/10
+650/650 [==============================] - 323s 496ms/step - loss: 0.1629 - accuracy: 0.9968 - val_loss: 0.4692 - val_accuracy: 0.8829
+Epoch 5/10
+650/650 [==============================] - 322s 496ms/step - loss: 0.1236 - accuracy: 0.9991 - val_loss: 0.2054 - val_accuracy: 0.9687
+Epoch 6/10
+650/650 [==============================] - 322s 496ms/step - loss: 0.0905 - accuracy: 0.9999 - val_loss: 0.2471 - val_accuracy: 0.9421
+Epoch 7/10
+650/650 [==============================] - 323s 496ms/step - loss: 0.0643 - accuracy: 0.9999 - val_loss: 0.1352 - val_accuracy: 0.9738
+Epoch 8/10
+650/650 [==============================] - 322s 496ms/step - loss: 0.0465 - accuracy: 0.9993 - val_loss: 24.3199 - val_accuracy: 0.0629
+Epoch 9/10
+650/650 [==============================] - 322s 496ms/step - loss: 0.1184 - accuracy: 0.9770 - val_loss: 0.0772 - val_accuracy: 0.9919
+Epoch 10/10
+650/650 [==============================] - 325s 499ms/step - loss: 0.0426 - accuracy: 0.9995 - val_loss: 0.0383 - val_accuracy: 0.9983
+
+Trial 31 Complete [00h 53m 55s]
+val_accuracy: 0.998269259929657
+
+Best val_accuracy So Far: 0.999423086643219
+Total elapsed time: 18h 31m 35s
+
+Search: Running Trial #32
+
+Value             |Best Value So Far |Hyperparameter
+0.2               |0.2               |dropout_rate
+0.0001            |0.0003            |learning_rate
+3                 |5                 |kernel_size
+0.001             |0.0005            |l2_reg
+
+Epoch 1/10
+136/650 [=====>........................] - ETA: 2:19 - loss: 2.6650 - accuracy: 0.33162025-06-20 18:17:49.747298: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.0998s vs `on_train_batch_end` time: 0.1569s). Check your callbacks.
+650/650 [==============================] - 190s 290ms/step - loss: 1.7696 - accuracy: 0.5711 - val_loss: 1.9164 - val_accuracy: 0.4627
+Epoch 2/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.9534 - accuracy: 0.8184 - val_loss: 0.8893 - val_accuracy: 0.8294
+Epoch 3/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.6582 - accuracy: 0.9136 - val_loss: 0.6784 - val_accuracy: 0.8873
+Epoch 4/10
+650/650 [==============================] - 188s 290ms/step - loss: 0.5056 - accuracy: 0.9554 - val_loss: 0.6310 - val_accuracy: 0.8885
+Epoch 5/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.4132 - accuracy: 0.9755 - val_loss: 0.6271 - val_accuracy: 0.8754
+Epoch 6/10
+650/650 [==============================] - 187s 288ms/step - loss: 0.3481 - accuracy: 0.9857 - val_loss: 0.7773 - val_accuracy: 0.8087
+Epoch 7/10
+650/650 [==============================] - 187s 287ms/step - loss: 0.2972 - accuracy: 0.9920 - val_loss: 0.8265 - val_accuracy: 0.7904
+
+Trial 32 Complete [00h 21m 57s]
+val_accuracy: 0.8884615302085876
+
+Best val_accuracy So Far: 0.999423086643219
+Total elapsed time: 18h 53m 32s
+
+Search: Running Trial #33
+
+Value             |Best Value So Far |Hyperparameter
+0.5               |0.2               |dropout_rate
+0.0003            |0.0003            |learning_rate
+3                 |5                 |kernel_size
+0.001             |0.0005            |l2_reg
+
+Epoch 1/10
+2025-06-20 18:39:47.174231: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+  6/650 [..............................] - ETA: 3:01 - loss: 3.8874 - accuracy: 0.0469WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.1058s vs `on_train_batch_end` time: 0.1564s). Check your callbacks.
+650/650 [==============================] - 190s 289ms/step - loss: 1.5329 - accuracy: 0.6079 - val_loss: 1.4401 - val_accuracy: 0.5829
+Epoch 2/10
+650/650 [==============================] - 187s 288ms/step - loss: 0.6758 - accuracy: 0.8854 - val_loss: 3.4722 - val_accuracy: 0.4063
+Epoch 3/10
+650/650 [==============================] - 187s 288ms/step - loss: 0.4227 - accuracy: 0.9585 - val_loss: 5.9575 - val_accuracy: 0.3762
+Epoch 4/10
+650/650 [==============================] - 187s 288ms/step - loss: 0.3004 - accuracy: 0.9821 - val_loss: 4.3403 - val_accuracy: 0.5573
+
+Trial 33 Complete [00h 12m 32s]
+val_accuracy: 0.5828846096992493
+
+Best val_accuracy So Far: 0.999423086643219
+Total elapsed time: 19h 06m 04s
+
+Search: Running Trial #34
+
+Value             |Best Value So Far |Hyperparameter
+0.6               |0.2               |dropout_rate
+0.0001            |0.0003            |learning_rate
+5                 |5                 |kernel_size
+0.0001            |0.0005            |l2_reg
+
+Epoch 1/10
+2025-06-20 18:52:19.119003: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+  6/650 [..............................] - ETA: 4:59 - loss: 3.8413 - accuracy: 0.0729WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.1536s vs `on_train_batch_end` time: 0.2926s). Check your callbacks.
+650/650 [==============================] - 325s 496ms/step - loss: 1.5116 - accuracy: 0.5437 - val_loss: 0.9956 - val_accuracy: 0.7167
+Epoch 2/10
+650/650 [==============================] - 322s 495ms/step - loss: 0.5164 - accuracy: 0.8656 - val_loss: 0.7912 - val_accuracy: 0.7765
+Epoch 3/10
+650/650 [==============================] - 322s 495ms/step - loss: 0.2446 - accuracy: 0.9540 - val_loss: 0.7282 - val_accuracy: 0.7746
+Epoch 4/10
+650/650 [==============================] - 322s 495ms/step - loss: 0.1382 - accuracy: 0.9841 - val_loss: 1.2050 - val_accuracy: 0.6915
+Epoch 5/10
+650/650 [==============================] - 322s 495ms/step - loss: 0.0869 - accuracy: 0.9965 - val_loss: 0.5181 - val_accuracy: 0.8458
+Epoch 6/10
+650/650 [==============================] - 322s 495ms/step - loss: 0.0628 - accuracy: 0.9988 - val_loss: 0.2715 - val_accuracy: 0.9223
+Epoch 7/10
+650/650 [==============================] - 322s 495ms/step - loss: 0.0577 - accuracy: 0.9985 - val_loss: 0.1146 - val_accuracy: 0.9752
+Epoch 8/10
+650/650 [==============================] - 322s 495ms/step - loss: 0.0449 - accuracy: 0.9998 - val_loss: 0.0822 - val_accuracy: 0.9862
+Epoch 9/10
+650/650 [==============================] - 322s 495ms/step - loss: 0.0620 - accuracy: 0.9937 - val_loss: 2.8365 - val_accuracy: 0.5188
+Epoch 10/10
+650/650 [==============================] - 322s 495ms/step - loss: 0.0582 - accuracy: 0.9963 - val_loss: 0.1322 - val_accuracy: 0.9681
+
+Trial 34 Complete [00h 53m 42s]
+val_accuracy: 0.9861538410186768
+
+Best val_accuracy So Far: 0.999423086643219
+Total elapsed time: 19h 59m 45s
+
+Search: Running Trial #35
+
+Value             |Best Value So Far |Hyperparameter
+0.2               |0.2               |dropout_rate
+0.001             |0.0003            |learning_rate
+5                 |5                 |kernel_size
+0.0001            |0.0005            |l2_reg
+
+Epoch 1/10
+2025-06-20 19:46:00.241179: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+  6/650 [..............................] - ETA: 5:02 - loss: 3.2846 - accuracy: 0.1042WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.1606s vs `on_train_batch_end` time: 0.2896s). Check your callbacks.
+650/650 [==============================] - 325s 496ms/step - loss: 0.8641 - accuracy: 0.7278 - val_loss: 9.5699 - val_accuracy: 0.1812
+Epoch 2/10
+650/650 [==============================] - 322s 495ms/step - loss: 0.2158 - accuracy: 0.9464 - val_loss: 16.1915 - val_accuracy: 0.1762
+Epoch 3/10
+650/650 [==============================] - 322s 496ms/step - loss: 0.1325 - accuracy: 0.9746 - val_loss: 0.8444 - val_accuracy: 0.7758
+Epoch 4/10
+650/650 [==============================] - 322s 496ms/step - loss: 0.0987 - accuracy: 0.9851 - val_loss: 9.9333 - val_accuracy: 0.2219
+Epoch 5/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.0969 - accuracy: 0.9845 - val_loss: 17.3313 - val_accuracy: 0.2738
+Epoch 6/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.0730 - accuracy: 0.9904 - val_loss: 0.6669 - val_accuracy: 0.8398
+Epoch 7/10
+650/650 [==============================] - 323s 497ms/step - loss: 0.0734 - accuracy: 0.9888 - val_loss: 4.7330 - val_accuracy: 0.5521
+Epoch 8/10
+650/650 [==============================] - 322s 496ms/step - loss: 0.0650 - accuracy: 0.9921 - val_loss: 0.3913 - val_accuracy: 0.8994
+Epoch 9/10
+650/650 [==============================] - 322s 495ms/step - loss: 0.0545 - accuracy: 0.9937 - val_loss: 0.9186 - val_accuracy: 0.8187
+Epoch 10/10
+650/650 [==============================] - 322s 496ms/step - loss: 0.0525 - accuracy: 0.9942 - val_loss: 0.1018 - val_accuracy: 0.9835
+
+Trial 35 Complete [00h 53m 49s]
+val_accuracy: 0.9834615588188171
+
+Best val_accuracy So Far: 0.999423086643219
+Total elapsed time: 20h 53m 34s
+
+Search: Running Trial #36
+
+Value             |Best Value So Far |Hyperparameter
+0.5               |0.2               |dropout_rate
+0.0003            |0.0003            |learning_rate
+5                 |5                 |kernel_size
+0.001             |0.0005            |l2_reg
+
+Epoch 1/10
+2025-06-20 20:39:49.321211: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+  6/650 [..............................] - ETA: 5:00 - loss: 3.7476 - accuracy: 0.0625WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.1554s vs `on_train_batch_end` time: 0.2931s). Check your callbacks.
+650/650 [==============================] - 326s 499ms/step - loss: 1.3057 - accuracy: 0.6842 - val_loss: 0.9925 - val_accuracy: 0.7565
+Epoch 2/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.4981 - accuracy: 0.9431 - val_loss: 2.1746 - val_accuracy: 0.5837
+Epoch 3/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.3144 - accuracy: 0.9837 - val_loss: 2.4328 - val_accuracy: 0.5600
+Epoch 4/10
+650/650 [==============================] - 325s 499ms/step - loss: 0.2118 - accuracy: 0.9962 - val_loss: 0.2779 - val_accuracy: 0.9519
+Epoch 5/10
+650/650 [==============================] - 323s 497ms/step - loss: 0.1432 - accuracy: 0.9991 - val_loss: 0.1345 - val_accuracy: 0.9950
+Epoch 6/10
+650/650 [==============================] - 323s 496ms/step - loss: 0.1342 - accuracy: 0.9909 - val_loss: 0.1047 - val_accuracy: 0.9950
+Epoch 7/10
+650/650 [==============================] - 323s 497ms/step - loss: 0.0761 - accuracy: 0.9995 - val_loss: 0.0702 - val_accuracy: 0.9956
+Epoch 8/10
+650/650 [==============================] - 323s 498ms/step - loss: 0.0474 - accuracy: 1.0000 - val_loss: 0.0472 - val_accuracy: 0.9977
+Epoch 9/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.0497 - accuracy: 0.9954 - val_loss: 27.2903 - val_accuracy: 0.0794
+Epoch 10/10
+650/650 [==============================] - 325s 499ms/step - loss: 0.0761 - accuracy: 0.9908 - val_loss: 0.0467 - val_accuracy: 0.9979
+
+Trial 36 Complete [00h 54m 01s]
+val_accuracy: 0.9978846311569214
+
+Best val_accuracy So Far: 0.999423086643219
+Total elapsed time: 21h 47m 35s
+
+Search: Running Trial #37
+
+Value             |Best Value So Far |Hyperparameter
+0.6               |0.2               |dropout_rate
+0.0001            |0.0003            |learning_rate
+3                 |5                 |kernel_size
+0.001             |0.0005            |l2_reg
+
+Epoch 1/10
+  3/650 [..............................] - ETA: 2:57 - loss: 4.3425 - accuracy: 0.0208    2025-06-20 21:33:50.111089: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+ 78/650 [==>...........................] - ETA: 2:35 - loss: 3.4008 - accuracy: 0.1330WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.1013s vs `on_train_batch_end` time: 0.1583s). Check your callbacks.
+650/650 [==============================] - 191s 291ms/step - loss: 2.0933 - accuracy: 0.4575 - val_loss: 2.0636 - val_accuracy: 0.4000
+Epoch 2/10
+650/650 [==============================] - 189s 290ms/step - loss: 1.1436 - accuracy: 0.7411 - val_loss: 1.8022 - val_accuracy: 0.5938
+Epoch 3/10
+650/650 [==============================] - 189s 290ms/step - loss: 0.8003 - accuracy: 0.8624 - val_loss: 1.1201 - val_accuracy: 0.7517
+Epoch 4/10
+650/650 [==============================] - 189s 290ms/step - loss: 0.6037 - accuracy: 0.9283 - val_loss: 0.9190 - val_accuracy: 0.7992
+Epoch 5/10
+650/650 [==============================] - 188s 290ms/step - loss: 0.4830 - accuracy: 0.9617 - val_loss: 0.7192 - val_accuracy: 0.8485
+Epoch 6/10
+650/650 [==============================] - 189s 290ms/step - loss: 0.4040 - accuracy: 0.9779 - val_loss: 0.6548 - val_accuracy: 0.8637
+Epoch 7/10
+650/650 [==============================] - 189s 290ms/step - loss: 0.3452 - accuracy: 0.9888 - val_loss: 0.3878 - val_accuracy: 0.9608
+Epoch 8/10
+650/650 [==============================] - 188s 290ms/step - loss: 0.2987 - accuracy: 0.9943 - val_loss: 0.3677 - val_accuracy: 0.9575
+Epoch 9/10
+650/650 [==============================] - 188s 290ms/step - loss: 0.2577 - accuracy: 0.9976 - val_loss: 0.3558 - val_accuracy: 0.9525
+Epoch 10/10
+650/650 [==============================] - 188s 290ms/step - loss: 0.2222 - accuracy: 0.9991 - val_loss: 0.3093 - val_accuracy: 0.9587
+2025-06-20 22:05:17.497913: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.1044s vs `on_train_batch_end` time: 0.1530s). Check your callbacks.
+
+Trial 37 Complete [00h 31m 27s]
+val_accuracy: 0.9607692360877991
+
+Best val_accuracy So Far: 0.999423086643219
+Total elapsed time: 22h 19m 03s
+
+Search: Running Trial #38
+
+Value             |Best Value So Far |Hyperparameter
+0.2               |0.2               |dropout_rate
+0.0003            |0.0003            |learning_rate
+3                 |5                 |kernel_size
+0.0001            |0.0005            |l2_reg
+
+Epoch 1/10
+650/650 [==============================] - 191s 290ms/step - loss: 1.0324 - accuracy: 0.6857 - val_loss: 4.4219 - val_accuracy: 0.2773
+Epoch 2/10
+650/650 [==============================] - 188s 290ms/step - loss: 0.3154 - accuracy: 0.9225 - val_loss: 4.3285 - val_accuracy: 0.4279
+Epoch 3/10
+650/650 [==============================] - 188s 290ms/step - loss: 0.1662 - accuracy: 0.9683 - val_loss: 0.7688 - val_accuracy: 0.7596
+Epoch 4/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.1067 - accuracy: 0.9865 - val_loss: 0.6841 - val_accuracy: 0.7860
+Epoch 5/10
+650/650 [==============================] - 188s 290ms/step - loss: 0.0769 - accuracy: 0.9940 - val_loss: 0.5700 - val_accuracy: 0.8463
+Epoch 6/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.0625 - accuracy: 0.9972 - val_loss: 2.8309 - val_accuracy: 0.5467
+Epoch 7/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.0697 - accuracy: 0.9937 - val_loss: 0.0950 - val_accuracy: 0.9829
+Epoch 8/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.0498 - accuracy: 0.9983 - val_loss: 0.1141 - val_accuracy: 0.9712
+Epoch 9/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.0449 - accuracy: 0.9987 - val_loss: 0.1059 - val_accuracy: 0.9769
+Epoch 10/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.0647 - accuracy: 0.9909 - val_loss: 1.1805 - val_accuracy: 0.7133
+
+Trial 38 Complete [00h 31m 24s]
+val_accuracy: 0.9828846454620361
+
+Best val_accuracy So Far: 0.999423086643219
+Total elapsed time: 22h 50m 26s
+
+Search: Running Trial #39
+
+Value             |Best Value So Far |Hyperparameter
+0.5               |0.2               |dropout_rate
+0.0001            |0.0003            |learning_rate
+3                 |5                 |kernel_size
+0.001             |0.0005            |l2_reg
+
+Epoch 1/10
+128/650 [====>.........................] - ETA: 2:21 - loss: 2.9563 - accuracy: 0.21832025-06-20 22:36:41.433320: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.1001s vs `on_train_batch_end` time: 0.1579s). Check your callbacks.
+650/650 [==============================] - 191s 291ms/step - loss: 2.0004 - accuracy: 0.4846 - val_loss: 1.4760 - val_accuracy: 0.6440
+Epoch 2/10
+650/650 [==============================] - 189s 290ms/step - loss: 1.1046 - accuracy: 0.7651 - val_loss: 0.8611 - val_accuracy: 0.8396
+Epoch 3/10
+650/650 [==============================] - 189s 290ms/step - loss: 0.7733 - accuracy: 0.8755 - val_loss: 0.6979 - val_accuracy: 0.8623
+Epoch 4/10
+650/650 [==============================] - 189s 290ms/step - loss: 0.5930 - accuracy: 0.9308 - val_loss: 0.6339 - val_accuracy: 0.8879
+Epoch 5/10
+650/650 [==============================] - 189s 290ms/step - loss: 0.4824 - accuracy: 0.9583 - val_loss: 0.5640 - val_accuracy: 0.9075
+Epoch 6/10
+650/650 [==============================] - 187s 288ms/step - loss: 0.4061 - accuracy: 0.9752 - val_loss: 0.7527 - val_accuracy: 0.8279
+Epoch 7/10
+650/650 [==============================] - 187s 288ms/step - loss: 0.3474 - accuracy: 0.9863 - val_loss: 0.9107 - val_accuracy: 0.7998
+Epoch 8/10
+650/650 [==============================] - 187s 288ms/step - loss: 0.2997 - accuracy: 0.9931 - val_loss: 1.1464 - val_accuracy: 0.7796
+
+Trial 39 Complete [00h 25m 08s]
+val_accuracy: 0.9075000286102295
+
+Best val_accuracy So Far: 0.999423086643219
+Total elapsed time: 23h 15m 34s
+
+Search: Running Trial #40
+
+Value             |Best Value So Far |Hyperparameter
+0.6               |0.2               |dropout_rate
+0.001             |0.0003            |learning_rate
+3                 |5                 |kernel_size
+0.0005            |0.0005            |l2_reg
+
+Epoch 1/10
+2025-06-20 23:01:49.206789: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+  6/650 [..............................] - ETA: 2:55 - loss: 3.9123 - accuracy: 0.0469WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.0990s vs `on_train_batch_end` time: 0.1548s). Check your callbacks.
+650/650 [==============================] - 190s 289ms/step - loss: 1.3457 - accuracy: 0.6098 - val_loss: 3.9246 - val_accuracy: 0.2773
+Epoch 2/10
+650/650 [==============================] - 187s 288ms/step - loss: 0.5092 - accuracy: 0.8871 - val_loss: 17.4373 - val_accuracy: 0.1696
+Epoch 3/10
+650/650 [==============================] - 187s 288ms/step - loss: 0.2779 - accuracy: 0.9583 - val_loss: 6.6385 - val_accuracy: 0.4046
+Epoch 4/10
+650/650 [==============================] - 187s 288ms/step - loss: 0.1809 - accuracy: 0.9814 - val_loss: 0.4594 - val_accuracy: 0.8860
+Epoch 5/10
+650/650 [==============================] - 187s 288ms/step - loss: 0.1376 - accuracy: 0.9873 - val_loss: 1.0698 - val_accuracy: 0.7690
+Epoch 6/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.1001 - accuracy: 0.9937 - val_loss: 0.8173 - val_accuracy: 0.8212
+Epoch 7/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.1043 - accuracy: 0.9879 - val_loss: 5.4578 - val_accuracy: 0.3060
+
+Trial 40 Complete [00h 21m 55s]
+val_accuracy: 0.8859615325927734
+
+Best val_accuracy So Far: 0.999423086643219
+Total elapsed time: 23h 37m 29s
+
+Search: Running Trial #41
+
+Value             |Best Value So Far |Hyperparameter
+0.2               |0.2               |dropout_rate
+0.001             |0.0003            |learning_rate
+3                 |5                 |kernel_size
+0.0001            |0.0005            |l2_reg
+
+Epoch 1/10
+ 17/650 [..............................] - ETA: 2:53 - loss: 2.8321 - accuracy: 0.20592025-06-20 23:23:44.107364: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.1028s vs `on_train_batch_end` time: 0.1552s). Check your callbacks.
+650/650 [==============================] - 191s 290ms/step - loss: 0.9568 - accuracy: 0.6965 - val_loss: 1.9656 - val_accuracy: 0.4910
+Epoch 2/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.3201 - accuracy: 0.9152 - val_loss: 7.5345 - val_accuracy: 0.3560
+Epoch 3/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.1979 - accuracy: 0.9554 - val_loss: 11.9092 - val_accuracy: 0.2698
+Epoch 4/10
+650/650 [==============================] - 188s 290ms/step - loss: 0.1411 - accuracy: 0.9746 - val_loss: 3.4680 - val_accuracy: 0.5875
+Epoch 5/10
+650/650 [==============================] - 188s 290ms/step - loss: 0.1171 - accuracy: 0.9806 - val_loss: 1.9760 - val_accuracy: 0.6962
+Epoch 6/10
+650/650 [==============================] - 188s 290ms/step - loss: 0.1233 - accuracy: 0.9794 - val_loss: 0.5812 - val_accuracy: 0.8675
+Epoch 7/10
+650/650 [==============================] - 188s 290ms/step - loss: 0.0896 - accuracy: 0.9890 - val_loss: 0.2212 - val_accuracy: 0.9502
+Epoch 8/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.0675 - accuracy: 0.9947 - val_loss: 5.5931 - val_accuracy: 0.5319
+Epoch 9/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.1039 - accuracy: 0.9820 - val_loss: 17.7622 - val_accuracy: 0.2754
+Epoch 10/10
+650/650 [==============================] - 188s 290ms/step - loss: 0.0677 - accuracy: 0.9930 - val_loss: 0.0975 - val_accuracy: 0.9819
+
+Trial 41 Complete [00h 31m 24s]
+val_accuracy: 0.9819231033325195
+
+Best val_accuracy So Far: 0.999423086643219
+Total elapsed time: 1d 00h 08m 53s
+
+Search: Running Trial #42
+
+Value             |Best Value So Far |Hyperparameter
+0.2               |0.2               |dropout_rate
+0.0001            |0.0003            |learning_rate
+5                 |5                 |kernel_size
+0.0005            |0.0005            |l2_reg
+
+Epoch 1/10
+ 55/650 [=>............................] - ETA: 4:37 - loss: 2.6727 - accuracy: 0.25852025-06-20 23:55:08.333655: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.1594s vs `on_train_batch_end` time: 0.2923s). Check your callbacks.
+650/650 [==============================] - 326s 499ms/step - loss: 1.2585 - accuracy: 0.6841 - val_loss: 1.0434 - val_accuracy: 0.7038
+Epoch 2/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.4687 - accuracy: 0.9302 - val_loss: 0.4028 - val_accuracy: 0.9252
+Epoch 3/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.2944 - accuracy: 0.9772 - val_loss: 0.3719 - val_accuracy: 0.9315
+Epoch 4/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.2235 - accuracy: 0.9921 - val_loss: 0.8994 - val_accuracy: 0.7904
+Epoch 5/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.1841 - accuracy: 0.9985 - val_loss: 0.9297 - val_accuracy: 0.7631
+Epoch 6/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.1588 - accuracy: 0.9994 - val_loss: 0.2368 - val_accuracy: 0.9715
+Epoch 7/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.1433 - accuracy: 0.9986 - val_loss: 0.7318 - val_accuracy: 0.8279
+Epoch 8/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.1245 - accuracy: 0.9992 - val_loss: 0.1549 - val_accuracy: 0.9840
+Epoch 9/10
+650/650 [==============================] - 323s 497ms/step - loss: 0.1009 - accuracy: 0.9999 - val_loss: 0.1645 - val_accuracy: 0.9763
+Epoch 10/10
+650/650 [==============================] - 322s 495ms/step - loss: 0.1140 - accuracy: 0.9916 - val_loss: 0.1823 - val_accuracy: 0.9662
+
+Trial 42 Complete [00h 53m 59s]
+val_accuracy: 0.9840384721755981
+
+Best val_accuracy So Far: 0.999423086643219
+Total elapsed time: 1d 01h 02m 52s
+
+Search: Running Trial #43
+
+Value             |Best Value So Far |Hyperparameter
+0.2               |0.2               |dropout_rate
+0.001             |0.0003            |learning_rate
+3                 |5                 |kernel_size
+0.0005            |0.0005            |l2_reg
+
+Epoch 1/10
+2025-06-21 00:49:07.317965: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+  6/650 [..............................] - ETA: 2:55 - loss: 3.4235 - accuracy: 0.0937WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.0990s vs `on_train_batch_end` time: 0.1554s). Check your callbacks.
+650/650 [==============================] - 190s 288ms/step - loss: 1.0371 - accuracy: 0.7065 - val_loss: 7.0909 - val_accuracy: 0.2027
+Epoch 2/10
+650/650 [==============================] - 187s 287ms/step - loss: 0.3731 - accuracy: 0.9323 - val_loss: 1.4772 - val_accuracy: 0.6510
+Epoch 3/10
+650/650 [==============================] - 187s 287ms/step - loss: 0.2281 - accuracy: 0.9698 - val_loss: 0.2630 - val_accuracy: 0.9413
+Epoch 4/10
+650/650 [==============================] - 187s 287ms/step - loss: 0.1474 - accuracy: 0.9859 - val_loss: 0.4917 - val_accuracy: 0.8723
+Epoch 5/10
+650/650 [==============================] - 187s 288ms/step - loss: 0.0983 - accuracy: 0.9942 - val_loss: 0.3481 - val_accuracy: 0.9035
+Epoch 6/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.1126 - accuracy: 0.9844 - val_loss: 0.5110 - val_accuracy: 0.8658
+
+Trial 43 Complete [00h 18m 45s]
+val_accuracy: 0.9413461685180664
+
+Best val_accuracy So Far: 0.999423086643219
+Total elapsed time: 1d 01h 21m 37s
+
+Search: Running Trial #44
+
+Value             |Best Value So Far |Hyperparameter
+0.5               |0.2               |dropout_rate
+0.0001            |0.0003            |learning_rate
+3                 |5                 |kernel_size
+0.0005            |0.0005            |l2_reg
+
+Epoch 1/10
+ 93/650 [===>..........................] - ETA: 2:31 - loss: 2.9769 - accuracy: 0.19152025-06-21 01:07:52.409507: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.1016s vs `on_train_batch_end` time: 0.1556s). Check your callbacks.
+650/650 [==============================] - 191s 290ms/step - loss: 1.8288 - accuracy: 0.4910 - val_loss: 1.4233 - val_accuracy: 0.6054
+Epoch 2/10
+650/650 [==============================] - 188s 290ms/step - loss: 0.9350 - accuracy: 0.7691 - val_loss: 1.0673 - val_accuracy: 0.7027
+Epoch 3/10
+650/650 [==============================] - 188s 290ms/step - loss: 0.6130 - accuracy: 0.8802 - val_loss: 0.5397 - val_accuracy: 0.8852
+Epoch 4/10
+650/650 [==============================] - 188s 290ms/step - loss: 0.4427 - accuracy: 0.9362 - val_loss: 0.5051 - val_accuracy: 0.8892
+Epoch 5/10
+650/650 [==============================] - 188s 290ms/step - loss: 0.3427 - accuracy: 0.9646 - val_loss: 0.4256 - val_accuracy: 0.9096
+Epoch 6/10
+650/650 [==============================] - 188s 290ms/step - loss: 0.2792 - accuracy: 0.9802 - val_loss: 0.4019 - val_accuracy: 0.9144
+Epoch 7/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.2357 - accuracy: 0.9887 - val_loss: 0.5144 - val_accuracy: 0.8862
+Epoch 8/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.2040 - accuracy: 0.9955 - val_loss: 0.4649 - val_accuracy: 0.8883
+Epoch 9/10
+650/650 [==============================] - 188s 289ms/step - loss: 0.1795 - accuracy: 0.9976 - val_loss: 0.4065 - val_accuracy: 0.9092
+
+Trial 44 Complete [00h 28m 17s]
+val_accuracy: 0.9144230484962463
+
+Best val_accuracy So Far: 0.999423086643219
+Total elapsed time: 1d 01h 49m 54s
+
+Search: Running Trial #45
+
+Value             |Best Value So Far |Hyperparameter
+0.5               |0.2               |dropout_rate
+0.001             |0.0003            |learning_rate
+5                 |5                 |kernel_size
+0.001             |0.0005            |l2_reg
+
+Epoch 1/10
+ 53/650 [=>............................] - ETA: 4:39 - loss: 2.6712 - accuracy: 0.28832025-06-21 01:36:08.944556: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.1621s vs `on_train_batch_end` time: 0.2916s). Check your callbacks.
+650/650 [==============================] - 327s 500ms/step - loss: 1.2323 - accuracy: 0.6928 - val_loss: 1.5224 - val_accuracy: 0.6156
+Epoch 2/10
+650/650 [==============================] - 325s 500ms/step - loss: 0.4009 - accuracy: 0.9427 - val_loss: 0.6465 - val_accuracy: 0.8352
+Epoch 3/10
+650/650 [==============================] - 325s 500ms/step - loss: 0.2004 - accuracy: 0.9837 - val_loss: 0.2052 - val_accuracy: 0.9673
+Epoch 4/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.1134 - accuracy: 0.9949 - val_loss: 0.2475 - val_accuracy: 0.9462
+Epoch 5/10
+650/650 [==============================] - 323s 496ms/step - loss: 0.1133 - accuracy: 0.9885 - val_loss: 2.2848 - val_accuracy: 0.4879
+Epoch 6/10
+650/650 [==============================] - 323s 496ms/step - loss: 0.0830 - accuracy: 0.9943 - val_loss: 0.6821 - val_accuracy: 0.8090
+
+Trial 45 Complete [00h 32m 27s]
+val_accuracy: 0.9673076868057251
+
+Best val_accuracy So Far: 0.999423086643219
+Total elapsed time: 1d 02h 22m 21s
+
+Search: Running Trial #46
+
+Value             |Best Value So Far |Hyperparameter
+0.6               |0.2               |dropout_rate
+0.0003            |0.0003            |learning_rate
+5                 |5                 |kernel_size
+0.0001            |0.0005            |l2_reg
+
+Epoch 1/10
+2025-06-21 02:08:35.479192: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+  6/650 [..............................] - ETA: 5:02 - loss: 3.8099 - accuracy: 0.0573WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.1591s vs `on_train_batch_end` time: 0.2909s). Check your callbacks.
+650/650 [==============================] - 325s 498ms/step - loss: 1.1498 - accuracy: 0.6465 - val_loss: 1.0050 - val_accuracy: 0.6700
+Epoch 2/10
+650/650 [==============================] - 323s 497ms/step - loss: 0.2944 - accuracy: 0.9267 - val_loss: 0.5244 - val_accuracy: 0.8302
+Epoch 3/10
+650/650 [==============================] - 323s 497ms/step - loss: 0.1318 - accuracy: 0.9787 - val_loss: 0.3655 - val_accuracy: 0.8858
+Epoch 4/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.0774 - accuracy: 0.9942 - val_loss: 1.0062 - val_accuracy: 0.7056
+Epoch 5/10
+650/650 [==============================] - 325s 500ms/step - loss: 0.0613 - accuracy: 0.9971 - val_loss: 0.1589 - val_accuracy: 0.9629
+Epoch 6/10
+650/650 [==============================] - 323s 497ms/step - loss: 0.0545 - accuracy: 0.9972 - val_loss: 0.3590 - val_accuracy: 0.8777
+Epoch 7/10
+650/650 [==============================] - 323s 496ms/step - loss: 0.0704 - accuracy: 0.9904 - val_loss: 0.1714 - val_accuracy: 0.9529
+Epoch 8/10
+650/650 [==============================] - 323s 497ms/step - loss: 0.0553 - accuracy: 0.9951 - val_loss: 0.0886 - val_accuracy: 0.9837
+Epoch 9/10
+650/650 [==============================] - 323s 497ms/step - loss: 0.0390 - accuracy: 0.9992 - val_loss: 0.0439 - val_accuracy: 0.9969
+Epoch 10/10
+650/650 [==============================] - 325s 500ms/step - loss: 0.0314 - accuracy: 1.0000 - val_loss: 0.0352 - val_accuracy: 0.9988
+
+Trial 46 Complete [00h 53m 57s]
+val_accuracy: 0.998846173286438
+
+Best val_accuracy So Far: 0.999423086643219
+Total elapsed time: 1d 03h 16m 18s
+
+Search: Running Trial #47
+
+Value             |Best Value So Far |Hyperparameter
+0.5               |0.2               |dropout_rate
+0.0001            |0.0003            |learning_rate
+5                 |5                 |kernel_size
+0.0001            |0.0005            |l2_reg
+
+Epoch 1/10
+2025-06-21 03:02:32.612797: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+ 44/650 [=>............................] - ETA: 4:43 - loss: 2.8844 - accuracy: 0.1804WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.1606s vs `on_train_batch_end` time: 0.2928s). Check your callbacks.
+650/650 [==============================] - 327s 501ms/step - loss: 1.3543 - accuracy: 0.5966 - val_loss: 0.8961 - val_accuracy: 0.7763
+Epoch 2/10
+650/650 [==============================] - 325s 500ms/step - loss: 0.4593 - accuracy: 0.8855 - val_loss: 0.4349 - val_accuracy: 0.8679
+Epoch 3/10
+650/650 [==============================] - 325s 499ms/step - loss: 0.2205 - accuracy: 0.9613 - val_loss: 0.6102 - val_accuracy: 0.8138
+Epoch 4/10
+650/650 [==============================] - 325s 500ms/step - loss: 0.1261 - accuracy: 0.9864 - val_loss: 0.1703 - val_accuracy: 0.9602
+Epoch 5/10
+650/650 [==============================] - 325s 500ms/step - loss: 0.0815 - accuracy: 0.9962 - val_loss: 0.1277 - val_accuracy: 0.9673
+Epoch 6/10
+650/650 [==============================] - 325s 500ms/step - loss: 0.0601 - accuracy: 0.9993 - val_loss: 0.0967 - val_accuracy: 0.9844
+Epoch 7/10
+650/650 [==============================] - 325s 500ms/step - loss: 0.0522 - accuracy: 0.9997 - val_loss: 0.0797 - val_accuracy: 0.9883
+Epoch 8/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.0457 - accuracy: 0.9998 - val_loss: 0.2385 - val_accuracy: 0.9290
+Epoch 9/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.0709 - accuracy: 0.9920 - val_loss: 0.0818 - val_accuracy: 0.9875
+Epoch 10/10
+650/650 [==============================] - 325s 500ms/step - loss: 0.0429 - accuracy: 0.9995 - val_loss: 0.0502 - val_accuracy: 0.9958
+
+Trial 47 Complete [00h 54m 10s]
+val_accuracy: 0.995769202709198
+
+Best val_accuracy So Far: 0.999423086643219
+Total elapsed time: 1d 04h 10m 28s
+
+Search: Running Trial #48
+
+Value             |Best Value So Far |Hyperparameter
+0.5               |0.2               |dropout_rate
+0.0003            |0.0003            |learning_rate
+5                 |5                 |kernel_size
+0.0001            |0.0005            |l2_reg
+
+Epoch 1/10
+ 38/650 [>.............................] - ETA: 4:46 - loss: 2.5704 - accuracy: 0.24842025-06-21 03:56:43.023268: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.1638s vs `on_train_batch_end` time: 0.2896s). Check your callbacks.
+650/650 [==============================] - 327s 501ms/step - loss: 1.0311 - accuracy: 0.6821 - val_loss: 0.6365 - val_accuracy: 0.7925
+Epoch 2/10
+650/650 [==============================] - 325s 499ms/step - loss: 0.2509 - accuracy: 0.9422 - val_loss: 2.1657 - val_accuracy: 0.5919
+Epoch 3/10
+650/650 [==============================] - 325s 500ms/step - loss: 0.1145 - accuracy: 0.9830 - val_loss: 1.3652 - val_accuracy: 0.6813
+Epoch 4/10
+650/650 [==============================] - 325s 499ms/step - loss: 0.0678 - accuracy: 0.9957 - val_loss: 3.3700 - val_accuracy: 0.5610
+
+Trial 48 Complete [00h 21m 42s]
+val_accuracy: 0.7925000190734863
+
+Best val_accuracy So Far: 0.999423086643219
+Total elapsed time: 1d 04h 32m 10s
+
+Search: Running Trial #49
+
+Value             |Best Value So Far |Hyperparameter
+0.6               |0.2               |dropout_rate
+0.0001            |0.0003            |learning_rate
+5                 |5                 |kernel_size
+0.001             |0.0005            |l2_reg
+
+Epoch 1/10
+ 52/650 [=>............................] - ETA: 4:38 - loss: 3.3303 - accuracy: 0.16712025-06-21 04:18:24.695904: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.1584s vs `on_train_batch_end` time: 0.2912s). Check your callbacks.
+650/650 [==============================] - 326s 499ms/step - loss: 1.8181 - accuracy: 0.5399 - val_loss: 1.3236 - val_accuracy: 0.6729
+Epoch 2/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.8471 - accuracy: 0.8522 - val_loss: 0.6490 - val_accuracy: 0.9015
+Epoch 3/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.5443 - accuracy: 0.9475 - val_loss: 1.0582 - val_accuracy: 0.7762
+Epoch 4/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.4122 - accuracy: 0.9808 - val_loss: 0.4456 - val_accuracy: 0.9421
+Epoch 5/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.3351 - accuracy: 0.9941 - val_loss: 0.5970 - val_accuracy: 0.8742
+Epoch 6/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.2815 - accuracy: 0.9990 - val_loss: 0.4377 - val_accuracy: 0.9254
+Epoch 7/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.2376 - accuracy: 0.9997 - val_loss: 0.3951 - val_accuracy: 0.9323
+
+Trial 49 Complete [00h 37m 50s]
+val_accuracy: 0.9421153664588928
+
+Best val_accuracy So Far: 0.999423086643219
+Total elapsed time: 1d 05h 10m 00s
+
+Search: Running Trial #50
+
+Value             |Best Value So Far |Hyperparameter
+0.2               |0.2               |dropout_rate
+0.0003            |0.0003            |learning_rate
+5                 |5                 |kernel_size
+0.0001            |0.0005            |l2_reg
+
+Epoch 1/10
+ 40/650 [>.............................] - ETA: 4:44 - loss: 2.4066 - accuracy: 0.28832025-06-21 04:56:14.667304: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.1610s vs `on_train_batch_end` time: 0.2867s). Check your callbacks.
+650/650 [==============================] - 326s 499ms/step - loss: 0.8544 - accuracy: 0.7450 - val_loss: 0.5910 - val_accuracy: 0.8131
+Epoch 2/10
+650/650 [==============================] - 324s 499ms/step - loss: 0.1960 - accuracy: 0.9602 - val_loss: 0.2396 - val_accuracy: 0.9385
+Epoch 3/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.0923 - accuracy: 0.9900 - val_loss: 0.5160 - val_accuracy: 0.8538
+Epoch 4/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.0611 - accuracy: 0.9969 - val_loss: 0.3113 - val_accuracy: 0.9081
+Epoch 5/10
+650/650 [==============================] - 324s 498ms/step - loss: 0.0583 - accuracy: 0.9971 - val_loss: 0.3400 - val_accuracy: 0.9117
+
+Trial 50 Complete [00h 27m 02s]
+val_accuracy: 0.9384615421295166
+
+Best val_accuracy So Far: 0.999423086643219
+Total elapsed time: 1d 05h 37m 01s
+
+Search: Running Trial #51
+
+Value             |Best Value So Far |Hyperparameter
+0.5               |0.2               |dropout_rate
+0.0003            |0.0003            |learning_rate
+3                 |5                 |kernel_size
+0.0001            |0.0005            |l2_reg
+
+Epoch 1/10
+ 95/650 [===>..........................] - ETA: 2:31 - loss: 2.3991 - accuracy: 0.27172025-06-21 05:23:16.320436: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.1044s vs `on_train_batch_end` time: 0.1554s). Check your callbacks.
+650/650 [==============================] - 191s 291ms/step - loss: 1.2143 - accuracy: 0.6223 - val_loss: 2.0451 - val_accuracy: 0.4179
+Epoch 2/10
+650/650 [==============================] - 189s 291ms/step - loss: 0.4022 - accuracy: 0.8948 - val_loss: 1.1028 - val_accuracy: 0.6846
+Epoch 3/10
+650/650 [==============================] - 189s 291ms/step - loss: 0.2013 - accuracy: 0.9593 - val_loss: 0.4743 - val_accuracy: 0.8562
+Epoch 4/10
+650/650 [==============================] - 189s 291ms/step - loss: 0.1197 - accuracy: 0.9842 - val_loss: 0.4200 - val_accuracy: 0.8713
+Epoch 5/10
+650/650 [==============================] - 189s 290ms/step - loss: 0.0827 - accuracy: 0.9946 - val_loss: 0.4538 - val_accuracy: 0.8667
+Epoch 6/10
+650/650 [==============================] - 189s 291ms/step - loss: 0.0638 - accuracy: 0.9978 - val_loss: 0.1854 - val_accuracy: 0.9592
+Epoch 7/10
+650/650 [==============================] - 189s 290ms/step - loss: 0.0605 - accuracy: 0.9973 - val_loss: 0.2248 - val_accuracy: 0.9383
+Epoch 8/10
+650/650 [==============================] - 189s 290ms/step - loss: 0.0654 - accuracy: 0.9947 - val_loss: 0.7956 - val_accuracy: 0.7965
+Epoch 9/10
+650/650 [==============================] - 189s 290ms/step - loss: 0.0637 - accuracy: 0.9939 - val_loss: 2.1522 - val_accuracy: 0.6394
+
+Trial 51 Complete [00h 28m 22s]
+val_accuracy: 0.9592307806015015
+
+Best val_accuracy So Far: 0.999423086643219
+Total elapsed time: 1d 06h 05m 24s
+
+Search: Running Trial #52
+
+Value             |Best Value So Far |Hyperparameter
+0.2               |0.2               |dropout_rate
+0.0001            |0.0003            |learning_rate
+5                 |5                 |kernel_size
+0.0001            |0.0005            |l2_reg
+
+Epoch 1/10
+ 51/650 [=>............................] - ETA: 4:40 - loss: 2.5661 - accuracy: 0.25802025-06-21 05:51:38.706251: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.1590s vs `on_train_batch_end` time: 0.2889s). Check your callbacks.
+650/650 [==============================] - 327s 501ms/step - loss: 1.1202 - accuracy: 0.6795 - val_loss: 0.7604 - val_accuracy: 0.7663
+Epoch 2/10
+650/650 [==============================] - 325s 500ms/step - loss: 0.3351 - accuracy: 0.9290 - val_loss: 0.2896 - val_accuracy: 0.9377
+Epoch 3/10
+650/650 [==============================] - 325s 500ms/step - loss: 0.1623 - accuracy: 0.9767 - val_loss: 0.1584 - val_accuracy: 0.9763
+Epoch 4/10
+650/650 [==============================] - 325s 500ms/step - loss: 0.0980 - accuracy: 0.9924 - val_loss: 0.1204 - val_accuracy: 0.9794
+Epoch 5/10
+650/650 [==============================] - 325s 499ms/step - loss: 0.0667 - accuracy: 0.9982 - val_loss: 0.1363 - val_accuracy: 0.9740
+Epoch 6/10
+650/650 [==============================] - 325s 500ms/step - loss: 0.0506 - accuracy: 0.9998 - val_loss: 0.0792 - val_accuracy: 0.9894
+Epoch 7/10
+650/650 [==============================] - 325s 499ms/step - loss: 0.0674 - accuracy: 0.9932 - val_loss: 0.0997 - val_accuracy: 0.9788
+Epoch 8/10
+650/650 [==============================] - 325s 500ms/step - loss: 0.0436 - accuracy: 0.9999 - val_loss: 0.0776 - val_accuracy: 0.9885
+Epoch 9/10
+650/650 [==============================] - 325s 500ms/step - loss: 0.0376 - accuracy: 1.0000 - val_loss: 0.0874 - val_accuracy: 0.9831
+
+Trial 52 Complete [00h 48m 46s]
+val_accuracy: 0.9894230961799622
+
+Best val_accuracy So Far: 0.999423086643219
+Total elapsed time: 1d 06h 54m 10s
+Mejores hiperparámetros encontrados:
+  dropout_rate: 0.2
+  learning_rate: 0.0003
+  kernel_size: 5
+  l2_reg: 0.0005
+Hiperparámetros guardados en: /Users/macprodehugo/Documents/TFG/HandSignDetectionProject/models/random_search/hparams/best_hparams.json
+
+Hiperparámetros guardados en HTML: /Users/macprodehugo/Documents/TFG/HandSignDetectionProject/models/random_search/hparams/best_hparams.html
+
+Model: "sequential_1"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #
+=================================================================
+ conv2d_4 (Conv2D)           (None, 220, 220, 32)      2432
+
+ batch_normalization_4 (Batc  (None, 220, 220, 32)     128
+ hNormalization)
+
+ max_pooling2d_4 (MaxPooling  (None, 110, 110, 32)     0
+ 2D)
+
+ conv2d_5 (Conv2D)           (None, 106, 106, 64)      51264
+
+ batch_normalization_5 (Batc  (None, 106, 106, 64)     256
+ hNormalization)
+
+ max_pooling2d_5 (MaxPooling  (None, 53, 53, 64)       0
+ 2D)
+
+ conv2d_6 (Conv2D)           (None, 49, 49, 128)       204928
+
+ batch_normalization_6 (Batc  (None, 49, 49, 128)      512
+ hNormalization)
+
+ max_pooling2d_6 (MaxPooling  (None, 24, 24, 128)      0
+ 2D)
+
+ conv2d_7 (Conv2D)           (None, 20, 20, 256)       819456
+
+ batch_normalization_7 (Batc  (None, 20, 20, 256)      1024
+ hNormalization)
+
+ max_pooling2d_7 (MaxPooling  (None, 10, 10, 256)      0
+ 2D)
+
+ global_average_pooling2d_1   (None, 256)              0
+ (GlobalAveragePooling2D)
+
+ dense_2 (Dense)             (None, 512)               131584
+
+ dropout_1 (Dropout)         (None, 512)               0
+
+ dense_3 (Dense)             (None, 26)                13338
+
+=================================================================
+Total params: 1,224,922
+Trainable params: 1,223,962
+Non-trainable params: 960
+_________________________________________________________________
+Epoch 1/70
+  6/650 [..............................] - ETA: 5:04 - loss: 3.4068 - accuracy: 0.15622025-06-21 06:40:24.455715: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node AssignAddVariableOp_10.
+650/650 [==============================] - 327s 500ms/step - loss: 0.9880 - accuracy: 0.7495 - val_loss: 0.6793 - val_accuracy: 0.8492
+Epoch 2/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.3329 - accuracy: 0.9575 - val_loss: 1.7566 - val_accuracy: 0.6085
+Epoch 3/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.2136 - accuracy: 0.9857 - val_loss: 1.6078 - val_accuracy: 0.6988
+Epoch 4/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.1507 - accuracy: 0.9970 - val_loss: 1.7432 - val_accuracy: 0.7052
+Epoch 5/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.1129 - accuracy: 0.9990 - val_loss: 0.1328 - val_accuracy: 0.9865
+Epoch 6/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0781 - accuracy: 0.9999 - val_loss: 0.0766 - val_accuracy: 0.9956
+Epoch 7/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0978 - accuracy: 0.9884 - val_loss: 1.0156 - val_accuracy: 0.7510
+Epoch 8/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0629 - accuracy: 0.9975 - val_loss: 0.0501 - val_accuracy: 0.9985
+Epoch 9/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0386 - accuracy: 0.9999 - val_loss: 0.0359 - val_accuracy: 0.9988
+Epoch 10/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0266 - accuracy: 1.0000 - val_loss: 0.0291 - val_accuracy: 0.9985
+Epoch 11/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0527 - accuracy: 0.9902 - val_loss: 5.3602 - val_accuracy: 0.3463
+Epoch 12/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0428 - accuracy: 0.9964 - val_loss: 0.0276 - val_accuracy: 0.9990
+Epoch 13/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0219 - accuracy: 0.9999 - val_loss: 0.0200 - val_accuracy: 0.9994
+Epoch 14/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0161 - accuracy: 1.0000 - val_loss: 0.0170 - val_accuracy: 0.9996
+Epoch 15/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0127 - accuracy: 1.0000 - val_loss: 0.0151 - val_accuracy: 0.9992
+Epoch 16/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0104 - accuracy: 1.0000 - val_loss: 0.0140 - val_accuracy: 0.9990
+Epoch 17/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0090 - accuracy: 1.0000 - val_loss: 0.0137 - val_accuracy: 0.9981
+Epoch 18/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0614 - accuracy: 0.9863 - val_loss: 0.0913 - val_accuracy: 0.9827
+Epoch 19/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0194 - accuracy: 0.9994 - val_loss: 0.0164 - val_accuracy: 0.9996
+Epoch 20/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0130 - accuracy: 1.0000 - val_loss: 0.0131 - val_accuracy: 0.9996
+Epoch 21/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0097 - accuracy: 1.0000 - val_loss: 0.0106 - val_accuracy: 0.9996
+Epoch 22/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0079 - accuracy: 1.0000 - val_loss: 0.0096 - val_accuracy: 0.9996
+Epoch 23/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0066 - accuracy: 1.0000 - val_loss: 0.0092 - val_accuracy: 0.9992
+Epoch 24/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0056 - accuracy: 1.0000 - val_loss: 0.0091 - val_accuracy: 0.9985
+Epoch 25/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0566 - accuracy: 0.9874 - val_loss: 0.0267 - val_accuracy: 0.9963
+Epoch 26/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0157 - accuracy: 0.9997 - val_loss: 0.0138 - val_accuracy: 0.9992
+Epoch 27/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0106 - accuracy: 1.0000 - val_loss: 0.0104 - val_accuracy: 0.9996
+Epoch 28/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0080 - accuracy: 1.0000 - val_loss: 0.0086 - val_accuracy: 0.9992
+Epoch 29/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0063 - accuracy: 1.0000 - val_loss: 0.0077 - val_accuracy: 0.9992
+Epoch 30/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0052 - accuracy: 1.0000 - val_loss: 0.0074 - val_accuracy: 0.9992
+Epoch 31/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0045 - accuracy: 1.0000 - val_loss: 0.0070 - val_accuracy: 0.9990
+Epoch 32/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0039 - accuracy: 1.0000 - val_loss: 0.0069 - val_accuracy: 0.9990
+Epoch 33/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0448 - accuracy: 0.9899 - val_loss: 0.7699 - val_accuracy: 0.8144
+Epoch 34/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0180 - accuracy: 0.9989 - val_loss: 0.0140 - val_accuracy: 0.9996
+Epoch 35/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0101 - accuracy: 1.0000 - val_loss: 0.0101 - val_accuracy: 0.9996
+Epoch 36/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0070 - accuracy: 1.0000 - val_loss: 0.0076 - val_accuracy: 0.9996
+Epoch 37/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0053 - accuracy: 1.0000 - val_loss: 0.0064 - val_accuracy: 0.9996
+Epoch 38/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0043 - accuracy: 1.0000 - val_loss: 0.0056 - val_accuracy: 0.9994
+Epoch 39/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0036 - accuracy: 1.0000 - val_loss: 0.0053 - val_accuracy: 0.9994
+Epoch 40/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0031 - accuracy: 1.0000 - val_loss: 0.0049 - val_accuracy: 0.9994
+Epoch 41/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0028 - accuracy: 1.0000 - val_loss: 0.0047 - val_accuracy: 0.9992
+Epoch 42/70
+650/650 [==============================] - 325s 499ms/step - loss: 0.0025 - accuracy: 1.0000 - val_loss: 0.0051 - val_accuracy: 0.9990
+Epoch 43/70
+650/650 [==============================] - 325s 499ms/step - loss: 0.0433 - accuracy: 0.9898 - val_loss: 0.5268 - val_accuracy: 0.8879
+Epoch 44/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0176 - accuracy: 0.9987 - val_loss: 2.3225 - val_accuracy: 0.7160
+Epoch 45/70
+650/650 [==============================] - 325s 499ms/step - loss: 0.0105 - accuracy: 0.9997 - val_loss: 0.0097 - val_accuracy: 0.9996
+Epoch 46/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0069 - accuracy: 1.0000 - val_loss: 0.0071 - val_accuracy: 0.9996
+Epoch 47/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0049 - accuracy: 1.0000 - val_loss: 0.0057 - val_accuracy: 0.9994
+Epoch 48/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0037 - accuracy: 1.0000 - val_loss: 0.0049 - val_accuracy: 0.9996
+Epoch 49/70
+650/650 [==============================] - 324s 498ms/step - loss: 0.0030 - accuracy: 1.0000 - val_loss: 0.0046 - val_accuracy: 0.9994
+Epoch 50/70
+650/650 [==============================] - 323s 496ms/step - loss: 0.0026 - accuracy: 1.0000 - val_loss: 0.0044 - val_accuracy: 0.9994
+Epoch 51/70
+650/650 [==============================] - 322s 496ms/step - loss: 0.0022 - accuracy: 1.0000 - val_loss: 0.0043 - val_accuracy: 0.9994
+Epoch 52/70
+650/650 [==============================] - 323s 496ms/step - loss: 0.0020 - accuracy: 1.0000 - val_loss: 0.0042 - val_accuracy: 0.9994
+Epoch 53/70
+650/650 [==============================] - 322s 496ms/step - loss: 0.0018 - accuracy: 1.0000 - val_loss: 0.0041 - val_accuracy: 0.9990
+Epoch 54/70
+650/650 [==============================] - 324s 498ms/step - loss: 0.0458 - accuracy: 0.9902 - val_loss: 0.1672 - val_accuracy: 0.9590
+Epoch 55/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0154 - accuracy: 0.9990 - val_loss: 0.0138 - val_accuracy: 0.9988
+Epoch 56/70
+650/650 [==============================] - 323s 497ms/step - loss: 0.0091 - accuracy: 1.0000 - val_loss: 0.0098 - val_accuracy: 0.9996
+Epoch 57/70
+650/650 [==============================] - 322s 496ms/step - loss: 0.0062 - accuracy: 1.0000 - val_loss: 0.0068 - val_accuracy: 0.9996
+Epoch 58/70
+650/650 [==============================] - 322s 496ms/step - loss: 0.0043 - accuracy: 1.0000 - val_loss: 0.0053 - val_accuracy: 0.9996
+Epoch 59/70
+650/650 [==============================] - 323s 496ms/step - loss: 0.0031 - accuracy: 1.0000 - val_loss: 0.0046 - val_accuracy: 0.9994
+Epoch 60/70
+650/650 [==============================] - 324s 498ms/step - loss: 0.0025 - accuracy: 1.0000 - val_loss: 0.0042 - val_accuracy: 0.9994
+Epoch 61/70
+650/650 [==============================] - 323s 496ms/step - loss: 0.0021 - accuracy: 1.0000 - val_loss: 0.0040 - val_accuracy: 0.9994
+Epoch 62/70
+650/650 [==============================] - 323s 496ms/step - loss: 0.0018 - accuracy: 1.0000 - val_loss: 0.0039 - val_accuracy: 0.9994
+Epoch 63/70
+650/650 [==============================] - 323s 496ms/step - loss: 0.0016 - accuracy: 1.0000 - val_loss: 0.0039 - val_accuracy: 0.9992
+Epoch 64/70
+650/650 [==============================] - 324s 498ms/step - loss: 0.0016 - accuracy: 1.0000 - val_loss: 0.0035 - val_accuracy: 0.9992
+Epoch 65/70
+650/650 [==============================] - 324s 499ms/step - loss: 0.0487 - accuracy: 0.9896 - val_loss: 0.0406 - val_accuracy: 0.9937
+Epoch 66/70
+650/650 [==============================] - 323s 496ms/step - loss: 0.0129 - accuracy: 0.9992 - val_loss: 0.0115 - val_accuracy: 0.9992
+Epoch 67/70
+650/650 [==============================] - 323s 496ms/step - loss: 0.0084 - accuracy: 1.0000 - val_loss: 0.0087 - val_accuracy: 0.9992
+Epoch 68/70
+650/650 [==============================] - 323s 496ms/step - loss: 0.0057 - accuracy: 1.0000 - val_loss: 0.0061 - val_accuracy: 0.9994
+Epoch 69/70
+650/650 [==============================] - 323s 497ms/step - loss: 0.0039 - accuracy: 1.0000 - val_loss: 0.0044 - val_accuracy: 0.9994
+Epoch 70/70
+650/650 [==============================] - 325s 499ms/step - loss: 0.0028 - accuracy: 1.0000 - val_loss: 0.0037 - val_accuracy: 0.9994
+Modelo guardado en: /Users/macprodehugo/Documents/TFG/HandSignDetectionProject/models/random_search/my_cnn_randomsearch.h5
+Se ha guardado labels.txt con las clases.
+Precisión en validación: 99.94%, Pérdida: 0.0037
+Guardado gráfico de Pérdida/Loss en: /Users/macprodehugo/Documents/TFG/HandSignDetectionProject/models/random_search/plots/loss.png
+Guardado gráfico de Exactitud/Accuracy en: /Users/macprodehugo/Documents/TFG/HandSignDetectionProject/models/random_search/plots/accuracy.png
+
+Process finished with exit code 0

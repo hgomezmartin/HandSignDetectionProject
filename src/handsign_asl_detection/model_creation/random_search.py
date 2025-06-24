@@ -15,7 +15,8 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.regularizers import l2
 
-from handsign_asl_detection.config import RANDOM_SEARCH_DIR, DISORDERED_DATADIR, IMG_SIZE, BATCH_SIZE, SEED, EPOCHS
+from handsign_asl_detection.config import RANDOM_SEARCH_DIR, DISORDERED_DATADIR, IMG_SIZE, BATCH_SIZE, SEED, EPOCHS_RS, \
+    EPOCHS
 
 # Constantes
 DATA_DIR = DISORDERED_DATADIR
@@ -34,15 +35,15 @@ np.random.seed(SEED)
 tf.random.set_seed(SEED)
 
 
-def build_model(hp, input_shape, num_classes):
+def build_rs_model(hp, input_shape, num_classes):
     model = Sequential()
 
     # Hiperparámetros para la activación #
 
-    dropout_rate = hp.Float('dropout_rate', min_value=0.2, max_value=0.6, step=0.1)
+    dropout_rate = hp.Choice("dropout_rate", values=[0.3, 0.5, 0.6])
     lr = hp.Choice('learning_rate', values=[0.0001, 0.0003, 0.001])
     ks = hp.Choice('kernel_size', values=[3, 5])
-    l2_reg = hp.Float('l2_reg', min_value=0.000001, max_value=0.001, sampling='log')
+    l2_reg = hp.Choice('l2_reg', [0.0001, 0.0005, 0.001])
 
     # Capa convolucional 1
     model.add(Conv2D(filters=32, kernel_size=(ks, ks), activation='relu', input_shape=input_shape))
@@ -125,7 +126,7 @@ def main():
         layers.RandomFlip("horizontal")
     ])
 
-    # train dataset → aug + prefetch
+    # train dataset -> aug + prefetch
     train_ds_aug = (train_ds
                     .map(lambda x, y: (data_aug(x, training=True), y),
                          num_parallel_calls=AUTOTUNE)
@@ -142,13 +143,13 @@ def main():
 
     # 2. Definimos RandomSearch
     tuner = kt.RandomSearch(
-        hypermodel=lambda hp: build_model(
+        hypermodel=lambda hp: build_rs_model(
             hp,
             input_shape=(IMG_SIZE, IMG_SIZE, 3),
             num_classes=num_classes
         ),
         objective='val_accuracy',
-        max_trials=1,  # cambiarlo a 24
+        max_trials=54,
         executions_per_trial=1,
         overwrite=True,
         directory=str(TUNER_DIR),
@@ -158,9 +159,9 @@ def main():
     # 3. Lanzamos la búsqueda de hiperparámetros
     tuner.search(
         train_ds_aug,
-        epochs=2,  # cambiar a EPOCHS
+        epochs=EPOCHS_RS,
         validation_data=val_ds_norm,
-        callbacks=[tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=10, restore_best_weights=True)]
+        callbacks=[tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=3, restore_best_weights=True)]
     )
 
     # 4. Obtenemos los mejores hiperparámetros

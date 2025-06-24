@@ -124,6 +124,8 @@ def realtime_section(model_path):
             # Bucle principal
             prev_time = time.time()
 
+            chart_interval = 2
+            last_chart_update = 0
             while st.session_state.camera_active:
                 ret, frame = cap.read()
                 if not ret:
@@ -168,13 +170,14 @@ def realtime_section(model_path):
                         cols[3].metric("Temperatura",
                                        f"{latest['temp']:.1f}°C" if latest['temp'] is not None else "N/D")
 
-                if len(METRICS_BUFFER) > 1 and int(time.time()) % 2 == 0:
+                if curr_time - last_chart_update >= chart_interval:
+                    last_chart_update = curr_time  # proximo punto de control
                     chart_container.empty()
                     with chart_container.container():
                         df = pd.DataFrame(METRICS_BUFFER).set_index("timestamp")
                         st.line_chart(df[["fps", "cpu", "ram"]])
 
-                time.sleep(0.5)
+                # time.sleep(0.5)
 
         except Exception as e:
             status_container.error(f"❌ Error crítico: {str(e)}")

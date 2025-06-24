@@ -5,11 +5,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
 from keras.callbacks import ReduceLROnPlateau
+from tensorflow.keras import layers
 from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Dense, Dropout, BatchNormalization, GlobalAveragePooling2D
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.regularizers import l2
 
 from handsign_asl_detection.config import IMG_SIZE, BATCH_SIZE, EPOCHS, SEED, DISORDERED_DATADIR, AUGMENTED_DIR
@@ -69,57 +69,51 @@ def build_cnn_model(input_shape, num_classes):
 
 
 def main():
-    # 0. Implementacion del data augmentation
-    # Solo para entrenamiento
-
-    train_datagen = ImageDataGenerator(
-        rescale=1.0 / 255,
-        rotation_range=15,  # rotación ±15°
-        zoom_range=0.1,  # zoom ±10%
-        width_shift_range=0.1,  # desplazamiento horizontal ±10%
-        height_shift_range=0.1,  # desplazamiento vertical ±10%
-        brightness_range=[0.8, 1.2],  # brillo entre 80–120%
-        horizontal_flip=True,  # volteo horizontal
-        fill_mode='reflect',  # rellena bordes reflejando pixeles
-        validation_split=0.2
-
-    )
-
-    # 2. Solo rescale para validación
-    val_datagen = ImageDataGenerator(
-        rescale=1.0 / 255,
-        validation_split=0.2
-    )
-
-
-    # 1. Configurar el ImageDataGenerator con validación (20% de los datos)
-    '''
-    datagen = ImageDataGenerator(
-        rescale=1.0 / 255,
-        validation_split=0.2
-    )'''
-    train_generator = train_datagen.flow_from_directory(
-    #train_generator = datagen.flow_from_directory(
+    # 1. Carga de imágenes en tf.data.Dataset (80 / 20)
+    train_ds = tf.keras.utils.image_dataset_from_directory(
         DATA_DIR,
-        target_size=(IMG_SIZE, IMG_SIZE),
+        validation_split=0.20,
+        subset="training",
+        seed=SEED,
+        image_size=(IMG_SIZE, IMG_SIZE),
         batch_size=BATCH_SIZE,
-        class_mode='sparse',  # Usamos etiquetas enteras
-        subset='training',
-        seed=SEED  # fija shuffle + aug para reproducibilidad
+        label_mode="int"
     )
 
-    validation_generator = val_datagen.flow_from_directory(
-    #validation_generator = datagen.flow_from_directory(
+    val_ds = tf.keras.utils.image_dataset_from_directory(
         DATA_DIR,
-        target_size=(IMG_SIZE, IMG_SIZE),
+        validation_split=0.20,
+        subset="validation",
+        seed=SEED,
+        image_size=(IMG_SIZE, IMG_SIZE),
         batch_size=BATCH_SIZE,
-        class_mode='sparse',
-        subset='validation',
-        seed=SEED  # fija shuffle + aug para reproducibilidad
+        label_mode="int"
     )
 
-    num_classes = len(train_generator.class_indices)
-    print(f"Clases encontradas (en total {num_classes}): {train_generator.class_indices}")
+    class_names = train_ds.class_names
+    num_classes = len(class_names)
+    print(f"Clases ({num_classes}): {class_names}")
+
+    # 1.2 capas de normalizado + augmentación (en GPU)
+    data_aug = Sequential([
+        layers.Rescaling(1. / 255),
+        layers.RandomRotation(0.08),
+        layers.RandomZoom(0.10),
+        layers.RandomTranslation(0.10, 0.10),
+        layers.RandomContrast(0.2),
+        layers.RandomFlip("horizontal")
+    ])
+
+    # train dataset -> aug + prefetch
+    train_ds_aug = (train_ds
+                    .map(lambda x, y: (data_aug(x, training=True), y), num_parallel_calls=AUTOTUNE)
+                    .cache()
+                    .prefetch(AUTOTUNE))
+
+    val_ds_norm = (val_ds
+                   .map(lambda x, y: (x / 255.0, y))
+                   .cache()
+                   .prefetch(AUTOTUNE))
 
     # 2. Construir el modelo
     input_shape = (IMG_SIZE, IMG_SIZE, 3)
@@ -145,9 +139,9 @@ def main():
 
     # 3. Entrenar el modelo usando los generadores
     history = model.fit(
-        train_generator,
+        train_ds_aug,
         epochs=EPOCHS,
-        validation_data=validation_generator,
+        validation_data=val_ds_norm,
         callbacks=[earlystop_cb, reduce_lr_cb],
         verbose=1
     )
@@ -159,13 +153,11 @@ def main():
 
     # 5. Guardamos también el mapeo de clases a un archivo .txt
     with open(LABELS_PATH, "w") as f:
-        # Escribimos las clases ordenadas por su índice
-        for cls_name in sorted(train_generator.class_indices, key=train_generator.class_indices.get):
-            f.write(f"{cls_name}\n")
+        f.write("\n".join(class_names))
     print("Se ha guardado en labels.txt con las clases.")
 
     # 6. Evaluar en validación / test si tuviera
-    val_loss, val_acc = model.evaluate(validation_generator, verbose=0)
+    val_loss, val_acc = model.evaluate(val_ds_norm, verbose=0)
     print(f"Precisión en validación: {val_acc * 100:.2f}%, Pérdida: {val_loss:.4f}")
 
     # 7. Imprimimos las graficas de funcion de pérdida y de exactitud

@@ -37,6 +37,7 @@ CSS_DIR = STATIC_DIR
 IMG_SIZE = 224
 BATCH_SIZE = 32
 EPOCHS = 70
+EPOCHS_RS = 10
 SEED = 42
 
 # De la creacion del dataset:
