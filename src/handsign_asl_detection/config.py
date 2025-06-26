@@ -24,6 +24,8 @@ AUGMENTED_DIR = MODELS_DIR / "augmented"
 NOT_AUGMENTED_DIR = MODELS_DIR / "not_augmented"
 IMX_READY_DIR = MODELS_DIR / "imx_ready"
 RANDOM_SEARCH_DIR = MODELS_DIR / "random_search"
+FINAL_DIR = MODELS_DIR / "final_model"
+FINAL_TFL_DIR = FINAL_DIR / "rpi_tflite"
 TEACHABLE_DIR = MODELS_DIR / "teachable_machine"
 TEACHABLE_TFL_DIR = TEACHABLE_DIR / "rpi_tflite"
 

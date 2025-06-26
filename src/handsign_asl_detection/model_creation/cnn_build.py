@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
 from keras.callbacks import ReduceLROnPlateau
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 from tensorflow.keras import layers
 from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Dense, Dropout, BatchNormalization, GlobalAveragePooling2D
@@ -62,7 +63,7 @@ def build_cnn_model(input_shape, num_classes):
 
     # Compilación
     model.compile(optimizer=Adam(learning_rate=0.0001),
-                  loss='sparse_categorical_en nuestr',
+                  loss='sparse_categorical_crossentropy',
                   metrics=['accuracy'])
 
     return model
@@ -189,6 +190,20 @@ def main():
     acc_path = os.path.join(PLOTS_DIR, "accuracy.png")
     plt.savefig(acc_path, dpi=150)
     print(f"Guardado gráfico de Exactitud/Accuracy en: {acc_path}")
+    plt.show()
+
+    y_true = np.concatenate([y.numpy() for _, y in val_ds_norm])
+    y_pred_probs = model.predict(val_ds_norm, verbose=0)
+    y_pred = np.argmax(y_pred_probs, axis=1)
+
+    cm = confusion_matrix(y_true, y_pred, labels=range(num_classes))
+    fig, ax = plt.subplots(figsize=(8, 8))
+    disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=class_names)
+    disp.plot(ax=ax, cmap="Blues", colorbar=True, xticks_rotation=45)
+    ax.set_title("Matriz de confusión")
+    cm_path = PLOTS_DIR / "confusion_matrix.png"
+    fig.savefig(cm_path, dpi=150, bbox_inches="tight")
+    print(f"Matriz de confusión guardada en: {cm_path}")
     plt.show()
 
 
