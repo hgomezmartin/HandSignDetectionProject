@@ -30,10 +30,7 @@ class RealTimeASLClassifier:
         self.cap = cv2.VideoCapture(0)
 
     def preprocess(self, img, bbox):
-        """
-        Recorta la región de interés de la mano, la redimensiona y la normaliza.
-        Se utiliza una imagen blanca de tamaño fijo (img_size x img_size) para mantener la relación de aspecto.
-        """
+
         x, y, w, h = bbox
         # Recorte con offset
         img_crop = img[max(0, y - self.offset):y + h + self.offset,

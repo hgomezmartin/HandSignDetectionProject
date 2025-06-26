@@ -15,8 +15,8 @@ from tensorflow.keras.regularizers import l2
 from handsign_asl_detection.config import IMG_SIZE, BATCH_SIZE, EPOCHS, SEED, DISORDERED_DATADIR, AUGMENTED_DIR
 
 DATA_DIR = DISORDERED_DATADIR
-MODEL_PATH = AUGMENTED_DIR / "my_cnn_model.h5"  # …/models/augmented/my_cnn_model.h5
-LABELS_PATH = AUGMENTED_DIR / "labels.txt"  # …/models/augmented/class_labels.txt
+MODEL_PATH = AUGMENTED_DIR / "my_cnn_model.h5"
+LABELS_PATH = AUGMENTED_DIR / "labels.txt"
 PLOTS_DIR = AUGMENTED_DIR / "plots"
 
 AUTOTUNE = tf.data.AUTOTUNE
@@ -62,7 +62,7 @@ def build_cnn_model(input_shape, num_classes):
 
     # Compilación
     model.compile(optimizer=Adam(learning_rate=0.0001),
-                  loss='sparse_categorical_crossentropy',
+                  loss='sparse_categorical_en nuestr',
                   metrics=['accuracy'])
 
     return model

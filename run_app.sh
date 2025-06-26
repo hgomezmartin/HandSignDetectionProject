@@ -9,8 +9,9 @@ cd "$(dirname "$0")"
 source .venv/bin/activate
 
 # 3. Instala dependencias y paquete
-pip install -r requirements.txt
 pip install -e .
+pip install -r requirements.txt
+
 
 # 4. Lanza Streamlit
 exec streamlit run src/handsign_asl_detection/web/app.py

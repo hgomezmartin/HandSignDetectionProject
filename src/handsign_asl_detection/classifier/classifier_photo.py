@@ -1,10 +1,4 @@
-"""
-Clasificación de una sola imagen.
 
-La primera llamada con una ruta de modelo lo carga (TFLite ó .h5)
-y lo deja cacheado; las siguientes llamadas reutilizan la misma
-instancia sin re-abrir archivo.
-"""
 
 from pathlib import Path
 
@@ -16,7 +10,7 @@ import tensorflow as tf
 from handsign_asl_detection.config import IMG_SIZE, TEACHABLE_TFL_DIR
 
 
-# ────────────────────────────── Cacheadores ──────────────────────────────
+# Cacheadores
 
 
 @st.cache_resource
@@ -36,16 +30,12 @@ def load_h5(model_path: str | Path):
     return model
 
 
-# Etiquetas (las comparte todo modelo)
+# Etiquetas
 with open((TEACHABLE_TFL_DIR / "labels.txt")) as f:
     labels = [ln.strip() for ln in f]
 
 
 def classify_image(img_bgr: np.ndarray, model_path: str | Path) -> tuple[str, float]:
-    """
-    Devuelve (label, confianza %) para una sola imagen BGR usando el modelo indicado.
-    El modelo puede ser .tflite (FP16 / FP32) o .h5.
-    """
     model_path = Path(model_path)
     if not model_path.exists():
         raise FileNotFoundError(model_path)
