@@ -1,6 +1,6 @@
 [server]
 maxUploadSize = 5120
-port = 8502
+port = 8501
 [theme]
 primaryColor="#C51D4A"
 backgroundColor="#0E1117"
