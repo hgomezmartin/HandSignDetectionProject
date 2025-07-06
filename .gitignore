@@ -1,3 +1,5 @@
 .gitattributes
 .ipynb_checkpoints
 .DS_Store
+.venv
+*.egg-info

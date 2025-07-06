@@ -3,7 +3,7 @@ cd /d "%~dp0"
 
 if not exist ".venv\" (
     echo [INFO] Creando entorno virtual .venv...
-    py -3 -m venv .venv            REM usa el launcher 'py' (vale python también)
+    python -m venv .venv
 )
 
 call ".venv\Scripts\activate"

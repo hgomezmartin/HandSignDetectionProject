@@ -1,0 +1,130 @@
+/usr/local/bin/python3.11 /Users/macprodehugo/Documents/TFG/HandSignDetectionProject/src/handsign_asl_detection/model_creation/cnn_build.py
+Found 26000 files belonging to 26 classes.
+Using 20800 files for training.
+Metal device set to: AMD Radeon HD - FirePro D700
+
+systemMemory: 64.00 GB
+maxCacheSize: 3.00 GB
+
+Found 26000 files belonging to 26 classes.
+Using 5200 files for validation.
+Clases (26): ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+Model: "sequential_1"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #
+=================================================================
+ lambda (Lambda)             (None, 224, 224, 3)       0
+
+ efficientnetb0 (Functional  (None, 7, 7, 1280)        4049571
+ )
+
+ global_average_pooling2d (  (None, 1280)              0
+ GlobalAveragePooling2D)
+
+ batch_normalization (Batch  (None, 1280)              5120
+ Normalization)
+
+ dropout (Dropout)           (None, 1280)              0
+
+ dense (Dense)               (None, 26)                33306
+
+=================================================================
+Total params: 4087997 (15.59 MB)
+Trainable params: 35866 (140.10 KB)
+Non-trainable params: 4052131 (15.46 MB)
+_________________________________________________________________
+Epoch 1/70
+2025-07-01 16:40:48.921438: E tensorflow/core/grappler/optimizers/meta_optimizer.cc:954] model_pruner failed: INVALID_ARGUMENT: Graph does not contain terminal node Adam/AssignAddVariableOp.
+650/650 [==============================] - 148s 214ms/step - loss: 0.9730 - accuracy: 0.7236 - val_loss: 0.4694 - val_accuracy: 0.8613 - lr: 3.0000e-04
+Epoch 2/70
+650/650 [==============================] - 131s 201ms/step - loss: 0.2489 - accuracy: 0.9404 - val_loss: 0.2867 - val_accuracy: 0.9169 - lr: 3.0000e-04
+Epoch 3/70
+650/650 [==============================] - 131s 201ms/step - loss: 0.1461 - accuracy: 0.9711 - val_loss: 0.2184 - val_accuracy: 0.9358 - lr: 3.0000e-04
+Epoch 4/70
+650/650 [==============================] - 131s 201ms/step - loss: 0.0991 - accuracy: 0.9831 - val_loss: 0.1816 - val_accuracy: 0.9477 - lr: 3.0000e-04
+Epoch 5/70
+650/650 [==============================] - 131s 201ms/step - loss: 0.0719 - accuracy: 0.9902 - val_loss: 0.1585 - val_accuracy: 0.9550 - lr: 3.0000e-04
+Epoch 6/70
+650/650 [==============================] - 131s 201ms/step - loss: 0.0545 - accuracy: 0.9942 - val_loss: 0.1450 - val_accuracy: 0.9588 - lr: 3.0000e-04
+Epoch 7/70
+650/650 [==============================] - 131s 201ms/step - loss: 0.0428 - accuracy: 0.9969 - val_loss: 0.1364 - val_accuracy: 0.9615 - lr: 3.0000e-04
+Epoch 8/70
+650/650 [==============================] - 131s 201ms/step - loss: 0.0348 - accuracy: 0.9983 - val_loss: 0.1298 - val_accuracy: 0.9642 - lr: 3.0000e-04
+Epoch 9/70
+650/650 [==============================] - 131s 201ms/step - loss: 0.0291 - accuracy: 0.9989 - val_loss: 0.1250 - val_accuracy: 0.9646 - lr: 3.0000e-04
+Epoch 10/70
+650/650 [==============================] - 131s 201ms/step - loss: 0.0250 - accuracy: 0.9995 - val_loss: 0.1212 - val_accuracy: 0.9648 - lr: 3.0000e-04
+Epoch 11/70
+650/650 [==============================] - 131s 201ms/step - loss: 0.0220 - accuracy: 0.9998 - val_loss: 0.1184 - val_accuracy: 0.9662 - lr: 3.0000e-04
+Epoch 12/70
+650/650 [==============================] - 131s 201ms/step - loss: 0.0199 - accuracy: 1.0000 - val_loss: 0.1163 - val_accuracy: 0.9671 - lr: 3.0000e-04
+Epoch 13/70
+650/650 [==============================] - 131s 201ms/step - loss: 0.0183 - accuracy: 1.0000 - val_loss: 0.1147 - val_accuracy: 0.9677 - lr: 3.0000e-04
+Epoch 14/70
+650/650 [==============================] - 131s 201ms/step - loss: 0.0171 - accuracy: 1.0000 - val_loss: 0.1134 - val_accuracy: 0.9679 - lr: 3.0000e-04
+Epoch 15/70
+650/650 [==============================] - 131s 201ms/step - loss: 0.0161 - accuracy: 1.0000 - val_loss: 0.1123 - val_accuracy: 0.9685 - lr: 3.0000e-04
+Epoch 16/70
+650/650 [==============================] - 131s 201ms/step - loss: 0.0154 - accuracy: 1.0000 - val_loss: 0.1113 - val_accuracy: 0.9690 - lr: 3.0000e-04
+Epoch 17/70
+650/650 [==============================] - 131s 201ms/step - loss: 0.0147 - accuracy: 1.0000 - val_loss: 0.1103 - val_accuracy: 0.9687 - lr: 3.0000e-04
+Epoch 18/70
+650/650 [==============================] - 131s 201ms/step - loss: 0.0141 - accuracy: 1.0000 - val_loss: 0.1093 - val_accuracy: 0.9687 - lr: 3.0000e-04
+Epoch 19/70
+650/650 [==============================] - 131s 201ms/step - loss: 0.0137 - accuracy: 1.0000 - val_loss: 0.1084 - val_accuracy: 0.9692 - lr: 3.0000e-04
+Epoch 20/70
+650/650 [==============================] - 131s 201ms/step - loss: 0.0132 - accuracy: 1.0000 - val_loss: 0.1075 - val_accuracy: 0.9688 - lr: 3.0000e-04
+Epoch 21/70
+650/650 [==============================] - 131s 201ms/step - loss: 0.0128 - accuracy: 1.0000 - val_loss: 0.1067 - val_accuracy: 0.9685 - lr: 3.0000e-04
+Epoch 22/70
+650/650 [==============================] - ETA: 0s - loss: 0.0124 - accuracy: 1.0000
+Epoch 22: ReduceLROnPlateau reducing learning rate to 0.0001500000071246177.
+650/650 [==============================] - 131s 201ms/step - loss: 0.0124 - accuracy: 1.0000 - val_loss: 0.1060 - val_accuracy: 0.9688 - lr: 3.0000e-04
+Epoch 23/70
+650/650 [==============================] - 131s 201ms/step - loss: 0.0118 - accuracy: 1.0000 - val_loss: 0.1100 - val_accuracy: 0.9685 - lr: 1.5000e-04
+Epoch 24/70
+650/650 [==============================] - 131s 201ms/step - loss: 0.0115 - accuracy: 1.0000 - val_loss: 0.1091 - val_accuracy: 0.9692 - lr: 1.5000e-04
+Epoch 25/70
+650/650 [==============================] - 131s 201ms/step - loss: 0.0113 - accuracy: 1.0000 - val_loss: 0.1081 - val_accuracy: 0.9694 - lr: 1.5000e-04
+Epoch 26/70
+650/650 [==============================] - 130s 201ms/step - loss: 0.0111 - accuracy: 1.0000 - val_loss: 0.1072 - val_accuracy: 0.9694 - lr: 1.5000e-04
+Epoch 27/70
+650/650 [==============================] - 131s 201ms/step - loss: 0.0109 - accuracy: 1.0000 - val_loss: 0.1066 - val_accuracy: 0.9704 - lr: 1.5000e-04
+Epoch 28/70
+650/650 [==============================] - 131s 201ms/step - loss: 0.0108 - accuracy: 1.0000 - val_loss: 0.1060 - val_accuracy: 0.9706 - lr: 1.5000e-04
+Epoch 29/70
+650/650 [==============================] - 131s 201ms/step - loss: 0.0106 - accuracy: 1.0000 - val_loss: 0.1055 - val_accuracy: 0.9704 - lr: 1.5000e-04
+Epoch 30/70
+650/650 [==============================] - 131s 201ms/step - loss: 0.0104 - accuracy: 1.0000 - val_loss: 0.1051 - val_accuracy: 0.9704 - lr: 1.5000e-04
+Epoch 31/70
+650/650 [==============================] - ETA: 0s - loss: 0.0103 - accuracy: 1.0000
+Epoch 31: ReduceLROnPlateau reducing learning rate to 7.500000356230885e-05.
+650/650 [==============================] - 131s 201ms/step - loss: 0.0103 - accuracy: 1.0000 - val_loss: 0.1048 - val_accuracy: 0.9704 - lr: 1.5000e-04
+Epoch 32/70
+650/650 [==============================] - 131s 201ms/step - loss: 0.0100 - accuracy: 1.0000 - val_loss: 0.1048 - val_accuracy: 0.9700 - lr: 7.5000e-05
+Epoch 33/70
+650/650 [==============================] - 133s 204ms/step - loss: 0.0099 - accuracy: 1.0000 - val_loss: 0.1045 - val_accuracy: 0.9700 - lr: 7.5000e-05
+Epoch 34/70
+650/650 [==============================] - ETA: 0s - loss: 0.0098 - accuracy: 1.0000
+Epoch 34: ReduceLROnPlateau reducing learning rate to 3.7500001781154424e-05.
+650/650 [==============================] - 133s 204ms/step - loss: 0.0098 - accuracy: 1.0000 - val_loss: 0.1042 - val_accuracy: 0.9700 - lr: 7.5000e-05
+Epoch 35/70
+650/650 [==============================] - 131s 201ms/step - loss: 0.0096 - accuracy: 1.0000 - val_loss: 0.1050 - val_accuracy: 0.9694 - lr: 3.7500e-05
+Epoch 36/70
+650/650 [==============================] - 131s 201ms/step - loss: 0.0096 - accuracy: 1.0000 - val_loss: 0.1048 - val_accuracy: 0.9694 - lr: 3.7500e-05
+Epoch 37/70
+650/650 [==============================] - ETA: 0s - loss: 0.0095 - accuracy: 1.0000
+Epoch 37: ReduceLROnPlateau reducing learning rate to 1.8750000890577212e-05.
+650/650 [==============================] - 131s 201ms/step - loss: 0.0095 - accuracy: 1.0000 - val_loss: 0.1046 - val_accuracy: 0.9696 - lr: 3.7500e-05
+Epoch 38/70
+650/650 [==============================] - ETA: 0s - loss: 0.0095 - accuracy: 1.0000Restoring model weights from the end of the best epoch: 28.
+650/650 [==============================] - 131s 201ms/step - loss: 0.0095 - accuracy: 1.0000 - val_loss: 0.1060 - val_accuracy: 0.9685 - lr: 1.8750e-05
+Epoch 38: early stopping
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/keras/src/engine/training.py:3000: UserWarning: You are saving your model as an HDF5 file via `model.save()`. This file format is considered legacy. We recommend using instead the native Keras format, e.g. `model.save('my_model.keras')`.
+  saving_api.save_model(
+Modelo guardado en: /Users/macprodehugo/Documents/TFG/HandSignDetectionProject/models/final_model/my_cnn_model.h5
+Se ha guardado labels.txt con las clases.
+Validación: 97.06% | Loss: 0.1060
+Guardado gráfico de Pérdida/Loss en: /Users/macprodehugo/Documents/TFG/HandSignDetectionProject/models/final_model/plots/loss.png
+Guardado gráfico de Exactitud/Accuracy en: /Users/macprodehugo/Documents/TFG/HandSignDetectionProject/models/final_model/plots/accuracy.png
+Matriz de confusión guardada en: /Users/macprodehugo/Documents/TFG/HandSignDetectionProject/models/final_model/plots/confusion_matrix.png

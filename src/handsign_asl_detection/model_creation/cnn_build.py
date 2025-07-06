@@ -1,86 +1,101 @@
+"""
+cnn_build.py
+-------------
+Entrena un clasificador de signos usando EfficientNetB0 como extractor
+de características congelado y una pequeña cabez densa propia
+
+Flujo:
+1. Cargamos las imagenes desde nuestro dataset desordenado "DISORDERED_DATADIR
+con una division 80 train / 20 test
+2. Definimos aumentos ligeros para dar robustez al modelo
+3. Construimos la arquitectura de la red
+4. Se entrena con "Early Stopping" y "ReduceLROnPlateau"
+5. Guardamos el modelo, labels y gráficas (loss, accuracy y matriz de confusión)
+
+Autor: Hugo Gómez Martín
+Contacto: hgm1001@alu.ubu.es
+Fecha: 05/07/2025
+"""
 import os
 import random
 
 import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
-from keras.callbacks import ReduceLROnPlateau
+from keras.callbacks import ReduceLROnPlateau, EarlyStopping
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
-from tensorflow.keras import layers
-from tensorflow.keras.callbacks import EarlyStopping
-from tensorflow.keras.layers import Conv2D, MaxPooling2D, Dense, Dropout, BatchNormalization, GlobalAveragePooling2D
-from tensorflow.keras.models import Sequential
+from tensorflow.keras import layers, Sequential
+from tensorflow.keras.applications import EfficientNetB0
+from tensorflow.keras.applications.efficientnet import preprocess_input
+from tensorflow.keras.layers import (GlobalAveragePooling2D, Dense,
+                                     BatchNormalization, Dropout)
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.regularizers import l2
 
-from handsign_asl_detection.config import IMG_SIZE, BATCH_SIZE, EPOCHS, SEED, DISORDERED_DATADIR, AUGMENTED_DIR
+# Config del proyecto
+from handsign_asl_detection.config import (
+    IMG_SIZE, BATCH_SIZE, EPOCHS, SEED,
+    DISORDERED_DATADIR, FINAL_DIR
+)
 
-DATA_DIR = DISORDERED_DATADIR
-MODEL_PATH = AUGMENTED_DIR / "my_cnn_model.h5"
-LABELS_PATH = AUGMENTED_DIR / "labels.txt"
-PLOTS_DIR = AUGMENTED_DIR / "plots"
+# rutas y constantes
+DATA_DIR = DISORDERED_DATADIR  # Cogemos el conjunto de datos desordenado
+MODEL_PATH = FINAL_DIR / "my_cnn_model.h5"  # Denominamos el modelo "my_cnn_model.h5"
+LABELS_PATH = FINAL_DIR / "labels.txt"  # Establecemos el conjutno de estiquetas en un fichero de texto
+PLOTS_DIR = FINAL_DIR / "plots"  # Creamos una carpeta para almacenar las gráficas
 
-AUTOTUNE = tf.data.AUTOTUNE
+AUTOTUNE = tf.data.AUTOTUNE  # Paralelizar tf.data
 
-# Establecemos semillas para la reproducibilidad
+# Semillas para la reproducibilidad (con el randomsearch)
 random.seed(SEED)
 np.random.seed(SEED)
 tf.random.set_seed(SEED)
 
 
-def build_cnn_model(input_shape, num_classes):
-    # Crea y devuelve un modelo CNN  con Keras.
-    model = Sequential()
+# contruccion del modelo
+def build_cnn_model(input_shape, num_classes, lr: float = 0.0003):
+    """EfficientNet-B0 congelado + cabecera nueva."""
+    base = EfficientNetB0(include_top=False,  # Quitamos cabecera
+                          weights="imagenet",  # Pesos base
+                          input_shape=input_shape)
+    base.trainable = False  # Congelamos tod o el backbone por bug el TF-metal
 
-    # Capa convolucional 1
-    model.add(Conv2D(filters=32, kernel_size=(3, 3), activation='relu', input_shape=input_shape))
-    model.add(BatchNormalization())
-    model.add(MaxPooling2D((2, 2)))
+    model = Sequential([
+        layers.Input(shape=input_shape),
+        layers.Lambda(preprocess_input),  # normalización específica EfficientNet
+        base,
+        GlobalAveragePooling2D(),
+        BatchNormalization(),
+        Dropout(0.2),
 
-    # Capa convolucional 2
-    model.add(Conv2D(filters=64, kernel_size=(3, 3), activation='relu'))
-    model.add(BatchNormalization())
-    model.add(MaxPooling2D((2, 2)))
+        Dense(num_classes,
+              activation="softmax",
+              kernel_regularizer=l2(0.0001))
+    ])
 
-    # Capa convolucional 3
-    model.add(Conv2D(filters=128, kernel_size=(3, 3), activation='relu'))
-    model.add(BatchNormalization())
-    model.add(MaxPooling2D((2, 2)))
-
-    # Capa convolucional 4
-    model.add(Conv2D(filters=256, kernel_size=(3, 3), activation='relu'))
-    model.add(BatchNormalization())
-    model.add(MaxPooling2D((2, 2)))
-
-    model.add(GlobalAveragePooling2D())
-
-    # Capa densa
-    model.add(Dense(units=512, activation='relu', kernel_regularizer=l2(0.0004)))
-    model.add(Dropout(0.5))
-
-    # Capa de salida
-    model.add(Dense(num_classes, activation='softmax'))
-
-    # Compilación
-    model.compile(optimizer=Adam(learning_rate=0.0001),
-                  loss='sparse_categorical_crossentropy',
-                  metrics=['accuracy'])
-
+    # Compilamos
+    model.compile(optimizer=Adam(lr),
+                  loss="sparse_categorical_crossentropy",
+                  metrics=["accuracy"])
     return model
 
 
+# main
 def main():
-    # 1. Carga de imágenes en tf.data.Dataset (80 / 20)
+    """
+    entrena, guarda y genera gráficas del modelo entrenado
+
+    """
+    # 1. Carga de datos con "image_dataset_from_directory"
     train_ds = tf.keras.utils.image_dataset_from_directory(
         DATA_DIR,
-        validation_split=0.20,
+        validation_split=0.20,  # 80/20 split de datos
         subset="training",
         seed=SEED,
         image_size=(IMG_SIZE, IMG_SIZE),
         batch_size=BATCH_SIZE,
-        label_mode="int"
+        label_mode="int"  # Etiquetas enteras 0...N-1
     )
-
     val_ds = tf.keras.utils.image_dataset_from_directory(
         DATA_DIR,
         validation_split=0.20,
@@ -91,80 +106,74 @@ def main():
         label_mode="int"
     )
 
-    class_names = train_ds.class_names
+    class_names = train_ds.class_names  # A, B, C ...
     num_classes = len(class_names)
     print(f"Clases ({num_classes}): {class_names}")
 
-    # 1.2 capas de normalizado + augmentación (en GPU)
-    data_aug = Sequential([
-        layers.Rescaling(1. / 255),
+    # 1.1 Aumentación (augmentation) on the fly
+    aug = Sequential([
         layers.RandomRotation(0.08),
         layers.RandomZoom(0.10),
         layers.RandomTranslation(0.10, 0.10),
         layers.RandomContrast(0.2),
-        layers.RandomFlip("horizontal")
     ])
 
-    # train dataset -> aug + prefetch
-    train_ds_aug = (train_ds
-                    .map(lambda x, y: (data_aug(x, training=True), y), num_parallel_calls=AUTOTUNE)
-                    .cache()
-                    .prefetch(AUTOTUNE))
+    # Se aplican aumentos solo a train, se cachea y prefetch
+    train_ds = (train_ds
+                .map(lambda x, y: (aug(x, training=True), y),
+                     num_parallel_calls=AUTOTUNE)
+                .cache()
+                .prefetch(AUTOTUNE))
 
-    val_ds_norm = (val_ds
-                   .map(lambda x, y: (x / 255.0, y))
-                   .cache()
-                   .prefetch(AUTOTUNE))
+    # solo cache y prefech
+    val_ds = val_ds.cache().prefetch(AUTOTUNE)
 
-    # 2. Construir el modelo
-    input_shape = (IMG_SIZE, IMG_SIZE, 3)
-    num_classes = num_classes
+    # 2. Modelo
+    input_shape = (IMG_SIZE, IMG_SIZE, 3)  # 224, 224 y 3 canales RGB
     model = build_cnn_model(input_shape, num_classes)
-    model.summary()
+    model.summary()  # impreime la arquitectura para ver el num de capas
 
-    # 2.1 Introduccion del EarlyStopping y del ReduceLr
+    # 3. Callbacks
     earlystop_cb = EarlyStopping(
-        monitor="val_accuracy",
-        patience=15,
-        restore_best_weights=True,
+        monitor="val_accuracy",  # metrica a vigilar
+        patience=10,  # epochs sin mejora
+        restore_best_weights=True,  # vuelve al mejor checkpoint
         verbose=1
     )
-
     reduce_lr_cb = ReduceLROnPlateau(
         monitor="val_accuracy",
-        factor=0.5,
-        patience=4,
+        factor=0.5,  # divide el LR entre 2
+        patience=3,
         min_lr=0.000001,
         verbose=1
     )
 
-    # 3. Entrenar el modelo usando los generadores
+    # 4. Entrenamiento (una sola fase)
     history = model.fit(
-        train_ds_aug,
+        train_ds,
         epochs=EPOCHS,
-        validation_data=val_ds_norm,
+        validation_data=val_ds,
         callbacks=[earlystop_cb, reduce_lr_cb],
         verbose=1
     )
 
-    # 4. Guardar el modelo
-    os.makedirs(os.path.dirname(MODEL_PATH), exist_ok=True)
+    # 5. Guardar modelo y etiquetas
+    os.makedirs(os.path.dirname(FINAL_DIR), exist_ok=True)
     model.save(MODEL_PATH)
     print(f"Modelo guardado en: {MODEL_PATH}")
 
-    # 5. Guardamos también el mapeo de clases a un archivo .txt
     with open(LABELS_PATH, "w") as f:
         f.write("\n".join(class_names))
-    print("Se ha guardado en labels.txt con las clases.")
+    print("Se ha guardado labels.txt con las clases.")
 
-    # 6. Evaluar en validación / test si tuviera
-    val_loss, val_acc = model.evaluate(val_ds_norm, verbose=0)
-    print(f"Precisión en validación: {val_acc * 100:.2f}%, Pérdida: {val_loss:.4f}")
+    # 6. Evaluación
+    val_loss, val_acc = model.evaluate(val_ds, verbose=0)
+    print(f"Validación: {val_acc * 100:.2f}% | Loss: {val_loss:.4f}")
 
-    # 7. Imprimimos las graficas de funcion de pérdida y de exactitud
+    # 7. Graficas
     os.makedirs(PLOTS_DIR, exist_ok=True)
 
-    # Gráfico de la función de pérdida
+    # Gráfico de la función de pérdida (loss por epoch)
     plt.figure(figsize=(8, 6))
     plt.title("Loss")
     plt.plot(history.epoch, history.history["loss"], label="Training Loss")
@@ -178,7 +187,7 @@ def main():
     print(f"Guardado gráfico de Pérdida/Loss en: {loss_path}")
     plt.show()
 
-    # Gráfico de la exactitud
+    # Gráfico de la exactitud (accuracy por epoch)
     plt.figure(figsize=(8, 6))
     plt.title("Accuracy")
     plt.plot(history.epoch, history.history["accuracy"], label="Training Accuracy")
@@ -192,9 +201,10 @@ def main():
     print(f"Guardado gráfico de Exactitud/Accuracy en: {acc_path}")
     plt.show()
 
-    y_true = np.concatenate([y.numpy() for _, y in val_ds_norm])
-    y_pred_probs = model.predict(val_ds_norm, verbose=0)
-    y_pred = np.argmax(y_pred_probs, axis=1)
+    # Matriz de confusión
+    y_true = np.concatenate([y.numpy() for _, y in val_ds])  # etiquetas reales
+    y_pred_probs = model.predict(val_ds, verbose=0)  # probabilidades
+    y_pred = np.argmax(y_pred_probs, axis=1)  # clases predecidas
 
     cm = confusion_matrix(y_true, y_pred, labels=range(num_classes))
     fig, ax = plt.subplots(figsize=(8, 8))
@@ -207,5 +217,6 @@ def main():
     plt.show()
 
 
+# Punto de entrada
 if __name__ == "__main__":
     main()
