@@ -1,7 +1,325 @@
 \capitulo{5}{Aspectos relevantes del desarrollo del proyecto}
 
-Este apartado pretende recoger los aspectos más interesantes del desarrollo del proyecto, comentados por los autores del mismo.
-Debe incluir desde la exposición del ciclo de vida utilizado, hasta los detalles de mayor relevancia de las fases de análisis, diseño e implementación.
-Se busca que no sea una mera operación de copiar y pegar diagramas y extractos del código fuente, sino que realmente se justifiquen los caminos de solución que se han tomado, especialmente aquellos que no sean triviales.
-Puede ser el lugar más adecuado para documentar los aspectos más interesantes del diseño y de la implementación, con un mayor hincapié en aspectos tales como el tipo de arquitectura elegido, los índices de las tablas de la base de datos, normalización y desnormalización, distribución en ficheros3, reglas de negocio dentro de las bases de datos (EDVHV GH GDWRV DFWLYDV), aspectos de desarrollo relacionados con el WWW...
-Este apartado, debe convertirse en el resumen de la experiencia práctica del proyecto, y por sí mismo justifica que la memoria se convierta en un documento útil, fuente de referencia para los autores, los tutores y futuros alumnos.
+En este apartado se describen los \textbf{detalles mas destacables e importantes de la implementación practica del proyecto}. Se cubre desde la organización del código hasta las distintas fases de desarrollo, análisis, diseño, construcción del \texttt{dataset}, entrenamiento del modelo y la integración a la Raspberry Pi ayudado por \texttt{Streamlit} para crear un entrono amigable para el usuario.
+
+
+\section{Fase de análisis y diseño}
+
+Antes de lanzarnos a codificar, se realizó una fase de análisis para definir los objetivos. Se identificaron los requisitos funcionales (reconocer letras en tiempo real, interfaz simplificada, etc.) junto a los no funcionales (tiempo real, tasa de acierto elevado, etc). Estos puntos análisis se consideraron al inicio del proyecto:
+
+\begin{itemize}
+    \item Para la parte de visión por computador, la duda era: ¿usar \textbf{detección de mano} o no?.
+    La alternativa hubiera sido una red que directamente clasificara la letra desde la imagen cruda, sin procesado y completa (con mano y fondo sin especificar). Esto simplifica el \textit{pipeline} (conjunto de pasos desde que se recogen hasta llegar al entrenamiento), pero requeriría un conjunto de datos bastante mayor y además la red tendría que aprender a ignorar el fondo y otros detalles lo que aumentarían la cantidad de épocas y datos para converger. Finalmente \textbf{se decidió incluir una etapa de detección de mano (con \texttt{cvzone})}, por la robustez que aporta, como ya se explicó en la sección \ref{tecnicas-actuales}. 
+
+    \item En cuanto al \textbf{modelo de IA} a emplear, se decidió desde un inicio diseñar un modelo desde cero. Al decidir esto, tenemos absoluto control sobre la creacion del modelo para poder adaptarlo a nuestro \texttt{dataset}. Pero es cierto que no encontramos los resultados esperados en esa red y optamos por cambiar su arquitectura implementando un \textbf{modelo de clasificación de imagenes preentrenado} llamado \texttt{EficientNetB0} con nuestro propio \textit{dataset} el cual ayudó a obtener muy buenos resultados.
+
+    \item Otro aspecto de diseño fue la construcción del \textit{dataset}. Se tuvo que planificar como \textbf{obtener muchas imágenes en un intervalo corto de tiempo} y se decidió diseñar un fichero Python que se fijase solo en la mano gracias a la librería \texttt{cvzone}, establecer un tope de imágenes generadas para cada letra y mantener pulsado para tomar capturas rápidamente formando así un conjunto de datos sólido. Se pudo haber implementado varios conjuntos de datos extraídos de \texttt{Kaggle}, pero el reto era crear un \textit{dataset} propio además de \textbf{utilizar los segmentos y nodos de la mano } gracias a la librería previamente mencionada, debido a que posteriormente se iba a clasificar con esa misma con nuestro clasificador.
+
+    \item Se definió también la interacción de la aplicación, sobre si hacer una propia aplicación para que corriese \textbf{nativamente en la Raspberry} y así poder realizar una comparación efectiva o realizar una web que también corriese en el propio dispositivo y que en un futuro, pudiese ser alojada en un dominio. Se decidió por esto último además de realizarlo con la herramienta de \texttt{Streamlit}, en vez de usar herramientas como por ejemplo \textit{Flask} debido a que es muy \textbf{fácil de implementar} además de requerir muy poco código para el propio \textit{frontend} además debido al tiempo y a la sencillez de implementar la interfaz web, \texttt{Streamlit} fué la mejor opción para poder adaptarse al usuario de una forma sencilla y eficaz.
+
+    \item También fue importante en el diseño prever la comparativa de rendimiento: ¿qué \textbf{métricas} íbamos a medir?:
+    
+        \begin{enumerate}
+    
+            \item \textbf{Precisión de clasificación en validación}
+            \item \textbf{Matriz de confusión}
+            \item \textbf{Velocidad de inferencia (fps)} en Raspberry Pi con y sin optimizaciones.
+            \item Uso de CPU + RAM durante la inferencia para ver la carga de los dispositivos
+            \item Y se deseaba medir la diferencia de CPU vs NPU si la \textit{AI Pi camera} hubises funcionado. Al no ser posible convertir mi red neuronal convolucional, se propuso como idea a futuro.
+        \end{enumerate}
+
+En resumen, la fase de análisis y diseño sirvió para trazar un camino a seguir. Aún así muchos detalles se ajustaron dentro de la implementación, como es natural. Pero gracias al buen planteamiento inicial, pudimos completar la gran mayoría de objetivos.
+    
+\end{itemize}
+
+\section{Construcción del \textit{dataset}}
+Para la construcción del conjunto de datos, se necesita \textbf{recoger un gran volumen de datos} debido a que cuanto mayor sea este, más datos tiene el modelo para aprender y poder fijarse en detalles y patrones de las imágenes. A continuación se detalla la metodología y el mecanismo de forma teórica:
+
+\subsection{Definición de clases (alfabeto ASL)}
+las clases a reconocer son las 26 letras del alfabeto ingles en su representación en ASL. cabe reiterar que en este alfabeto:
+\begin{itemize}
+\tightlist
+    \item Las letras A-I, K-J se realizan con la mano estática cada una con su respectivo gesto
+
+    \item Las letras J y Z dinámicas.
+        \begin{enumerate}
+            
+        \item La letra J se realiza haciendo una J en el aire con el dedo meñique. Al ser un letra con \textbf{movimiento} (y nuestro modelo no detecta ese movimiento, si no solamente imágenes estáticas). Por lo tanto, la idea fué \textbf{recoger ese gesto una vez finalizado}, es decir, una vez acabado el recorrido de dibujar la J con el dedo meñique apuntando hacia abajo:
+        
+        \imagen{letra-j.jpg}{Imagen letra J extraida del conjunto de datos}{0.2}
+    
+        \item Al Igual que la letra J, la letra Z se traza moviendo el dedo índice en forma de Z, muy parecido a la letra D, pero con el dedo pulgar recogido para así poder diferenciarlas:
+
+        \imagen{letra-z.jpg}{Imagen letra Z extraida del conjunto de datos}{0.3}
+
+        \end{enumerate}
+\end{itemize}
+
+Así es como se estableció el \textit{dataset}, En un principio estuvo compuesto por 500 imágenes por cada clase dando un total de: $500 \times 26 = 13000$ imágenes, pero mas adelante, para tener un conjunto de datos \textbf{ligeramente mas variado}, mi hermana completó el \textit{dataset} voluntariamente añadiendo 500 imágenes por cada letra más otorgándonos un total de: $(500 \times 2) \times 26 = 26000$ imágenes totales \textbf{con procesado} las cuales, a día de hoy, componen el conjunto de datos.
+
+\subsection{Captura y preprocesado de imágenes}\label{captura-imagenes-y-prerpocesado}
+Realizar fotografías es una labor tediosa, sobre todo cuando requiere completar un \textit{dataset} de 26000 imágenes. Además de fotografiar todo el conjunto de datos, también es necesario procesar cada muestra para \textbf{garantizar su calidad} para el posterior entrenamiento del modelo.
+
+\subsubsection{Captura semiautomática ("\textit{burst mode}")}
+Al mantener pulsada la tecla de captura (por defecto la "s" por \textit{save}), el programa entra en \textbf{modo ráfaga} y toma automáticamente varias imágenes. Un contador detiene la ráfaga al llegar al número máximo de muestras preestablecidas, de modo que todas las letras acaben con el mismo número de ejemplos. Así realizamos una recogida de datos mucho más amena y rápida.
+
+\subsubsection{Detección y recorte de la región de interés}
+Se utiliza el detector de manos de \textit{cvzone} para localizar en tiempo real la mano y obtener su cuadro de detección. El detector de manos nos da un \textbf{rectángulo (x, y, w, h)} que encierran nuestra mano. Para poder recortar esa Zona con un pequeño margen y sin salirnos de la imagen, calculamos las esquinas del recorte, asegurándonos de no usar coordenadas fuera del fotograma:\newline
+    
+      $x_{1}=\max\bigl(0,\,x-\mathrm{OFFSET}\bigr)$ (borde izquierdo)
+    
+      $y_{1}=\max\bigl(0,\,y-\mathrm{OFFSET}\bigr)$ (borde superior)
+        
+      $x_{2}=\min\bigl(W_{\mathrm{img}},\,x+w+\mathrm{OFFSET}\bigr)$ (borde derecho)
+    
+      $y_{2}=\min\bigl(H_{\mathrm{img}},\,y+h+\mathrm{OFFSET}\bigr)$ (borde inferior)
+
+    
+De este modo definimos la sub-imagen recortada $ I_{\mathrm{crop}}=I\bigl[y_{1}:y_{2},\,x_{1}:x_{2}\bigr]$. Ese recorte se escala y centra dentro de un \textbf{lienzo blanco} de tamaño $300\times300$, ajustando su ancho y su alto de la relación de aspecto (h/w) de la mano. Para ello
+
+\begin{enumerate}
+    \item \textbf{Calculamos la relación de aspecto de la mano}\newline
+    \[\mathrm{aspectRatio} = \frac{h}{w}\]
+        \begin{itemize}
+            \item Si $\mathrm{aspectRatio} > 1$, la mano es \textbf{mas alta que ancha}.
+            \item Si $\mathrm{aspectRatio} \le 1$, la mano es \textbf{mas ancha que alta}.
+        \end{itemize}
+    \item \textbf{Redimensionamiento}
+        \begin{itemize}
+            \item Caso alto:
+            \begin{itemize}
+                \item Factor de escala $k = \frac{\mathrm{300}}{h}$
+                \item  Nuevo ancho $w' = \lceil k \cdot w\rceil$
+                \item Redimensionamos el recorte a $(w', 300)$
+            \end{itemize}
+            \item Caso ancho:
+            \begin{itemize}
+                \item Factor de escala $k = \frac{\mathrm{300}}{w}$
+                \item  Nuevo ancho $h' = \lceil k \cdot h\rceil$
+                \item Redimensionamos el recorte a $(300, h')$
+            \end{itemize} 
+        \end{itemize}
+    \item \textbf{Cálculo de márgenes}\newline
+        Para centrar el recorte dentro de este "lienzo blanco":
+        \begin{itemize}
+            \item Si redimensionamos por alto, el margen horizontal es:\newline
+            \[w_{\mathrm{gap}} = \left\lceil\frac{\mathrm{300} - w'}{2}\right\rceil\]
+            y pegamos la imagen redimensionada en:\newline \[I_{\mathrm{white}}\bigl[:,\,w_{\mathrm{gap}}:w_{\mathrm{gap}}+w'\bigr] = I_{\mathrm{res}}\]
+            \item Si redimensionamos por ancho, el margen vertical es: \newline
+            \[w_{\mathrm{gap}} = \left\lceil\frac{\mathrm{300} - h'}{2}\right\rceil\]
+            y pegamos en: \newline \[I_{\mathrm{white}}\bigl[h_{\mathrm{gap}}:h_{\mathrm{gap}}+h',\,:\bigr] = I_{\mathrm{res}}\]
+        \end{itemize}
+\end{enumerate}
+
+De este modo cada mano utiliza totalmente uno de los ejes del lienzo y queda \textbf{perfectamente centrada} en la imagen $300\times300$ sin tener que reducir el tamaño por captura debido a que utilizamos margenes dinámicos en vez de estáticos.
+
+\subsubsection{Descarte con imagen en blanco}
+Si durante el guardado de imágenes el detector no encuentra la mano (ya sea por mala iluminación, desenfoque o por que se salió de la perspectiva de la cámara), en lugar de descartar la iteración se \textbf{guarda una imagen completamente blanca} de tamaño $300\times300$. Esto mantiene constante el número de muestras por clase además de enseñar al modelo a distinguir entre ausencia de mano y gestos válidos.
+
+
+
+
+
+
+\section{Implementación y entrenamiento del modelo}
+En esta sección se verán aspectos relevantes a la construcción del modelo, desde sus dificultades hasta su respectiva versión final.
+
+\subsection{Carga, procesado y \textit{split} de datos}
+Todo el conjunto de datos se carga en el entrenamiento del modelo gracias a la herramienta de \textit{Keras} llamada \texttt{image set from directory}, donde lee todas las carpetas (una por clase) y divide \textbf{el 80\% de esas imágenes para datos de entrenamiento} y reserva el otro \textbf{20\% para datos de validación}.
+
+Con el 80\% disponemos de suficientes ejemplos para ajustar los pesos de la red y capturar caracteristicas o patrones presentres en los datos. 
+
+Cada imagen viene siempre asocidada como tupla con su etiqueta, formando una tupla (imagen, etiqueta) que se mantiene durante todo el \texttt{pipeline}, nunca se separan imágenes de sus etiquetas
+
+\subsection{Data augmentation}
+Lo que realiza este bloque es alterar cada lote de imágenes al vuelo (mejor conocido como \textit{on the fly}) para que el modelo vea \textbf{mas variedad de imágenes} (y más si nuestro conjunto de datos es relativamente pequeño) y no memorice así patrones fijos.
+
+Guardamos los datos en cache preprocesados en memoria para acelerar pasadas posteriores y con \textit{prefetch} mientras la GPU esta ocupada entrenando el mini-lote actual de imágenes, \texttt{TensorFlow} usa por detrás la CPU libre para leer y procesar en segundo plano el segundo lote de datos para que la GPU cuando termina de procesar el \texttt{batch}, ya tiene el \texttt{batch + 1} siguiente para procesar de inmediato sin quedarse esperando a que se carguen. Esta funcionalidad es básicamente para que se \textbf{adelante trabajo minimizando tiempos muertos} entre la carga de esos \texttt{mini-batch} en GPU.
+
+\subsection{Modelo Principal}
+El modelo central empleado finalmente es una CNN de clasificación que aprovecha \textit{transfer learning} con \texttt{EfficientNetB0} previamente entrenada en \texttt{ImageNet} de Keras. Para ello, se instancia \texttt{EfficientNetB0} con $include\_top=False$ (excluyendo sus capas finales de clasificación) y $weights=imagenet$, de modo que \textbf{solo se utiliza la parte convolucional para extraer las características de nuestro conjunto de datos}. Además, se congela esta base estableciendo trainable=False, lo que evita que sus pesos se actualicen durante el entrenamiento en el nuevo conjunto de datos, aunque es cierto que se desactivó por que el programa fallaba al pasar a la base.
+
+la arquitectura completa se construye de forma secuencial y consiste en los siguientes bloques:
+
+\imagen{arquitectura.png}{Imagen de la arquitectura de la red neuronal}{0.9}
+
+\begin{itemize}
+    \item Preprocesamiento de entrada (\textit{Lambda}): La capa  es la capa de entrada que \textbf{prepara las imagenes} del \textit{dataset} \textbf{en formato esperado} por EfficientNet ([0–255] cada pixel de la imagen) para que las \"entienda\" bien. 
+
+    \item Base \texttt{EfficientNet-B0} (congelada): La red \texttt{EfficientNet-B0} principalmente procesa la imagen y \textbf{extrae distintos mapas de características} que aportan información. Prácticamente es un bloque gigantesco de capas convolucionales y activaciones (ReLU, etc.) que \textbf{ya "sabe"} extraer bordes, texturas y formas de manos. 
+
+    \item GlobalAveragePooling2D: Tras la base convolucional preentrenada se aplica un \textit{pooling} global promedio. Esta capa promedia cada capa de características especialmente convirtiendo la salida de (altura x anchura x canales, en este caso (7x7x1280)) en un \textbf{vector de 2 dimensiones} cuyo tamaño es igual al numero de canales de salida. Así se llevan las características a un vector que resume la información mas relevante.
+
+    \item BatchNormalization: Es una capa que se utiliza para aumentar la estabilidad de entrenamiento. Básicamente, \textbf{normaliza las activaciones del vector características} para que tengan media 0 y varianza 1 dentro de cada \textit{mini-batch} y así conseguir que el entrenamiento sea más estable y rápido.
+
+
+    \item Dropout: Esta capa durante el entrenamiento \textbf{``apaga''\ aleatoriamente el 20\% (en nuestro caso) de las neuronas} en esa capa, es decir, en cada \textit{mini-batch} en esa capa apaga al azar el 20\% de esos valores, en este caso 1280 neuronas, forzando al modelo a no depender siempre de los mismos canales, mejorando así la generalización y reduciendo el sobreajuste.
+
+    \item Capa densa final con Softmax: la última capa es \textbf{totalmente conectada} con tantas neuronas como clases tiene nuestro proyecto (toma las 1280 valores como entrada y produce 26 salidas), de la A a la Z. Usa la función de activación \textit{softmax} que \textbf{convierte cada valor en una probabilidad entre 0 y 1} asegurando que todas ellas sumen 1. Además incorpora regularización L2 en los pesos, \textbf{penalizando valores muy grandes} y reduciendo así el riesgo de memorizar ejemplos de entrenamiento.
+
+\end{itemize}
+
+El modelo se compila usando el optimizador \texttt{Adam} (uno de los mas comunes dentro del entrenamiento de redes neuronales) con una tasa de aprendizaje (\textit{learning rate}) relativamente normal (0.0003 en nuestro caso) que permiten ajustar con cuidado los pesos de la cabeza sin destrozar los filtros preentrenados de \texttt{EfficientNet}. Como función de perdida usamos \texttt{sparse\_categorical\_crossentropy}, el cual es ideal cuando las etiquetas vienen como enteros (en nuestro caso de 0 que sería la letra A hasta el 25 que representaría la letra Z). Además incluimos la métrica \texttt{accuracy} (precisión) para \textbf{monitorizar en cada época} el porcentaje de aciertos en entrenamiento y validación (entre 1-0). Con esta configuración, el modelo ya está listo para ejecutar el bucle del entrenamiento con \texttt{model.fit}, donde \texttt{Adam} actualizará los pesos minimizando la perdida y las otras capas ayudarán a mejorar la robustez del entrenamiento.
+
+\subsection{Callbacks}
+En este modelo hemos introducido dos Callbacks para controlar el entrenamiento otorgándoles un colchón de 70 épocas.
+
+\begin{itemize}
+    \item EarlyStopping: \textbf{Detiene el entrenamiento} si la variable que esta monitorizando, en nuestro caso el \textit{validation accuracy} \textbf{no mejore} según la paciencia que tenga, (en nuestro caso 10 épocas). Si no mejora en esas épocas preestablecidas, \textbf{restaura los mejores pesos} que hubo en la mejor época con mejor rendimiento de validación, asegurando así no quedarnos con un estado peor por sobre-entrenar.
+
+    \item ReduceLROnPlateau: Reduce el \texttt{learning rate} a la mitad si la validación no mejora según la paciencia establecida, en nuestro caso 3 épocas hasta un mínimo de 0.000001 (1e-6). Esto permite \textbf{ajustes finos} cuando el modelo se atasca y deje de converger para que el entrenamiento siga convergiendo aunque sea lentamente.  
+\end{itemize}
+
+\subsection{Entrenamiento}
+En cada época el modelo recorre todo el conjunto de datos de entrenamiento en \textbf{lotes} o \texttt{batches} preestablecidos con su respectivo tamaño (dependiendo la ram o vram que tengamos en nuestra computadora, podemos aumentar o disminuirlo). con los datos de validación comprueba como aprende el modelo además de indicarle los \texttt{callbacks} para que los aplique en el entrenamiento.
+
+\subsection{Guardado + Evaluación y Gráficas}
+El modelo se exporta con \texttt{model.save} que guarda la arquitectura + pesos en un fichero de \texttt{Keras .h5}, se pudo haber guardado como \texttt{.keras}, pero al utilizar en fases iniciales la herramienta \texttt{Teachable Machine}, esta exportaba sus modelos con la extensión \texttt{.h5}, por lo tanto, también realizamos ese guardado con ese mismo formato.
+
+Las gráficas que se han representado son 3 en total:
+\begin{itemize}
+    \item \textbf{Curvas de pérdida (\textit{loss}) y precisión (\textit{accuracy})} tanto de la parte de entrenamiento como de validación. Estas gráficas nos dan indicios de sobreajustes indicandosnos en que épocas se producen.
+    
+    \item \textbf{Matriz de confusión}: una tabla de 26x26 (una fila y columna por cada letra A-Z), las \textbf{filas} representan las \textbf{clases reales} (y\_true) y las \textbf{columnas} las \textbf{predicciones del modelo} (y\_pred). Una diagonal mucho mas resaltada significa que el modelo acierta la letra correcta con frecuencia. Es cierto que algunos valores se pueden encontrar fuera de la diagonal, si estos valores son algo destacados, el modelo puede estar confundiendo letras. Esto nos ayuda a identificar que pares de clases son mas difíciles de distinguir entre sí (por ejemplo entre la M y la N (muy similares entre sí)).
+\end{itemize}
+
+
+
+\subsection{Random Search}
+Para poder ajustar los hiperplarametros del modleo base se utilizó la herramienta de \texttt{Keras} llamada \texttt{KerasTuner} con las estrategia \texttt{RandomSearch}. Esto permitiío explorar diferentes combinaciones de hiperparámetros clave y encontrar el conjutno mas efectivo, se defivineron como variables a optimizar:
+
+\begin{itemize}
+    \item \texttt{Dropout rate}: se buscó entre los parámetros: 0.2, 0.3 y 0.4.
+    \item \texttt{Learning rate}: se probó entre los parámetros típicos para Adam: 0.001 (1e-3), 0.0003 (3e-4), 0.0001(1e-4). Se añade 0.0003 y no 0.0005 porque es un parámetro muy reconocido y habitual en Adam.
+    \item \texttt{L2 regularization}: se exploró entre los parámetros 0.001 (1e-3), 0.0005 (5e-4) y 0.0001 (1e-4).
+\end{itemize}
+
+Estos rangos se han escogido porque, por un lado se cubren los valores más usados para redes convolucionales preentrenadas, y por otro permiten a RandomSearch encontrar de manera eficiente sin muchos intentos (\textit{trials}). Hemos elegido 30 \textit{trials} porque, aunque el espacio de búsqueda sea reducido con 27 $(3\times3\times3 = 27)$ combinaciones posibles, el random seach  pero con 27 ensayos exactos habría riesgo de poder repetir alguna configuración y dejar otra sin probar debido a que \texttt{RandomSearch} no prueba configuraciones distintas, si no que son aleatorias, por lo que si que es posible que dos \textit{trials} acaben usando exactamente los mismos valores debido a que no hay ningún mecanismo interno que evite repeticiones. Por ello, con 30 \textit{trials} aumentamos la probabilidad de cubrir casi todas las combinaciones sin disparar el coste computacional. Además, añadimos 7 épocas a cada trial con una paciencia de parada temprana de 3 para descartar los distintos intentos que causen sobreajuste.
+
+Finalmente, una vez acabado el \texttt{RandomSearch}, los mejores hiperparámetros que otorgó en un principio dejaba de aprender después de la quinta época, por lo tanto, cogimos los mejores segundos hiperparámetros, donde solo se diferenciaba el learning rate, bajando de 0.001 a 0.0003:
+
+\begin{itemize}
+    \item \texttt{Dropout rate}: 0.2 .
+    \item \texttt{Learning rate}: 0.0003 (3e-4).
+    \item \texttt{L2 regularization}: 0.0001 (1e-4).
+\end{itemize}
+
+\subsection{Guardado del modelo y conversión a \textit{TFLite}}
+En el proyecto se utiliza un modelo entrenado en \textit{Keras} que se almacena en un archivo \textit{.h5} (punto flotante de 32 bits, \texttt{FP32}) el cual para poder exportarlo a la Raspberry, se debe convertir antes a un archivo \textit{TensorFlow Lite}, un formato ligero y optimizado \textbf{para la inferencia en dispositivos embebidos}. 
+
+Para ello, utilizamos un \textit{script} que se ubica en nuestra carpeta \textit{utils}, el cual carga nuestro modelo entrenado \textit{.h5}, lo transforma a un archivo \textit{.tflite} con precisión \texttt{FP32} (igual que nuestro modelo sin optimizado, pero eliminando todo lo innecesario para el entrenamiento) y luego aplica "\textit{quantization}" a media precisión \texttt{FP16} (16 bits) para generar un segundo \texttt{.tflite} para poder \textbf{comparar el desempeño} de cada uno en Raspberry, resultados que expondremos próximamente. Esta cuantización como podemos observar reduce a la mitad el tamaño de los pesos, que a menudo acelera la inferencia pero por el contrario perdemos ligeramente exactitud. 
+
+Probé ambos modelos optimizados, tanto de \textit{Teachable Machine} como los propios, y después de compararlos observamos que nuestro modelo optimizado \textbf{no era lo suficientemente ligero} ni esta lo suficientemente optimizado para correr en Raspberry Pi 5, por lo que, se usaron los extraídos de \textit{Teachable machine} los cuales tienen un mejor rendimento en tiempo real: 10 FPS vs 3 FPS. Una gran mejora a futuro a considerar.
+
+
+\section{Aplicación Streamlit (clasificador por imagen, tiempo real y módulo de entrenamiento)}
+
+\imagen{logo_asl.png}{Logotipo del proyecto desarrollado}{0.3}
+
+Para poder representar toda la funcionalidad finalmente se decidió usar este \textit{framework} basado en Python pensado para aplicaciones web de \textit{machine learning} y ciencia de datos \cite{web:streamlit}. En este apartado, describimos como se estructuró la aplicación, sus funcionalidades y la forma en que se integra el entrenamiento con el propio conjunto de datos.
+
+Nuestra aplicación se dividió conceptualmente en cuatro secciones principales: \textbf{Inicio}, \textbf{Clasificación en tiempo real}, \textbf{clasificación por imagen estática} y \textbf{Entrenamiento interactivo}. Es cierto que en todo momento se muestra una barra lateral inicialmente desplegada donde podemos navegar por nuestra aplicación además de elegir a través de un desplegable que modelo preferimos (FP32 o FP16) para las respectivas comparaciones a la hora de realizar la inferencia. A continuación se detalla cada sección con imágenes de la interfaz:
+
+\subsection{\textbf{Inicio}}
+\imagen{pagina_inicio_asl.png}{imagen del inicio del proyecto}{1}
+
+Es nuestra página \textit{index} donde se describen las 3 distintas funcionalidades de la aplicación además de mostrar el logotipo en grande para diferenciar nuestra aplicación dando un toque personal. Después de la breve descripción, te anima a navegar a través del menú insertado en la barra lateral.
+
+
+\subsection{\textbf{Clasificación en tiempo real}}
+
+\imagen{tiemporeal_web.png}{Captura de la interfaz inicial de reconocimiento en tiempo real}{0.9}
+
+Esta es la funcionalidad central. Al entrar en esta sección, únicamente se encuentra un botón ``\textbf{Iniciar Cámara}''\ esperando a que activemos la cámara con una breve descripción señalando al botón ``\textbf{Clasificación en tiempo real}''\. Si no detecta ninguna cámara conectada al equipo nos mostrará ``\textbf{error al mostrar la cámara}''\, de lo contrario, aparecerá un mensaje de carga ``\textbf{Iniciando cámara, por favor espere}''\. Una vez realizado, se empezará a ver vídeo proveniente de la cámara \textbf{esperando recibir unas manos para realizar la inferencia} y así predecir el gesto correspondiente al alfabeto ASL junto la muestra de fotogramas por segundo en la esquina superior derecha de la pantalla. Además, justo debajo de la imagen tenemos una gráfica que se actualiza en tiempo real midiendo el uso de la CPU y RAM además de los Fotogramas por segundo de la inferencia para compararlos mas adelante. Si nos fijamos, donde se ubicaba el botón de ``\textbf{Iniciar Cámara}''\, habrá cambiado totalmente a ``\textbf{Detener cámara}''\ . Debo aclarar que, bajo el capó, se crea una instancia de la clase \textit{RealTimeASLClassifier} (proventiente del script orientado a la clasificación en raspberry pi en la carpeta \textit{classifier}, configurada para usar el modelo entrenado (en Raspberry Pi, se optó por cargar el modelo \textit{TFLite} en lugar del \textit{.h5} por eficiencia, adaptando ligeramente la clase \textit{classifier.py} para usar el intérprete \textit{TFLite}). 
+
+\subsection{\textbf{clasificación por imagen estática}}
+
+\imagen{foto_web.png}{Captura de la interfaz de reconocimiento por foto}{0.9}
+
+En esta sección, el usuario puede subir una foto desde el explorador de archivos gracias al botón ``\textbf{Browse files}''\ o arrastrar la foto hacia el recuadro gracias al \textit{drag and drop} solo con formatos de imágenes válidos (\textit{.jpg}, \textit{.jpeg}, \textit{.png}). Después de subir la foto, internamente se lee y se decodifica la imagenes leyendo los bytes, se decodifica a BGR que es el formato usado por \textit{OpenCV}. Después, internamente a la hora de clasificar hay una instancia de la clase \textit{classify\_image} (proveniente de \textit{classifier\_photo.py}) la cual clasifica la foto y recibe una etiqueta y una confianza en porcentaje, convierte la imagen de BGR a RGB y la muestra. Además, mientras se esta realizando la predicción de esa imagen estática, se dibuja una barra de progreso como indicador de actividad. Como funcionalidad extra, puedes descargar la imagen con el nombre de \textit{uploaded.png}.
+
+
+\subsection{\textbf{Entrenamiento interactivo}}
+Esta es una característica extra que se incluyó debido a la herramienta utilizada en los inicios del proyecto \textit{Teachable Machine} que nos inspiró para poder realizar esta funcionalidad extra en nuestra web.
+
+Al igual que en la herramienta realizada por Google, el usuario puede decidir hasta  26 clases, la vigesimosexta incluida, donde puede introducir su propio conjunto de datos separados por clases sin límite de imágenes por clase (en un futuro se podría llegar a limitar el número de imágenes a añadir por clase si tenemos pensado alojar nuestra web en internet). Una vez el usuario ya ha introducido todo el \textit{dataset} que desee, puede editar tres hiperparámetros, los cuales son:
+
+\imagen{entrenamiento_web.png}{Captura de la interfaz de entrenamiento}{0.9}
+
+\begin{itemize}
+\tightlist
+    \item \textbf{Cantidad de épocas (\textit{Epochs})}: número de veces que el modelo recorrerá todo el conjunto de entrenamiento. Se establece un límite de 5 a 50 con un \textit{slider} el cual aumenta 1 a 1.
+    \item \textbf{Tamaño del lote (\textit{Batch size})}: numero de muestras que procesa el modelo en cada paso antes de actualizar los pesos. Se establece un límite de 4 a 128 donde el usuario puede decidir dependiendo de la cantidad de memoria que disponga su computadora a través de un \textit{slider} que aumenta de 4 en 4.
+    \item \textbf{Tasa de aprendizaje (\textit{learning rate})}: la magnitud de los ajustes que se aplican a los pesos en cada iteración de optimización. Se establece un limite de 0.001 a 0.000001 el cual el usuario deberá elegir un \textit{learning rate} que considere adecuado a través del \textit{slider}, por defecto está definido a 0.001.
+\end{itemize}
+
+Una vez realizado, se entrena donde el usuario podrá ver en una grafica en tiempo real la precisión de, tanto el conjunto de validación como del conjunto de entrenamiento además de dibujar una barra de progreso para que se le mantenga informado al usuario en todo momento de su entrenamiento. 
+Una vez finalizado, el usuario podrá descargar un archivo comprimido el cual contendrá el  modelo exportado en \textit{.h5} y en \textit{.tflite (FP32)} además de un fichero de texto donde se almacenarán las diferentes clases.
+
+\subsection{Gía de estilo y paleta visual}
+En la interfaz de usuario, hemos empleado una paleta inspitada en los colores oficiales de Raspberry Pi Foundation como por ejemplo el rojo  vibrante característico de la marca \cite{web:raspberrypi_colours}. Este color se usa principalmente en botones, el \textit{footer} además de implementar un fondo oscuro jugando con tonalidades grisáceas claras y oscuras para no representar una interfaz visual monótona. 
+
+\imagen{colores.png}{Colores utilizados en el proyecto junto a su valor hexadecimal}{0.8}
+
+
+\section{Integración en Raspberry Pi 5}
+Para desplegar la aplicación en Raspberry Pi 5, primero convertimos el modelo entrenado a un formato ligero y optimizado con \textit{TensorFlow Lite} que permita una inferencia fluida en un sistema con bajos recursos. Una vez incluida únicamente la visión optimizada del modelo en la interfaz web, procedemos a configurar el dispositivo
+
+\begin{enumerate}
+    \item Instalación de Python ARM: se instala la misma versión de Python compilada para la arquitectura ARM de las Raspberry Pi 5
+
+    \item Bajamos el \href{https://github.com/hgomezmartin/HandSignDetectionProject}{repositorio del proyecto} que se encuentra público en GitHub.
+
+    \item Instalamos todas las dependencias manual o automáticamente usando ejecutando el \textit{script} en \texttt{bash} proporcionado en la raiz del proyecto.
+
+    \item Iniciar la web con el mismo archivo \texttt{bash} que instala dependencias (idempotente si previamente ya han sido instaladas).
+\end{enumerate}
+
+Se ha decidido introducir los requerimientos en un archivo \texttt{bash} para automatizar el proceso y hacer un poco mas simple el proceso de instalación de dependencias. Además, este archivo inicializa automáticamente un entorno virtual, de modo que las librerías de otros proyectos no se vean afectadas.
+
+\section{Incompatibilidad de mi red neuronal con \textit{Pi AI Camera}}
+
+Al comenzar el proyecto, como uno de los objetivos principales planteamos ejecutar la inferencia en nuestra Raspberry Pi aprovechando la nueva cámara AI lanzada en colaboración con Sony. Esta cámara integra un sensor Sony IMX500 de 12 MP, diseñado para acelerar redes neuronales convolucionales. Sin embargo, no pudimos utilizarla porque nuestro modelo no pudo exportarse al formato cuantizado que la cámara requiere, teniendo que redirigir ese objetivo a realizar la inferencia con una cámara normal sin aceleración y convirtiendo nuestro modelo a uno mas optimizado gracias a \textit{TensorFlow Lite}
+
+Estos son los pasos se tuvieron que realizar para poder convertir nuestro modelo al formato compatible con la cámara IA.
+
+\begin{itemize}
+    \item Modelo FP32: debimos entrenar primero nuestra red como es lógico, pero luego debimos añadir la extensión \texttt{.keras} que es 100\% compatible con nuestra extensión \texttt{.h5}
+
+    \item Cuantización int8: debimos volver a entrenar simulando int8 para que al red aprendiese a manejar baja precisión junto al uso de \textit{strip-qantization} con el cual eliminamos todos los bloques de simulación y quedarnos con pesos ya en int8
+
+    \item IMX500 Converter: Instalamos esta librería debido a que es la herramienta oficial de Sony que compila ese \texttt{.keras int8} limpio en binario optimizado, aquí es donde no funcionaba la conversión. la herramienta simplemente se quedaba ejecutándose infinitamente.
+
+Finalmente, al no ver progresión en esta idea, se decidió hibernar e implementarla en un futuro para no perder mucho tiempo a la hora de alcanzar nuestros objetivos.
+    
+\end{itemize}
+
+
+
+
+
+\section{Pruebas y comparativas}
+En este apartado se verán las distintas pruebas de entrenamiento entre modelos y comparativas previamente realizadas en la Raspberry Pi 5 junto a una breve descripción y explicación de las gráficas insertadas
+
+\subsection{Fotogramas por segundo (FPS)}
+
+\imagen{fps_asus_rpi.png}{Comparativa de FPS realizada entre un portátil y la Raspberry Pi 5}{0.9}
+
+
+\subsection{Gráficas del modelo (Pérdida (\textit{Loss}) y Exactitud (\textit{Accuracy}))}
+
+\subsubsection{Pérdida (\textit{Loss})}
+\imagen{loss.png}{Gráfica sobre la pérdida durante el entrenamiento del modelo}{0.9}
+La gráfica muestra como la función de pérdida a demás de empezar con una perdida ya relativamente muy baja, desciende rápido durante las primeras épocas: Al inicio se puede observar que la pérdida de entrenamiento cae de $\sim 1$ a $\sim 0.1$ en las primeras 5 épocas, mientas que la validación ce de $\sim 0.5$ a $\sim 0.17$. a partir de ahí el \textit{Loss} sigue aproximandose a cero, pero la de validación podemos observar que se establece en $\sim 0.1$. Esto indica que puede haber un \textbf{pequeño sobreajuste} al alargarse tanto el entrenamiento.
+
+\subsubsection{Exactitud (\textit{Accuracy})}
+\imagen{accuracy.png}{Gráficas sobre la exactitud durante el entrenamiento del modelo}{0.9}
+Como podemos observar, es prácticamente la misma gráfica pero como si se le hubiese hecho un \textit{flip} horizontal. La precisión del entrenamiento sube rápidamente de un $\sim 0.73$ a un $\sim 0.99$ en las primeras 5 épocas, mientras que la precisión de la validación alcanza el $\sim 0.96$ pero, al igual que en la pérdida, la validación se establece y no sigue subiendo alcanzando el \textbf{97,06\% en validación}, confirmando ese pequeño sobreajuste que nos da la idea de que el modelo aunque es cierto que ha capturado con mucho éxito la mayoría de patrones generales, hay exceso de entrenamiento que no aporta mejoras adicionales. 
+
+Además, es cierto que gracias a nuestros ajustes de \texttt{Eaarly Stopping} (acortando el entrenamiento) y \texttt{ReduceLROnPlateau} (rebajando la tasa de aprendizaje) evitamos que el modleo caiga en un sobreajuste extremo.
+
+\subsection{Matriz de confusión}
+
+\imagen{confusion_matrix}{Matriz de confusion del modelo}{1}
+
+Todo ese bloque toma únicamente muestras de validación (el 20 \% reservado), extrae sus etiquetas (\textit{labels}) y las predicciones del modelo, y a partir de ahí construye la matriz de confusión. De esta forma se comprueba cómo de bien generaliza la red a datos que el modelo nunca vio durante el entrenamiento. Es cierto que En algunas letras como W y V el modelo se puede llegar a confundir, sobre todo porque estos gestos son sumamente parecidos entre sí, al igual que K y T. Pero, podemos asegurar que el entrenamiento fue todo un éxito viendo como resultado la diagonal resaltada.

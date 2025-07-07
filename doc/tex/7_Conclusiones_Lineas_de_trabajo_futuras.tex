@@ -1,4 +1,53 @@
-\capitulo{7}{Conclusiones y Líneas de trabajo futuras}
+\capitulo{7}{Conclusiones y líneas de trabajo futuras}
 
-Todo proyecto debe incluir las conclusiones que se derivan de su desarrollo. Éstas pueden ser de diferente índole, dependiendo de la tipología del proyecto, pero normalmente van a estar presentes un conjunto de conclusiones relacionadas con los resultados del proyecto y un conjunto de conclusiones técnicas. 
-Además, resulta muy útil realizar un informe crítico indicando cómo se puede mejorar el proyecto, o cómo se puede continuar trabajando en la línea del proyecto realizado. 
+En este último capitulo se presentan las conclusiones generales del proyecto y se sugieren líneas de trabajo a futuro para posteriores actualizaciones del proyecto.
+
+\section{Conclusiones}
+
+Desde el punto de vista técnico y teórico, este proyecto deja varias conclusiones que merecen la pena comentar:
+
+\begin{itemize}
+    \item El proyecto me ha resultado bastante entretenido, pero sobre todo útil debido a que, gracias a su realización, he obtenido conocimientos de diversas áreas, como por ejemplo: técnicas de visión de computador, entrenamiento y diseño de redes neuronales convolucionales y la integración de múltiples componentes tanto \textit{software} (todas las librerías, entornos, etc.) como \textit{hardware} (uso de Raspberry Pi) que tanto empeño invertí para integrarlo al proyecto. Todas las librerías y documentaciones referenciadas me sirvieron para poder formarme y obtener conocimientos nuevos sobre el campo del \textit{deep learning}.
+
+    \item Es cierto que los objetivos se lograron, demostrar que es posible reconocer el lenguaje de signos ASL (en alfabeto) mediante inteligencia artificial en un sistema computacionalmente limitado como es la Raspberry Pi 5, con un buen desempeño y de manera interactiva. Esta demostración valida esa hipótesis inicial sobre la capacidad de las CNN de reconocer gestos y características muy concretas y poderlas llevarlas a cabo en sistemas limitados. 
+
+    \item La experiencia que me ha dado este proyecto sobre como gestionar el tiempo y sobre todo tomar decisiones cruciales ha sido de gran valor para poderlo aplicar a mi día a día. Cuando un camino no funciona, barajamos nuevas alternativas, el caso mas notable fue la cámara AI de Raspberry con NPU debido a que invertimos mucho tiempo en investigar su uso además de investigar como poder convertir nuestro modelo al formato correcto. Debido a la poca documentación al ser relativamente nueva y a la poca información que nos otorgaba el conversor, decidimos redirigir ese objetivo de forma satisfactoria. Adaptar las estrategias a los recursos disponibles fue crucial para concluir el proyecto exitosamente.
+
+\end{itemize}
+
+
+
+
+
+
+\section{Líneas de trabajo futuro}
+Este proyecto debe tener una serie de actualizaciones para poder convertirlo en algo mas cercano a un producto o herramienta universal. Para poder llegar a ello, hay que implementar nuevas funcionalidades que pueden ser añadidas de forma satisfactoria en líneas de trabajo futuras.
+
+Los siguientes puntos son una serie de sugerencias sobre líneas de trabajo que pueden aplicarse en el futuro:
+
+\begin{itemize}
+    \item \textbf{Aplicar modelos nuevos en nuestra aplicación}: Se sugiere un apartado nuevo para poder subir el modelo que se ha entrenado en el apartado de entrenamiento ya sea optimizado o no y poder elegirlo para clasificarlo en tiempo real o de forma estática subiendo una captura o foto.
+
+    \item \textbf{Modelo CNN propio optimizado}: En el futuro podría diseñarse un modelo CNN que además de obtener buenos resutados en el entrenamiento, también sea optimizado para poder trasladarlo a la Raspberry Pi sin depender de herramientas externas como \texttt{Teachable Machine}.
+
+    \item \textbf{Implementar camará AI de Rapberry}: Adaptar el modelo de forma que sea compatible para utilizar el conversor \texttt{IMXConverter} de Sony para poder utilizar la cámara IA de Raspberry Pi y así obtener mejor rendimiento en la inferencia con Raspberry.
+
+
+    \item \textbf{Implementar \textbf{Google Collab}}: Otra mejora a futuro sería adaptar el código de entrenamiento del modelo a \texttt{Jupyter Notebook} para usar el aceleramiento gráfico que otorga \texttt{Google Collab} y así realizar el entrenamiento de una forma mucho más rápida que ejecutar el entrenamiento en local.
+
+    \item \textbf{Alojamiento web con \texttt{Streamlit Community Cloud}}: Se propone alojar la web en internet para que múltiples usuarios puedan acceder a ella de forma remota y sin instalar dependencias sin que de problemas la clasificación en tiempo real con \texttt{Streamlit Community Cloud} u otra herramienta de \textit{hosting}.
+
+    \item \textbf{Internacionalización}: Una vez alojado, Internacionalizar la web insertando nuevos idiomas para que usuarios de todo el mundo puedan utilizarla.
+
+    \item \textbf{Uso de lengua escrita como apoyo}: Aumentar las clases del conjunto de datos para añadir soluciones como: borrar, espacio, coma, punto, etc. para poder aplicar un lienzo de escritura dentro de la propia web.
+
+
+    
+\end{itemize}
+
+
+
+
+
+
+

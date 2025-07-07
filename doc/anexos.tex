@@ -8,6 +8,7 @@
 \usepackage{lmodern} % scalable font
 \usepackage{microtype}
 \usepackage{placeins}
+\usepackage{longtable} 
 
 \RequirePackage{booktabs}
 \RequirePackage[table]{xcolor}
@@ -17,11 +18,15 @@
 % Links
 \PassOptionsToPackage{hyphens}{url}\usepackage[colorlinks]{hyperref}
 \hypersetup{
-	allcolors = {red}
+	allcolors = {blue}
 }
+
 
 % Ecuaciones
 \usepackage{amsmath}
+
+% Bibliography management
+\usepackage[numbers,sort]{natbib}
 
 % Rutas de fichero / paquete
 \newcommand{\ruta}[1]{{\sffamily #1}}
@@ -38,14 +43,15 @@
 
 % Imagenes
 \usepackage{graphicx}
-\newcommand{\imagen}[2]{
+\newcommand{\imagen}[3]{
 	\begin{figure}[!h]
 		\centering
-		\includegraphics[width=0.9\textwidth]{#1}
+		\includegraphics[width=#3\textwidth]{#1}
 		\caption{#2}\label{fig:#1}
 	\end{figure}
 	\FloatBarrier
 }
+
 
 \newcommand{\imagenflotante}[2]{
 	\begin{figure}%[!h]
@@ -313,6 +319,7 @@
 \makeatletter
 \usepackage{xcolor}
 \newcommand{\tutor}[1]{\def\@tutor{#1}}
+\newcommand{\tutors}[1]{\def\@tutors{#1}}
 \newcommand{\course}[1]{\def\@course{#1}}
 \definecolor{cpardoBox}{HTML}{E6E6FF}
 \def\maketitle{
@@ -344,6 +351,7 @@
     Presentado por \@author{}\\ 
     en Universidad de Burgos --- \@date{}\\
     Tutor: \@tutor{}\\
+    Tutor: \@tutors{}\\
   }%
   \end{center}%
   \null
@@ -353,9 +361,10 @@
 
 
 % Datos de portada
-\title{Evolución de una máquina extrusora de filamento: un enfoque basado en Hardware, Software e Inteligencia Artificial. \\Documentación Técnica}
+\title{Reconocimiento de Lenguaje de Signos ASL mediante IA: Implementación y Comparativa de Rendimiento en Raspberry Pi. \\Documentación Técnica}
 \author{Hugo Gómez Martín}
 \tutor{Fernando Rivas Navazo}
+\tutors{Daniel Urda Muñoz}
 \date{\today}
 
 \begin{document}
@@ -402,7 +411,7 @@
 \include{./tex/F_ODS}
 
 
-\bibliographystyle{plain}
+\bibliographystyle{plainnat}
 \bibliography{bibliografiaAnexos}
 
 \end{document}

@@ -1,11 +1,132 @@
 \apendice{Documentación técnica de programación}
 
 \section{Introducción}
+En este capítulo se detallarán aspectos relacionados con la documentación técnica, estructura de directorios, manual del programador, y distintos requisitos para la correcta ejecución del proyecto.
 
 \section{Estructura de directorios}
+El código reside en la carpeta \texttt{/src} donde las distintas funcionalidades están separadas por carpetas dependiendo de la función que relacen, la estructura de los directorios en es:
+
+\begin{itemize}
+    \item \textbf{/src/hadn\_sing\_detection/classifier:} es el motor de inferencia de nuestra aplicación que contiene 3 clasificadores distintos, uno orientado a la clasificación en tiempo real en \texttt{classifier\_rpy.py} y la inferencia en \texttt{classifier\_photo.py} además un fichero \texttt{classifier.py} que realiza la inferencia unicamente de modelo sin optimizar donde podemos probar nuestro modelo (orientado para probar modelos por parte del programador no accesible desde la aplicación).
+    Estos modleos cargan modleos \textit{TensorFlow/Keras}, hace el pre-procesado y devuelven la etiqueta ASL con su respectiva confianza, ya sea fotograma a fotograma (tiempo real) o sobre una imagen estática
+
+    \item \textbf{/src/hadn\_sing\_detection/dataset:} Este directorio permite crear el \textit{dataset}. el fichero \texttt{collection.py} recoge unicamente imágenes 300x300 pixel procesadas donde se irán almacenando en la carpeta \textit{/data/ordered}. Te permite crear mas subdirectorios (clases) y almacenar el conjunto de datos estableciendo un limite.
+    El fichero \texttt{disordered.py} es el encargado de desordenar los datos para que a la hora de entrenar el modelo cada lote durante el entrenamiento contiene muestras mixtas de los dos conjuntos de datos mezclados, lo que favorece la generalización del modelo.
+    
+    \item  \textbf{/src/hadn\_sing\_detection/model\_creation}: Contiene dos ficheros: \texttt{cnn\_build.py} que se encarga de entrenar el modelo con los hiperparámetros otorgados por el \textit{Random search} añadiendo \textit{Callbacks} como \textit{Early stopping} o \textit{ReduceOnPlateau}. Su función \texttt{build\_cnn\_model()} es la que contiene la arquitectura del modelo y la usa la interfaz de entrenamiento de la aplicación. El fichero \texttt{random\_search.py} cuenta con la misma arquitectura pero con la diferencia de que contiene \texttt{Keras tuner} para la búsqueda de hiperparámetros.
+    \item \textbf{/src/hadn\_sing\_detection/utils:} en este directorio podemos encontrar el fichero que convierte el modelo exportado \textit{.h5} en dos ficheros \texttt{.tflite} cuantizados (FP32 y FP16).
+    \item \textbf{/src/hadn\_sing\_detection/web}
+    En este directorio podemos encontrar \texttt{app.py} el cual gestiona las demás interfaces además de proporcional la interfaz ``Inicio''\ y proporcionar la barra lateral con el menú y desplegable del modelo a usar.
+        \begin{itemize}
+            \item \textbf{/src/hadn\_sing\_detection/web/components}: Se proporcionan 3 Ficheros para clasificación en tiempo real, clasificación estática por foto y entrenamiento. 
+            \item \textbf{/src/hadn\_sing\_detection/web/static}: Contiene style.css el cual aplica el footer de nuestra app y le proporciona el mismo color principal que al resto de la web además de contener la carpeta \texttt{images} que es donde se ubica el logotipo empleado en la pagina web y en la pestaña
+        \end{itemize}
+\end{itemize}
+ademas, a la misma altura que estas carpetas en encuentra config.py que contiene todas las rutas relativas necesarias para los ficheros así como sus variables globales.
+
+Además, fuera del \textit{src/} hay mas ficheros que no contienen código pero sí cosas importantes a destacar que son esenciales para el funcionamiento de nuestro proyecto.
+
+\begin{itemize}
+    \item \textbf{models/:} Contiene los modleos cuantizados y normales junto a las respectivas labels.txt del modelo principal, del \textit{Random Search} y de \textit{Teachable machine}.
+
+    \item \texttt{data/:} contiene los conjuntos de datos \texttt{/ordered y /disordered} con 26000 imágenes repartidas en 26 clases cada uno.
+
+    \item \texttt{/.streamlit/config.toml:} contiene el fichero de configuración de \texttt{Strealmit} que contiene los colores de la aplicación junto a el puerto y el máximo de subida de la aplicación.
+
+    \item También hay ficheros sueltos como \texttt{run\_app.sh/run\_app.bat} que son lanzadores rápidos para Linux y Windows los cuales instalan dependencias y ejecutan \texttt{app.py} para iniciar la aplicación en nuestro navegador además de contener \texttt{asl\_detection.exe} el cual lanza la aplicación con el único requisito que es tener Python 3.11 instalado. Este ejecutable se encuentra en el apartado de Releases en nuestro repositorio.
+
+\end{itemize}
+
+
 
 \section{Manual del programador}
+En esta sección vamos a explicar como crear el entrono de desarrollo para poder trabajar con el código:
+
+\subsection{Clonar el repositorio}
+Lo primero de todo sería clonar el repositorio para poder tener acceso local a todas las carpetas, modelos, conjuntos de datos, requerimientos, etc. que necesitamos para trabajar con el proyecto.
+
+Para poder realizar eso, necesitamos copiar la dirección web y bajarlo al directorio de nuestra preferencia, una vez nos encontremos en el, abrimos la terminal del sistema y ejecutamos el siguiente comando:
+
+\texttt{git clone https://github.com/hgomezmartin/HandSignDetectionProject.git}
+
+una vez clonado, podremos abrirlo en nuestro IDE favorito, personalmente recomiendo \texttt{PyCharm} debido a la cantidad de funcionalidades que tiene por defecto, como crear un entorno virtual automáticamente o instalar requerimientos de forma sencilla.
+
+\subsection{Instalación de Python}
+La versión de Python que ha sido utilizada en este proyecto ha sido la versión \texttt{3.11.7} específicamente, por lo tanto se recomienda utilizar esa misma versión o una versión compatible con el proyecto.
+
+\subsubsection{Windows}
+Para poder instalarlo en Windows, debemos descargar desde la página web oficial de Python la versión \href{https://www.python.org/downloads/release/python-3117/}{\texttt{3.11.7}}.
+
+Una vez seguidos todo estos pasos de instalación y haberlo agregado al \textit{Path} del sistema, comprobamos mediante este comando en la consola del sistema la instalación de Python:
+
+\texttt{python --version}
+
+la consola nos debería mostrar la versión de Python instalada.
+
+\subsubsection{Linux}
+Para poder instalar Python, se tendrá que realizar a través de terminal:
+
+\texttt{sudo apt install python3.11}
+
+una vez instalado, verificamos por terminal que esté correctamente instalado para su uso.
+
+\texttt{python3.11 --version}
+
+\subsection{Instalación de dependencias}
+Recomendamos activar un entorno virtual para separar estas dependencias, pero el cada usuario es libre de poder elegir donde instalarlo.
+
+Para poder crear el entorno virtual y activarlo, necesitaremos estos dos comandos
+
+En Windows (si no quieres instalarlo en un entorno virtual, ignora los dos primeros comandos): 
+
+
+\texttt{python -m venv .(nombre (recomendamos .venv\_handsign))} (crea el entorno)
+
+\texttt{./.(nombre del entorno)/Scripts/activate} (lo activa)
+
+una vez activado, instalaríamos las dependencias con el comando:
+
+\texttt{pip install -r requirements.txt}
+
+En linux:
+
+\texttt{python3 -m venv .(nombre (recomendamos .venv\_handsign))} (crea el entorno)
+
+\texttt{source .(nombre del entorno)/bin/activate} (lo activa)
+
+y después se instalarían las dependencias al igual que en Windows desde pip:
+
+\texttt{pip install -r requirements.txt}
+
+
 
 \section{Compilación, instalación y ejecución del proyecto}
+A continuación, después de haber instalado los requerimientos básicos del proyecto, se va a establecer el camino recomendado para dejar el proyecto operativo desde cero. 
+
+\subsection{Instalar el paquete del proyecto en modo editable}
+
+
+El primer paso consiste en registrar e propio código como paquete Python para que la aplicación pueda importar sin errores los módulos de entrenamiento y clasificación (en la raíz del proyecto):
+
+\textit{python -m pip install -e .}
+
+\subsection{Levantar la aplicación manualmente}
+Desde la raíz del proyecto, se procede a la ejecución de la aplicación:
+
+\textit{streamlit run src/handsign\_asl\_detection/web/app.py}
+
+No obstante, hay ficheros preparados en la raíz del proyecto que instalan dependencias, crean el paquete de la aplicación y abren automáticamente la aplicación sin necesidad de estos comandos, la única dependencia que necesitan es tener Python instalado.
+Además también se incluye un ejecutable (\texttt{.exe}) aunque es cierto que debemos tener Python 3.11 o superior instalado en nuestro equipo para poder ejecutarlo.
+
+Una vez \texttt{Streamlit} se ejecute, la consola mostrará algo como:
+
+\imagen{output_streamlit.png}{Captura de las URL que nos muestra Streamlit por consola}{1}
+
+Una vez cargue completamente \texttt{Streamlit} y aparezca eso, se nos abrirá automáticamente en el Navegador la aplicación. No obstante, si queremos acceder desde algún otro dispositivo que este conectado a la misma red, insertaríamos la \textit{Network URL} y accederíamos a la aplicación.
+
+Para desconectarla sería, cerrar la sesión con ``ctrl+c''\ en la terminal o cerrar directamente la consola.
+
+
 
 \section{Pruebas del sistema}
+Es cierto que no se han implementado baterías de test automatizados. No obstante, antes de considerar la aplicación lista, se comprobó el funcionamiento previo de todos los códigos para garantizar su correcto funcionamiento y la cobertura funcional completa de los distintos casos de uso definidos.

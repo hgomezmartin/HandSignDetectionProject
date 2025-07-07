@@ -1,3 +1,93 @@
 \capitulo{1}{Introducción}
 
-Descripción del contenido del trabajo y del estructura de la memoria y del resto de materiales entregados.
+
+Más de 70 millones de personas con trastornos de audición utilizan diariamente alguna lengua de signos como su principal medio para poder comunicarse \cite{web:sign_languages_day}. Aproximadamente medio millón de estadounidenses sordos o con dificultades en su audición utilizan ASL, mientras que aproximadamente solo hay un intérprete certificado disponible por cada 50 usuarios. El problema se agrava fuera de las grandes ciudades, con apenas 10000 interpretes titulados en toda Norteamérica, las zonas rurales son las que más dificultades tienen para acceder a estos servicios \cite{web:shortage_asl}.
+
+\imagen{asl-mapa-mundo.png}{Mapa de los países que adoptan ASL (o su variante) como lengua de señas oficial o cooficial. \cite{img:asl_map}}{1}
+
+Ante esta situación, decidí desarrollar un sistema automático que es capaz de traducir ese lenguaje de signos del alfabeto ASL en tiempo real a texto, reduciendo la dependencia de interpretes humanos y ampliarla a todos los usuarios que padecen de esta discapacidad con una solución sencilla y eficaz en dispositivos de bajo coste actuales como la Raspberry Pi 5, modelo muy interesante que triplica la velocidad de procesamiento de su anterior versión\cite{art:raspberry_pi_5}.
+
+Para poder llevarlo a cabo, procedemos a combinar la detección de manos en imágenes usando librerías como \texttt{cvzone} basadas en \texttt{MediaPipe} con la clasificación de gestos mediante una red neuronal convolucional (popularmente conocida como \texttt{CNN}) entrenada con \texttt{TensorFlow/Keras} sobre un conjunto de datos propio de 26 clases con 1000 imágenes cada una sumando un total de 26000 imágenes. Para la detección de la mano empleamos la librería \texttt{cvzone} basada en \texttt{MediaPipe} que nos permite localizar con precisión 21 puntos y aristas al rededor de nuestra mano \cite{web:hand_landmarker}, lo que facilita a nuestro modelo obtener la región de interés, mientras que el modelo \texttt{CNN} ofrece altas tasas de acierto en la clasificación de los respectivos gestos.
+
+En esta documentación se detalla el desarrollo completo del proyecto, desde los objetivos planteados, los conceptos teóricos fundamentales, las herramientas y distintas técnicas empleadas, hasta los aspectos de implementación mas importantes y las pruebas de rendimiento y comparativas realizadas. El resultado es una aplicación desarrollada en \texttt{Streamlit} que permite:
+\begin{itemize}
+\tightlist
+    \item 
+        Detectar la mano del usuario a través de una cámara en tiempo real y a través de una \textit{bounding box} o caja delimitadora que nos indica de izquierda a derecha la mano empleada, el porcentaje de acierto, y la letra reconocida por el clasificador. Además, se implementa métricas que cuantifican los fotogramas por segundo, los porcentajes de uso de CPU y RAM, así como la temperatura de la CPU.
+    \item 
+        Clasificar gestos a partir de una imagen estática cargada por el usuario
+    \item 
+        Re-entrenar el modelo con un nuevo conjunto de datos que el propio usuario proporcione, hasta 26 clases además de poder editar varios parámetros que considere. Después del entrenamiento, el usuario podrá descargar un archivo comprimido que contendrá dos modelos, uno de ellos optimizado y un fichero de texto con las diferentes clases que ha introducido para poder exportar su modelo.
+\end{itemize}
+
+De este modo se demuestra la viabilidad de este proyecto interactivo y portable para el reconocimiento del lenguaje de signos ASL.
+
+
+\section{Estructura de la memoria}\label{estructura-de-la-memoria}
+La estructura de la memoria expuesta se compone de:
+
+\begin{itemize}
+\tightlist
+    \item 
+        \textbf{Introducción:} Breve descripción general del proyecto y del trabajo realizado junto a la estructura de la memoria y de los anexos.
+    \item 
+        \textbf{Objetivos del proyecto:} Listado y descripción de los objetivos llevados a cabo a lo largo del proyecto.
+    \item 
+        \textbf{Conceptos teóricos:} Descripción de los conceptos teóricos utilizados en el proyecto para su correcta comprensión y puesta en contexto.  
+    \item 
+        \textbf{Técnicas y herramientas:} Exposición de todas las herramientas y metodologías utilizadas para poder gestionar y construir satisfactoriamente el proyecto.
+    \item 
+        \textbf{Aspectos relevantes del desarrollo del proyecto.} Se recogen los aspectos mas importantes que tuvieron lugar durante el desarrollo del proyecto y los diferentes retos que se han tenido que superar 
+    \item 
+        \textbf{Trabajos relacionados:} Exposición del estado del arte junto a un listado con diferentes aplicaciones que son similares al proyecto realizado con su respectiva descripción.
+    \item 
+        \textbf{Conclusiones y líneas de trabajo futuras:} Diferentes conclusiones que hemos obtenido una vez finalizado el proyecto además de proporcionar diferentes mejoras e implementaciones que se pueden realizar en el futuro.
+
+    
+\end{itemize}
+
+
+
+
+\section{Estructura de los anexos}\label{estructura-de-los-anexos}
+Además de la memoria, se proporcionan los siguientes anexos:
+
+\begin{itemize}
+\tightlist
+    \item 
+        \textbf{Plan de Proyecto Software:} Recoge la planificación del proyecto junto su respectivo análisis de viabilidad.
+    \item
+        \textbf{Especificación de Requisitos:} Se listan los requisitos definidos en la aplicación con respecto a los objetivos marcados.
+    \item 
+        \textbf{Especificación de diseño:} Exposición del diseño de la aplicación además de proporcionar su arquitectura.
+    \item 
+        \textbf{Manual del programador:} Los diferentes aspectos técnicos del proyecto y las distintas decisiones de implementación del código
+    \item 
+        \textbf{Manual del usuario:} Una guía de usuario para poder manejar la aplicación y aprovechar todas las funcionalidades
+    \item 
+        \textbf{Anexo de sostenibilización curricular:} Reflexión personal sobre los distintos aspectos de la sostenibilidad que se abordan en el proyecto.
+    
+\end{itemize}
+
+
+\section{Materiales adjuntos}\label{materiales-adjuntos}
+Estos son los siguientes materiales que se adjuntan con la memoria:
+
+\begin{itemize}
+\tightlist
+    \item 3 memorias USB con todo lo necesario que requiere el proyecto
+    \item Archivo ejecutable \texttt{.bat} que ejecuta la aplicación en el navegador (Microsoft Windows).
+    \item Archivo ejecutable \texttt{.sh} que ejecuta la aplicación en el navegador (GNU/Linux).
+    \item UN Archivo ejecutable \texttt{.exe} que ejecuta la aplicación en el navegador (Microsoft Windows) sin necesidad de instalar dependencias previas.
+    \item \textit{Dataset} tanto ordenado como desordenado con clases de la A a la Z con 1000 imágenes por cada clase.
+    \item Varios modelos \texttt{Tensorflow/Keras} ya entrenados usados para la experimentación que pueden ser utilizados 
+\end{itemize}
+
+Además, los siguiente recurso está accesible a través de internet:
+\begin{itemize}
+\tightlist
+    \item Repositorio del proyecto:
+        \href{https://github.com/hgomezmartin/HandSignDetectionProject}{Repositorio GitHub del proyecto HandSignDetectionProject}.
+\end{itemize}
+
+

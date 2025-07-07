@@ -1,3 +1,24 @@
 \capitulo{6}{Trabajos relacionados}
 
-Este apartado sería parecido a un estado del arte de una tesis o tesina. En un trabajo final grado no parece obligada su presencia, aunque se puede dejar a juicio del tutor el incluir un pequeño resumen comentado de los trabajos y proyectos ya realizados en el campo del proyecto en curso. 
+En este campo hay numerosos estudios sobre el reconocimiento de lenguaje de signos. Muchos de ellos de estos proyectos y emplean técnicas de visión por computador diversas. Buscar este tipo de proyectos nos ha ayudado a recoger características para nuestra propia aplicación las cuales serán útiles para el correcto desarrollo del proyecto.
+
+En esta sección van a revisar 4 proyectos/aplicaciones relevantes y se comparan sus enfoques y objetivos con los objetivos principales de nuestro proyecto.
+
+\section{Reconocimiento de gestos de Google AI Edge}
+Google lanzó varias soluciones sobre diferentes modelos como una API de inferencia de LLM, detección de objetos, segmentación de imágenes, entre otras. La más interesante para comparar con este proyecto es la solución de \href{https://ai.google.dev/edge/mediapipe/solutions/vision/gesture_recognizer}{Gesture Recognizer de MediaPipe} (reconocimiento de gestos) la cual pre-entrenada junto con \texttt{MediaPipe Hands}, puede reconocer ciertas señas comunes, aunque sin ningún tipo de alfabeto, si no gestos como: puño cerrado, pulgar hacia arriba, etc., además de detectar ambas manos. Uno de los apartados destacables de este proyecto es que es multiplataforma además de poder correr en el navegador. La diferencia notable con nuestro proyecto es que solo reconoce unas pocas clases, mas en concreto 7 clases donde se pueden utilizar ambas manos a la vez. Es cierto que esta web ha motivado a implementar un modelo que pueda correr en cualquier dispositivo (mas optimizado) sin requerir de un hardware potente a nuestra disposición. Por eso decidimos cuantizar nuestro modelo de \texttt{TFLite} a \texttt{FP16} \cite{web:mediapipe_gesturerecogniser}.
+
+\section{Sign Language Recognition with Convolutional Neural Networks}
+
+Este proyecto es el mas similar que he encontrado con respecto al realizado. Estos alumnos de la universidad de Standford desarrollaron un sistema de reconocimiento del alfabeto ASL utilizando una red neuronal convolucional, entrenado en un conjunto de datos masivo de imágenes (más de 200k imágenes de 29 clases, incluyendo: espacio, nada y borrar) \cite{art:singlenguage_standford}. Una vez entrenado, reportaron una precisión de prácticamente el 100\% en la clasificación de las letras, mas concretamente un 99.31\% que, comparándolo con su conjunto de datos de mas de 200k imágenes, es un porcentaje altísimo y fiable en la clasificación del alfabeto ASL \cite{art:singlenguage_standford}. Sin embargo, su implementación estaba orientada a entornos de escritorio que requiriesen un hardware decente que no consideraba restricciones de tiempo real en hardware limitado.
+
+\section{Google Teachable Machine}
+Es cierto que en el pasado utilizamos esta herramienta para poder avanzar en el proyecto con un modelo fiable. Además, esta herramienta diseñada por Google ha servido de inspiración para poder realizar la funcionalidad de entreno en nuestra web desarrollada con \texttt{Streamlit} junto a los respectivos hiperparámetros editables, característica también añadida en nuestra interfaz.
+
+
+\section{SignALL}
+SignAll es una empresa que desarrolló un sistema complejo con múltiples cámaras y sensores que captan profundidad para traducir signos a voz y viceversa. También es capaz de reconocer vocabulario amplio y no solo limitarse al alfabeto además de poder reconocer gestos en movimiento, pero requiere un \textit{set-up} muy específico con 3 cámaras diferentes (una cámara captura el movimiento del cuerpo, otra cámara capta el movimiento de las manos y otra expresiones faciales) \cite{web:signall}.
+
+Esta es una solución extrema y con un nivel muy superior a nuestro proyecto, pero esta característica ha servido para motivarnos a utilizar un modelo que se pueda ejecutar con cualquier cámara existente sin tener que invertir en un \textit{set-up} siendo así mucho mas accesible.
+
+
+

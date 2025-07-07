@@ -1,11 +1,114 @@
 \apendice{Especificación de diseño}
 
 \section{Introducción}
+En este capitulo se documenta como está construido nuestro proyecto: los datos que maneja, el flujo interno y la arquitectura \textit{software} que implementa.
 
 \section{Diseño de datos}
+Nuestra aplicación en ningún momento retiene información del usuario como \textit{login} o \textit{register} ni guarda absolutamente ningún dato personal debido a que no implementamos ni Base de Datos ni establecemos roles de usuarios, todo se genera o carga en memoria cada vez que el usuario la ejecuta.
+
+Es cierto que el usuario puede añadir imágenes tanto en el entrenamiento, como en la clasificación vía imagen estática o en la detección en tiempo real, pero una vez realizada su función se libera de la memoria y no se almacena, detalladamente, esas imágenes subidas se copian a \texttt{TMP\_PATH} (\textit{/tmp/train\_v3\_tmp}), un directorio temporal que se crea en cada sesión, después, pasa por un contenedor intermedio llamado \textit{uploads} el cual crea un diccionario en memoria que agrupa los ficheros por clase.
+
+Podemos abordar los datos de las estadísticas que se dibujan sobre la marcha (FPS, uso de CPU, RAM y temperatura) se conservan en \texttt{METRICS\_BUFFER}, una \textit{deque} de 120 posiciones que guarda las 120 lecturas mas recientes para dibujar el gráfico en tiempo real.
+
+Por último, todos los parámetros globales o rutas a conjuntos de datos y modelos residen en el módulo \textit{config.py}, lo que permite ajustar datos y parámetros de la aplicación modificando un solo archivo.
+
+
 
 \section{Diseño procedimental}
+Se van a implementar los siguientes diagramas de flujo que corresponden las tres casos de uso principales que se pueden realizar en nuestra aplicación:
+
+\imagen{tiemporeal_drawio.png}{Diagrama de flujo de Detección en tiempo Real}{0.5}
+
+\imagen{foto_drawio.png}{Diagrama de flujo de Clasificación de imagen estática}{0.7}
+
+\imagen{entrenamiento_drawio.png}{Diagrama de flujo de Entrenamientos de modleos personalizados}{0.65}
+
+Estos son solo 3 diagramas de flujo de los 11 casos de uso establecidos. Se pueden establecer mas pero es cierto que estos tres casos de uso (los mas importantes) abarcan y dan a entender y resumen bien el diseño procedimental de nuestra aplicación.
 
 \section{Diseño arquitectónico}
+En el proyecto a la hora de diseñar la arquitectura de nuestra aplicación en \texttt{Streamlit}, decidimos añadir un MVC (Modelo-Vista-Controlador) \textbf{ligero} adaptado al contexto de esta librería. \texttt{Streamlit} ejecuta el \textit{frontend} y el \textit{backend} en el mismo proceso, por lo tanto, la separación no es física (dos servicios), si no lógica. Aun así, distinguir estas capas nos ayuda a mantener el código modular y fácil de mantener. 
+
+\subsection{Modelo-Vista-Controlador}
+
+\imagen{mvc.png}{Esquema de la arquitectura MVC \cite{img:mvc}}{0.7}
+
+En este capitulo, se establecerá la explicación lógica de la implementación de la arquitectura MVC en nuestro programa.
+
+\subsubsection{Modelo}
+El modelo agrupa toda la lógica que "sabe de IA" y de tratamiento de imágenes:
+\begin{itemize}
+    \item \textbf{Paquete \texttt{classifier/}:} Clases como \texttt{RealTimeASLClassifier} o \texttt{StaticPhotoClassifer} se encargan de clasificar las imágenes, preprocesar cada fotograma o fotografía además de redimensionar las imágenes y por último devolver tanto la etiqueta como la confianza de la clasificación.
+
+    \item \textbf{Paquete \texttt{model\_creation/}:} Establecido para que tiempo real en nuestra interfaz pueda usar la arquitectura del modelo principal para realizar el entrenamiento gracias a la importación de la clase \texttt{build\_cnn\_model}
+\end{itemize}
 
 
+
+\subsubsection{Vista}
+La vista abarca todo lo que el usuario ve y toca que, en nuestro caso esta establecido por:
+
+\begin{itemize}
+    \item Tiempo Real
+    \item Foto
+    \item Entrenamiento
+\end{itemize}
+
+Cada uno construye su respectiva interfaz con \texttt{Streamlit} con distintas funcionalidades(como por ejemplo, \texttt{st.button, st.file\_uploader,} etc.) y presenta los datos que el modelo va produciendo en la interfaz de usuario.
+
+Además el \textit{frontend} de nuestra aplicación también cuenta con un CSS (\texttt{style.css}) el cual oculta el \textit{footer}, define el rojo característico de Raspberry como color primario y ajusta la barra inferior. El resto de la paleta queda en manos de la configuración establecida en la carpeta \texttt{.streamlit} de la raíz.
+
+Es importante mencionar que la Vista no conoce los detalles de \textit{Tensorflow} ni de \textit{OpenCV}, simplemente recibe el resultado procesado y lo enseña.
+
+\subsubsection{Controlador}
+El Controlador constituye la capa de coordinación entre el Modelo y la Vista. Es el encargado de dirigir el flujo de eventos y traducir las acciones de la interfaz de usuario en invocaciones al Modelo.
+
+En nuestro proyecto se establece en \texttt{app.py} donde:
+\begin{itemize}
+    \item Presenta el menú lateral (Tiempo real, Foto y Entrenamiento) e invoca a cada componente/interfaz cuando procede.
+    \item Mantiene el estado de la sesión \texttt{st.session\_state} para saber, por ejemplo, si la cámara está encendida o que modelo cuantizado está seleccionado. 
+\end{itemize}
+
+\subsection{Estilo de la aplicación}
+En este capitulo se resumirá la guía visual de la interfaz de usuario implementada en \texttt{Streamlit}.
+
+\subsubsection{Nombre}
+Antes de adaptar los colores y el estilo de la aplicación, tenemos que establecer previamente un nombre y un logotipo.
+
+Como nombre se eligió \textbf{``ASL Detection''\ }. Como se puede observar, es muy simple y fácil de recordar. Además describe exactamente el objetivo del proyecto. Es cierto que también se barajó el nombre de ``HandSign Detection''\ al igual que el nombre del repositorio (nombre que se le otorgó inicialmente al proyecto), pero era demasiado general y se decidió sustituir por el lenguaje de signos específico, que es el lenguaje de signos americano (ASL).
+
+\subsubsection{Logotipo de la aplicación}
+Al igual que con el nombre, establecimos un logo minimalista fácil de memorizar. 
+
+Se tuvieron en cuenta varias ideas, pero la que más destacó fue: establecer las siglas ASL en perfecta sincronía con bordes tanto redondeados como puntiagudos, además de darle un toque personal añadiendo el color oficial corporativo de Raspberry y dándole profundidad \cite{web:raspberrypi_colours_an}:
+
+\imagen{logo_asl.png}{Logotipo de la aplicación ASL Detection}{0.3}
+
+\subsubsection{Colores}
+Una vez tenemos el Logotipo y el Nombre de la aplicación, podemos establecer los colores temáticos de la aplicación.
+
+Los colores van a ir de la mano con el logotipo estableciendo 4 colores distintos:
+
+\imagen{colores.png}{Paleta de colores implementada en la aplicación}{1}
+
+\begin{itemize}
+    \item \textbf{Color primario:} Se escogió este color debido a que es el mismo color que el del logotipo, es decir, cuenta con el mismo color que el color corporativo de Raspberry Pi.
+    \item \textbf{Color del texto}: Color predeterminado para el texto y contrastarse mejor con un fondo negro.
+    \item \textbf{Color de fondo:} fondo negro para destacar botones, títulos, gráficas, etc.
+    \item \textbf{Color secundario del fondo}: fondo secundario oscuro implementado en la barra lateral para que el menú y el desplegable de elección del modelo puedan diferenciarse del fondo
+\end{itemize}
+
+todos estos colores están establecidos en el fichero \texttt{config.toml} que usa \texttt{Streamlit} para cargar distintas configuraciones, desde colores hasta dirección del puerto, etc.
+
+\subsection{Tipografía}
+La topografía que se estableció fue la tipografía predeterminada de \texttt{Streamlit}: Sans Serif.
+
+Es una tipografía clara y legible, por lo que no se optó por cambiarla
+
+\subsection{Inconografía}
+
+La interfaz como observamos a lo largo de la aplicación, recurre a \textit{Emojis Unicode}:
+
+
+\imagen{iconos.png}{Captura de la interfaz tiempo real}{0.6}
+
+Son muy comunes en interfaces realizadas con \texttt{Streamlit} además de poder usarse en cualquier SO sin empaquetar fuentes, además refuerzan el sentido de la acción al primer golpe de vista para mejorar la compresión del usuario.

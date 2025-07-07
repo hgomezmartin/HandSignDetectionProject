@@ -1,6 +1,215 @@
 \capitulo{4}{Técnicas y herramientas}
 
-Esta parte de la memoria tiene como objetivo presentar las técnicas metodológicas y las herramientas de desarrollo que se han utilizado para llevar a cabo el proyecto. Si se han estudiado diferentes alternativas de metodologías, herramientas, bibliotecas se puede hacer un resumen de los aspectos más destacados de cada alternativa, incluyendo comparativas entre las distintas opciones y una justificación de las elecciones realizadas. 
-No se pretende que este apartado se convierta en un capítulo de un libro dedicado a cada una de las alternativas, sino comentar los aspectos más destacados de cada opción, con un repaso somero a los fundamentos esenciales y referencias bibliográficas para que el lector pueda ampliar su conocimiento sobre el tema.
+En este capitulo principalmente se describen las principales técnicas metodológicas y las herramientas empleadas para llevar a cabo el proyecto. Esto abarca desde la forma en que se organizó el el desarrollo, como la metodología o el control de versiones hasta el entorno de programación utilizado (lenguaje, IDE, librerías, etc.) y el \texttt{hardware} disponible. También se comentarán las alternativas consideradas en cada caso además de justificar las elecciones tomadas a lo largo del desarrollo.
 
 
+\section{Metodología de desarrollo y control de versiones}\label{metodologia-de-desarrollo-y-control-de-versiones}
+Se intentó seguir en todo momento una \textbf{metodología ágil} adaptada al horario, donde la mayoría de \textit{sprints} se componían de al menos dos semanas. Inicialmente es cierto que se hicieron varios prototipos rápidos para comprobar la viabilidad (por ejemplo capturar imágenes de la cámara desde la librería \texttt{OpenCV}, entrenar un modelo con hiperparámetros poco ajustados con pocas capas ocultas, realizar un programa clasificador no funcional cuyos hiperparámetros no coincidían con el modelo entrenado, etc.) como se realiza en cualquier proyecto. A partir de ahí, se fueron arreglando detalles del código como por ejemplo implementar funcionalidades nuevas mejorando partes del código como el cargado de imágenes desde el dispositivo en el entrenamiento del modelo por un código mucho mas simple, intuitivo y funcional. Mas adelante se verifico que un modelo simple podía aprender algo; después de comprobar que sí, se mejoró y mas tarde se cambió la arquitectura además de los hiperparámetros con un \texttt{random search} que nos otorgó buenos resultados en nuestra red. Por último, esta se integró parte de la interfaz \texttt{Streamlit} ademas de proceder a la optimización del modelo para la Raspberry Pi y micro-ordenadores o ordenadores de bajos recursos en general. 
+
+Este enfoque permitió flexibilidad para reorganizar tareas según los distintos obstáculos encontrados (por ejemplo, tras descartar el uso de la cámara con NPU, re reorientaron los esfuerzos a optimizar el modelo en CPU)
+
+\subsection{Flujo iterativo-exploratorio en una única rama \textit{main}}\label{flujo-iterativo-exploratorio-en-una-única-rama-main}
+
+Para el control de versiones del código se utilizó Git, alojando el repositorio inicialmente privado en GitHub (en las versiones finales se hizo público). Se trabajó en una \textbf{única rama principal \texttt{main}}, dado que el equipo esta compuesto solo por una persona y el proyecto no requirió a mi parecer ramificaciones complejas. Aún así, Git fue fundamental para llevar registro de los cambios, poder volver a diferentes versiones estables en caso de error o poder sincronizar el proyecto entre ordenadores para poder realizar correctamente los entrenamientos en local, esto fue fundamental para poder entrenar el ultimo modelo que había desarrollado principalmente en mi ordenador personal con una GPU integrada y poder transportarlo así a un ordenador con una una mejor tarjeta gráfica en este caso dedicada para acelerar el entrenamiento utilizando aceleración por GPU.
+
+Aunque no hubo colaboradores, la práctica de usar una herramienta de control de versiones y utilizar una metodología contribuyó a mantener un código y un proyecto \textbf{bien estructurado}, previendo posibles mantenimientos futuros. En cuanto a gestión de proyectos, se emplearon \textit{to-do-lists}para priorizar funcionalidades del \textit{sprint} y se mantuvo una comunicación frecuente con los tutores para revisar el estado de mi proyecto y diferentes direcciones para alcanzar los objetivos.
+
+\section{Entorno y librerías de desarrollo en Python}\label{Entorno-y-librerias-de-desarrollo-en-python}
+
+\subsection{Entorno de desarrollo}
+En este apartado se describirán la bases para realizar el proyecto, además de las distintas herramientas para el desarrollo de la documentación.  
+
+\subsubsection{Pycharm community Edition (IDE)}
+
+\imagen{Pycharm-logo.png}{Logotipo de Pycharm \cite{img:logo_pycharm}}{0.2}
+
+El proyecto se desarrolló íntegramente en el entorno de desarrollo integrado (IDE): \texttt{Pycharm Community Edition 2024.1.4}. Dicho IDE genera automáticamente el entorno virtual \texttt{.venv}, lo que posibilitó poder instalar de forma asilada todas las dependencias del proyecto, evitando así conflictos de versiones con otros proyectos presentes en el equipo. Se usó la versión \textit{Community} de \texttt{PyCharm} por que resultó imposible acceder a la versión \textit{Professional} con las claves facilitadas por la Universidad de Burgos. 
+
+\subsubsection{Python 3.11}
+
+\imagen{Python11-logo.png}{Logotipo de Python 11 \cite{img:logo_python}}{0.4}
+
+Para la ejecución del codigo se empleó: Python 3.11.7, lanzada en 4 de diciembre del 2023. No se eligió por ningún motivo en particular, simplemente ya se hallaba instalada en el equipo debido a la realización de proyectos con el mismo IDE posteriores a la realización de este trabajo. Al ser una versión relativamente reciente además de proporcionar compatibilidad total con las bibliotecas requeridas, no se consideró necesario actualizarla.
+
+\subsubsection{\LaTeX}
+
+\imagen{LaTeX-logo.png}{Logotipo de LaTeX \cite{img:logo_latex}}{0.4}
+
+\LaTeX\ es in sistema que se centra en la composición de documentos de texto, especialmente diseñado para documentos científicos o de investigación (principalmente usado en documentos relacionados con la ingeniería o las matemáticas). Maneja muy bien formulas matemáticas, referencias cruzadas, referencias bibliográficas y figuras, proporcionando resultados de alta calidad tipográfica sin preocuparnos de los detalles de diseño. 
+
+\subsubsection{Overleaf}
+
+\imagen{Overleaf-logo.png}{Logotipo de Overleaf \cite{img:logo_overleaf}}{0.3}
+
+Overleaf es un editor en línea para proyectos \LaTeX\ en la nube. Es una plataforma donde podemos crear documentos y además compilarlos en el propio editor. ofrece colaboración con mas miembros para trabajar en equipo o en grupos. Está orientado principalmente a aquellas personas que no quieran pelearse con instalaciones locales para poder trabajar con este tipo de documentos o prefiera trabajar en equipo.
+
+\subsection{Librerías utilizadas para el desarrollo}\label{librerias-utilizadas-para-el-desarrollo}
+A continuación, voy a mostrar las librerías utilizadas más destacadas con una breve descripción sobre ellas
+
+Se han necesitado todas las librerías expuestas en la tabla para poder alcanzar los objetivos, no obstante hay tres librerías fundamentales que necesitan ser explicadas con más detalle:
+
+\subsubsection{OpenCV}
+
+\imagen{OpenCV-logo.png}{Logotipo de OpenCV \cite{img:logo_opencv}}{0.3}
+
+ Es la biblioteca de visión por computador de código abierto mas extendida y popular \cite{web:opencv}. Ofrece cientos de algoritmos sobre visión por computador ademas de funciones para cargar, procesar y analizar imágenes y video en tiempo real \cite{web:opencv_doc}. En este proyecto al cargar \texttt{OpenCV} con \texttt{cv2} se emplea para tarea como la capturas de las imágenes de la cámara, preprocesamiento como redimensionar, recortar el área de la mano y su respectivo dibujo junto a las anotaciones en pantalla como por ejemplo dibujar el \textit{bounding box} o el resultado de la predicción y gestión general del flujo de video. Es una herramienta optimizada y escrita en C++, disponible para Python \cite{web:opencv}\cite{web:opencv_doc}. Su eficiencia es fundamental para lograr que el sistema funcione, no solo fluido en nuestro equipo, si no en un \textit{hardware} limitado como la Raspberry Pi.
+ 
+\subsubsection{TensorFlow y Keras}
+
+\imagen{tensorflowkeras-logo.png}{Logotipo de TensorFlow y Keras \cite{img:logo_tensorflowkeras}}{0.5}
+
+Son las librerías principales que construyen, entrenan y ejecutan el modelo CNN que realiza la clasificación de nuestro alfabeto ASL. \texttt{TensorFlow} es un \textit{framework} de \texttt{deep learning} \texttt{open-source} creado por Google utilizado con el objetivo de construir y entrenar redes neuronales. En la versión que estamos utilizando en nuestro proyecto que es la 2.12 integra de forma integra \texttt{Keras} como su API de alto nivel para crear y entrenar modelos de aprendizaje profundo \cite{web:tf_keras}. Esto quiere decir que \texttt{Keras} funciona como una interfaz simplificada dentro de \texttt{TensorFlow}, con el objetivo de crear prototipos rápidamente tanto en campos como la investigación e ingeniería o entornos orientados a la enseñanza \cite{web:tf_keras}.
+
+En este proyecto se ha utilizado \texttt{Tensorflow} (con la API de \texttt{Keras}) para entrenar y diseñar una red neuronal convolucional capaz de reconocer el lenguaje de signos ASL, aprovechando la facilidad de \texttt{Keras} para definir arquitecturas CNN sin complicar ni aumentar el numero de lineas de nuestro código siendo así mas fácil gestionar el ciclo de entrenamiento y su mantenibilidad.
+
+Además, para aprovechar la GPU AMD Radeon D700 del Mac Pro 6.1 durante el entrenamiento loca, se integró la extensión \texttt{TensorFlow Metal}.
+
+\imagen{metal-logo.png}{Lototipo de TensorFlow Metal \cite{img:metal}}{0.3}
+
+Esta extensión de \texttt{TensorFlow} permite usa la API gráfica \texttt{Metal} de Apple como backend de \texttt{Tensorflow}. Gracias a ello, las operaciones de tensores se aceleran notablemente sin necesidad de \textit{hardware} NVIDIA ni CUDA, reduciendo así los tiempos de nuestro entrenamiento. En esta gráfica podemos observar los tiempos que marcan nuestras épocas con ella y sin ella aplicada:
+
+\imagen{metal_comparativa.png}{Comparativa con y sin aceleración gráfica}{0.9}
+    
+\subsubsection{cvzone y MediaPipe}\label{cvzone-mediapie}
+
+\imagen{cv-logo.png}{Logotipo de cvzone \cite{img:logo_cvzone}}{0.5}
+
+Es una librería que facilita el reconocimiento de nuestra mano. En concreto, \texttt{cvzone} provee funcionalidades listas para usar, como su módulo de seguimiento de manos (\texttt{HandTrackingModule}) que internamente usa \texttt{MediaPipe Hands} pero expone una interfaz mas sencilla para obtener información como la ubicación de la mano, posición de los dedos , dibujo de los puntos donde se ubican los nudillos, etc. En este proyecto, \texttt{cvzone} simplifica el código necesario para detectar la mano, por ejemplo, con unas pocas líneas se inicializa un \textit{HandDetector} propio de esta librería y se obtiene un \textit{bounding box} de la mano presente en la imagen. 
+Por debajo, se usa \texttt{OpenCV} para el manejo de imagen y las funciones de \texttt{MediaPipe}, pero nos ayuda a ahorrarnos integrar estas librerías manualmente en nuestro código para ubicar visualmente nuestra mano.
+En resumen, esta librería nos ayuda a acelerar el desarrollo de nuestro proyecto pudiendo importar su modulo \texttt{HandTrackingModule}.  Esta libreríass esta mantenida por la comunidad de \textit{Computer Vision Zone} y resulta muy útil por si no queremos complicar nuestro código y dejarlo limpio importando su módulo. Además, no solo cuenta con \texttt{HandTrackingModule}, si no también otros módulos como detección de rostros, seguimiento de objetos, reconocimiento de poses humanas, etc. todo integrado con módulos de forma coherente e intuitiva. Vale destacar que \texttt{cvzone} no reemplaza a \texttt{OpenCV} o \texttt{MediaPipe}, sino que se construye sobre ellas (de hecho, utiliza estas dos librerías internamente), por lo que usa la robustez y complejidad de esas librerías a la vez que ofrece una sintaxis mucho mas amigable.
+
+\subsubsection{Streamlit}
+
+\imagen{Streamlit-logo.png}{Logotipo de Streamlit \cite{web:streamlit}}{0.5}
+
+\texttt{Streamlit} es un Framework web que permite crear aplicaciones web interactivas completamente codificadas en Python (al igual que todo el ecosistema del proyecto) de forma rápida y sencilla, enfocadas sobre todo a proyectos de ciencia de datos y \textit{machine learning}. Esta biblioteca facilita a desarrolladores sin experiencia en front-end la construcción de interfaces de usuario atractivas con pocas lineas de código \cite{web:streamlit}. Esa es una de las principales razones por las cuales se ha escogido \texttt{Streamlit} para la realización de una web accesible e interactiva escondiendo la complejidad del proyecto. Por medio de esta librería, se pudo desplegar una interfaz donde se ejecuta y visualiza tanto el reconocimiento en tiempo real como el reconocimiento de variables estáticas, además de incluir un apartado muy parecido a \texttt{Teachable Machine} de Google donde el usuario puede entrenar el modelo con su propio conjunto de datos además de poder editar diferentes hiperparámetros como la cantidad de épocas, tamaño del \textit{batch} y \textit{learning rate}
+
+Además de la librería \texttt{Streamlit}, también hemos utilizado un componente externo (realizados por la comunidad):
+
+\begin{itemize}
+\tightlist
+    \item \texttt{streamlit-option-menu}: Permite mostrar un menú de opciones interactivo en la interfaz. En concreto (en nuestra interfaz), proporciona un menú lateral con elementos clicables para navegar entre diferentes interfaces de la aplicación.
+\end{itemize}
+
+\subsubsection{NumPy}
+
+\imagen{NumPy-logo.png}{Logotipo de Numpy \cite{img:logo_numpy}}{0.5}
+
+Es una librería fundamental en Python que proporciona \textit{arrays} multidimensionales. Es ampliamente utilizada en ciencia de datos, \textit{machine learning} y visión por computador por su eficiencia a la hora de manejar grandes cantidades de datos. En este proyecto se emplea para poder procesar las imágenes.
+
+\subsubsection{Keras Tuner}
+
+\imagen{keras-logo.png}{Logotipo de Keras \cite{img:logo_keras}}{0.5}
+
+librería que tiene el objetivo de simplificar en gran medida la tarea de optimización de hiperparámetros en modelos de \textit{deep learning}. \texttt{Keras Tuner} principalmente permite  definir rangos de búsqueda para hiperparámetros y probar automáticamente tantas veces como intentos (\textit{trials}) queramos sin tener que realizar la prueba de hiperpárametros manualmente uno a uno. Clave en nuestro proyecto a la hora de hacer la busqueda profunda por rangos (\texttt{random search}).
+
+\subsubsection{Matplotlib}
+
+\imagen{Matplotlib-logo.png}{Logotipo de Matplotlib \cite{img:logo_matplotlib}}{0.3}
+
+librería especializada en la creación de gráficos y visualizaciones de dos dimensiones. Con esta librería se pueden realizar múltiples tipos de gráficas (líneas, barras, histogramas..). En nuestro proyecto se utiliza para la comparación gráfica entre modelos obteniendo dos gráficas de perdida y precisión por cada modelo entrenado, permitiendo visualizar así fenómenos de sobreajuste.
+
+\subsection{Sckit-learn}
+
+\imagen{scikit-logo.png}{Logotipo de Scikit-learn \cite{img:scikit}}{0.5}
+
+Esta librería la usamos por su función \texttt{confusion matrix} la cual nos ayuda en nuestro proyecto a crear y así poder visualizar la matriz de confusión para ver los resultados de nuestro modelo ya entrenado. Con su función \textit{display} podemos visualizar esa matriz de forma gráfica coloreando según la frecuencia de cada celda en la matriz. 
+Es una de las librerías mas usadas a la hora de realizar matrices de confusión en proyectos de \textit{machine learning}, por eso no se dudó en elegirla.
+
+
+
+\subsubsection{psutil}
+
+\imagen{psutil-logo.png}{Logotipo de psutil \cite{img:logo_psutil}}{0.3}
+
+librería en Python para la monitorización del sistema. Permite obtener información sobre el uso de la CPU, memoria, discos, etc. En nuestro proyecto lo usamos en el tiempo real de \texttt{Streamlit} para  medir el rendimiento y los recursos consumidos por la inferencia en tiempo real y poder compararlo.
+
+Cada una de estas librerías aportó al proyecto funcionalidades claves, desde la captura y preprocesamiento de imágenes, pasando por la construcción y entrenamiento del modelo CNN, hasta la implementación de la interfaz de usuario y la optimización en entornos de bajos recursos. Gracias a todo este ecosistema Python y estas herramientas, fue posible desarrollar el sistema al completo de una manera modular y eficiente consiguiendo gran parte de los objetivos marcados en el apartado dos de esta memoria. Todas las librerías mencionadas son de código abierto cn su respectiva documentación y soporte de la comunidad en diversos foros, lo cual facilitó a la hora de desarrollar el proyecto, Además integrar estas librerías al entorno de la Raspberry Pi (ARM) como en mis propios ordenadores personales utilizados para desarrollar el proyecto (x86) debido a que al realizar \texttt{pip install} el gestor detecta nuestra plataforma y descarga automáticamente el \texttt{wheel} (formato de distribución empaquetada) adecuado garantizando así su compatibilidad.
+
+
+
+
+    
+\subsection{Comparativa breve de alternativas como \textit{PyTorch}, \textit{PyTorch Mobile}...  y su justificación}\label{comparativa-alterbativas-Pytorch}
+
+Es cierto que existen mas alternativas que no solo \texttt{TensorFlow/Keras}, algunas de ellas son muchos mas sencillas de implementar y bastante mas legibles al integrarse en el código. Un ejemplo de ello es \texttt{PyTorch}, también conocido generalmente como \texttt{Torch}, usada actualmente por la comunidad investigadora debido a que muchos desarrolladores consideran muy intuitivo y flexible a la hora de experimentar modelos. De hecho, generalmente se suele resumir esta comparativa como: \texttt{PyTorch} es útil para prototipos e investigación y \texttt{TensorFlow/Keras} para proyectos a nivel de producción e implementaciones masivas \cite{web:keras_vs_torch}. 
+    
+
+Principalmente, se eligió \texttt{TensorFlow/Keras} debido a que uno de los primeros proyectos que se experimentó sobre entrenamiento y construcción de modelos CNN, fue una clasificación entre dos clases (perros y gatos) donde se utilizaba \texttt{TensorFlow/Keras}. Una vez haberlo experimentado por mi mismo, \textbf{la curva de aprendizaje resultó ser muy accesible} gracias a \texttt{Keras} al proveer abstracciones de alto nivel como por ejemplo \textit{model.compile()} (configura el modelo, le dice como aprender) o \textit{model.fit()} (entrena el modelo) que simplifican mucho más el entrenamiento. Además, contamos con gran cantidad de documentación junto a soporte comunitario para resolver dudas. Esto último fue muy importante en la comprensión de esta biblioteca: tutoriales, foros y ejemplo abundantes que fueron muy útiles y dieron confianza suficiente para continuar con el proyecto.
+    
+
+Por otro lado, la integración de \texttt{TensorFlow Lite} inclinó la balanza a favor de nuestro objetivo de introducir el modelo en la Raspberry Pi. Es cierto que \texttt{PyTorch} también cuenta con su propia alternativa optimizada llamada \texttt{PyTorch Mobile}, pero es cierto que la versión optimizada de \textit{TensorFlow} suele ser \textbf{bastante mas rápida y liviana} gracias a su mayor optimización. Además, los tamaños binarios de \texttt{TensorFlow Lite} suelen ser mas pequeños que los binarios de \texttt{PyTorch Mobile} \cite{web:tflite_vs_torchmob}. 
+    
+
+En resumen, aunque \texttt{PyTorch} ofrece una gran flexibilidad y popularidad entre los investigadores, la elección de \texttt{TensorFlow/Keras} estuvo respaldada en todo momento gracias a la facilidad que aporta su API \texttt{Keras}, su amplia documentación y comunidad existente y su optimización a la hora de funcionar en dispositivos sencillos como pueden ser micro-ordenadores accesibles y funcionales que encajan perfectamente con nuestros objetivos.
+
+\section{Herramientas de entrenamiento de modelos inicialmente utilizadas}\label{herramientas-de-entrenamiento-de-modelos utilizada}
+
+\subsection{\textit{Google Teachable Machine}}\label{google-teachable-machine}
+
+\imagen{teachablemachine-logo.png}{Logotipo de Teachable Machine \cite{img:logo_teachablemachine}}{0.2}
+
+Teachable Machine es una herramienta web que posibilita crear modelos de aprendizaje profundo de manera sencilla y accesible para todos los usuarios\cite{web:teachable_machine}.
+
+En los inicios del proyecto, se exploró el uso de \textit{Google Teachable Machine} como un \textbf{modelo a seguir} a la hora de realizar el proyecto y fijarme así en los distintos hiperparámetros que permitía editar y como estos afectaban directamente al entrenamiento. Esta web nos permite además de poder entrenar modelos de imagen estándar a color (224x224px), también nos permite entrenar proyectos de audio con pistas de un segundo de duración además de poder entrenar proyecto de posturas. Para nuestro proyecto, el indicado es el primero.
+
+Dentro de de esta interfaz web podemos agregar cuantas clases necesitemos y cargar imágenes desde comprimidos hasta imágenes crudas. Una vez cargado todo nuestro \textit{dataset} y comprobar que nuestras clases esta correctamente escritas, procedemos a entrenar pudiendo editar el número de épocas, el tamaño del lote (\textit{Batch size}) o la tasa de aprendizaje (\textit{learning rate (lr)}). Una vez entrenado (los entrenamientos tardan debido a que se entrena localmente en tu computadora), se puede exportar tanto a \texttt{TensorFlow}, \texttt{TensorFlow Lite} o \texttt{TF.js}.
+
+Este modelo se utilizó previamente, pero se dejó de usar en el proyecto debido a la similitud de nuestro propio modelo entrenado localmente con nuestra propia red neuronal diseñada específicamente para nuestro conjunto de datos. 
+
+Creo que es totalmente conveniente haberla introducido en este apartado, debido a que nos ha permitido ver si era viable realizar un modelo con tantas clases y que, a la hora de realizar la inferencia, este clasificase correctamente, además de servir de inspiración para poder realizar el entrenamiento en \texttt{Streamlit} además de \textbf{usar sus modelos optimizados dentro de \texttt{Streamlit} en vez de nuestros modelos optimizados} debido a que pesan muchísimo menos además de correr mejor en estos dispositivos computacionalmente limitados.
+
+
+
+\section{\textit{Hardware} empleado}\label{hardare-empleado}
+A lo largo del proyecto, se utilizaron diversos dispositivos \textit{Hardware} tanto para desarrollo como para el entrenamiento y la ejecución final del sistema. A continuación se describen:
+\newline
+\subsection{Portátil ASUS ZenBook 13}
+
+
+\imagen{zenbook-logo.png}{Logotipo de ASUS ZenBook \cite{img:logo_zenbook}}{0.7}
+
+Se trata del \textbf{computador personal} usado sobre todo para desarrollar el proyecto, tanto para el desarrollo de la estructura y código, como para realizar la documentación. Cuenta con:
+
+\begin{itemize}
+\tightlist
+    \item \textbf{Sistema Operativo}: Windows 10 Pro 64 bits.
+    \item \textbf{Procesador}: AMD Ryzen 7 5700U de 8 núcleos y 16 hilos, a una frecuencia base de 1,8GHz, x86.
+    \item \textbf{Memoria}: 16GB (2x8GB) DDR4 en \textit{Dual Channel} a 3733MHz CL36.
+    \item \textbf{Tarjeta Gráfica}: AMD Radeon RX Vega 8 512MB VRAM (gráficos integrados). 
+\end{itemize}
+
+\subsection{Mac Pro 6.1 (finales del 2013)} 
+
+\imagen{MacPro-logo.png}{Logotipo de Mac Pro \cite{img:logo_macpro}}{0.5}
+
+Conocida coloquialmente como "Trashcan", se trata del segundo computador personal de sobremesa pensado \textbf{principalmente para entrenar el modelo en su tarjeta gráfica} aprovechando su memoria y su compatibilidad con macOS \texttt{metal} para acelerar el entrenamiento del modelo. Aunque tiene 2 GPU dedicadas, la versión de metal compatible con este Mac no permite entrenar el modelo con dos tarjetas gráficas a la vez, por lo tanto en entrenamiento solo se pudo acelerar sobre una de ellas.
+
+Para poner en contexto, Esta tarjeta gráfica es similar a una NVIDIA GTX 960, con la diferencia de que la GPU que usa este Mac Pro tiene 2GB más de VRAM que aprovechará nuestro modelo.
+
+\begin{itemize}
+\tightlist
+    \item \textbf{Sistema Operativo}: macOS Monterey (macOS 12).
+    \item \textbf{Procesador}: Intel Xeon E5-2697 V2 de 12 núcleos y 24 hilos, a una frecuencia base de 2,7GHz, x86.
+    \item \textbf{Memoria}: 64GB (4x16GB) DDR3 ECC en \textit{Quad Channel} a 1866MHz CL13.
+    \item \textbf{Tarjeta Gráfica}: Dual AMD D700 12GB VRAM GDDR5 (2x6GB). 
+\end{itemize}
+
+\subsection{Raspberry Pi 5 + cámara (PS3 Eye)}
+
+\imagen{Raspberry-logo.jpg}{Logotipo de Raspberry Pi \cite{img:logo_raspberry}}{0.3}
+
+Es el dispositivo objetivo donde el proyecto según los objetivos, va a correr finalmente. Supone un salto de rendimiento nota ble respecto a a la generación Pi 4, según el documento oficial de Raspberry Pi 5 sobre sus especificaciones, llega a triplicar el rendimiento que su anterior generación \cite{art:raspberry_pi_5}. La Raspberry cuenta con puertos de alta velocidad USB3 donde conectaremos la cámara para proceder a correr \texttt{Streamlit} y empezar el reconocimiento.
+
+\begin{itemize}
+\tightlist
+    \item \textbf{Sistema Operativo}: Raspberry Pi OS 64 bits.
+    \item \textbf{Procesador}: Broadcom BCM2712 de 4 núcleos y 4 hilos a una frecuencia base de 2.4GHz, ARM.
+    \item \textbf{Memoria}: 8GB LPDDR4X.
+    \item \textbf{Tarjeta Gráfica}: VideoCore VII.
+    \item \textbf{Cámara}: PS3 Eye 60FPS 320x240.
+\end{itemize}
+
+
+
+En general, el \textit{hardware} empleado fue suficiente para poder cumplir la mayoría de los objetivos del proyecto. La raspberry demostró ser capaz de manejar el proceso requerido gracias a su mejora con respecto a su anterior generación. En capítulos posteriores veremos las mediciones exactas, pero puedo adelantar que se logró un rendimiento en torno a los $\sim 10$ FPS con los respectivos modelos previamente optimizados con \texttt{TensorFlow Lite}.

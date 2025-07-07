@@ -1,83 +1,83 @@
 \capitulo{3}{Conceptos teóricos}
 
-En aquellos proyectos que necesiten para su comprensión y desarrollo de unos conceptos teóricos de una determinada materia o de un determinado dominio de conocimiento, debe existir un apartado que sintetice dichos conceptos.
+Para poder abordar mas adelante las técnicas y herramientas empleadas en el proyecto y respectivas decisiones, es necesario realizar previamente una explicación teórica sobre los conceptos mas relevantes. 
 
-Algunos conceptos teóricos de \LaTeX{} \footnote{Créditos a los proyectos de Álvaro López Cantero: Configurador de Presupuestos y Roberto Izquierdo Amo: PLQuiz}.
-
-\section{Secciones}
-
-Las secciones se incluyen con el comando section.
-
-\subsection{Subsecciones}
-
-Además de secciones tenemos subsecciones.
-
-\subsubsection{Subsubsecciones}
-
-Y subsecciones. 
+Es este apartado se describe que es el lenguaje de signos ASL, por qué se ha elegido y su importancia. Después, se introduce el problema del reconocimiento de gestos por computador, diferenciando métodos mas primitivos y actuales; finalmente, se explican los fundamentos de las redes neuronales convolucionales (CNN), que es la pieza clave de nuestro proyecto junto a la explicación teórica de las distintas librerías implementadas que nos han ayudado a completar nuestra red y su respectiva representación.
 
 
-\section{Referencias}
+\section{Lenguaje de signos ASL y su importancia}\label{lenguaje-de-signos-ASL-y-su-importancia}
 
-Las referencias se incluyen en el texto usando cite~\cite{wiki:latex}. Para citar webs, artículos o libros~\cite{koza92}, si se desean citar más de uno en el mismo lugar~\cite{bortolot2005, koza92}.
+El lenguaje de signos americano o también denominado \textit{American Sign Language} (ASL) es una lengua de signos natural y completa usando el abecedario ingles americano con 26 letras de la A a la Z. Es el idioma principal de muchas personas sordas o con dificultades de audición en Norteamérica y también es utilizado por múltiples oyentes \cite{web:asl_nidcd}. Aunque es cierto que nunca ha sido declarado idioma oficial de Estados Unidos, pero si tiene protección legal bajo la ley de Estadounidenses con Discapacidades (ADA) la cual impone a entidades la obligación de proveer interpretes acreditados u otros recursos para asegurar una comunicación accesible y fluida \cite{web:ada}.
+
+\imagen{alfabeto_asl.png}{Abecedario ASL}{1}
+
+Dentro del ASL además de gestos que pueden significar frases breves, también existe un objeto manual, el cual vamos a utilizar en el proyecto. Este alfabeto esta compuesto por cada letra del alfabeto inglés y cada letra corresponde a un gesto único realizado con una sola mano \cite{web:asl_nidcd}. Por ejemplo, para representar un nombre o palabras para las que no hay un gesto especifico, se deletrea gesticulando con la mano.
+
+Menos un par de letras que es cierto que implican movimiento como puede ser la "J", o la "Z", la mayoría de las letras se gesticulan con poses estáticas. Fue una característica fundamental para elegir este lenguaje en concreto entre otros, debido a que la mayoría de sus letras permanecen estáticas, menos ese par de letras para las cuales hemos encontrado la solución de mantenerlas estáticas en el final de su recorrido, así podemos realizar un conjunto de datos correcto y estático para poder clasificar correctamente.
+
+En el contexto de este proyecto, centrarnos desde el inicio en el alfabeto ASL es de mucha utilidad, debido a que tenemos 26 clases diferentes que son relativamente fáciles de capturar en una cámara y su reconocimiento automático con el clasificador sienta las bases objetivas del proyecto.
 
 
-\section{Imágenes}
+\section{Reconocimiento de gestos y visión por computador}\label{reconocimiento-de-gestos-y-visión-por-computador}
 
-Se pueden incluir imágenes con los comandos standard de \LaTeX, pero esta plantilla dispone de comandos propios como por ejemplo el siguiente:
+Desde hace décadas, ha habido distintos enfoques a la hora de reconocer gestos de la mano u otros objetos. En términos generales, podemos distinguir entre enfoques clásicos basados en técnicas de visión artificial mas primitivos y tradicionales y otros enfoques actuales basados en el aprendizaje profundo o \textit{deep learning}.
 
-\imagen{escudoInfor}{Autómata para una expresión vacía}{.5}
+\subsection{Técnicas clásicas}\label{tecnicas-clasicas}
+Antes de la aparición y del éxito del \textit{deep learning}, el reconocimiento de gestos se lograba empleando algoritmos como descriptores locales. Un descriptor local  que se solía utilizar anteriormente era el uso de descriptores locales como HOG (\textit{Histogram of Oriented Gradients}) para captar características de la imagen como por ejemplo la textura del objeto, su respectiva orientación, etc. Mas adelante, estas características se clasificaban con un clasificador tradicional como podrían ser un SVM o un HOG-MO entrenado previamente para distinguir entre distintas letras o gestos \cite{art:hog_hog-mo}.
+
+Otras técnicas también podrían ser convertir la imagen al espacio de color HSV con YCrCb pudiendo así aislar la región de piel del fondo usando rangos de colores adecuados. Una vez aislada la mano, se extraen características geométricas de su contorno y postura debido a que la forma del perímetro de la mano, el perfil de como esta orientada la palma y la posición de los dedos, como en el caso de nuestro proyecto, ofrecen información muy valiosa \cite{art:color_piel}.
+
+\subsection{Técnicas actuales basadas en aprendizaje profundo aplicado a imágenes}\label{tecnicas-actuales}
+
+Antes de abordar este apartado, es fundamental saber comprender y diferenciar entre \textit{machine learning} y \textit{deep learning}. Ambas forman parte de la inteligencia artificial y a su vez, el  \textit{deep learning} forma parte de \textit{machine learning}, si están separadas, ¿En que se diferencian exactamente?.
+
+\imagen{deep_learning.png}{Relación entre inteligencia artificial, aprendizaje automático y aprendizaje profundo. \cite{img:deep_learning}}{0.5}
+
+Para poder comprenderlo mejor, voy a explicarlo con un ejemplo practico y general sobre reconocimiento de imágenes: 
+
+Empecemos por el \textit{machine learning}, digamos que le ofrecemos a un clasificador fotos de un millón de gatos y fotos de un millón de perros junto a sus respectivas etiquetas, a medida que va siendo entrenado con todas estas imágenes, va a ir poco a poco reconociendo patrones, por ejemplo, detecta que los gatos tiene las orejas en punta y rígidas, también reconoce otros patrones como los ojos, al igual que con los perros, también aprende patrones como que tiene por lo general las orejas caídas, no tienen bigotes. Por lo tanto, gracias a este ejemplo que acabo de presentar podemos concretar que el \textit{machine learning} va poco a poco reconociendo patrones y poco a poco van clasificando las imágenes. 
+
+El \textit{deep learning} es un tipo de \textit{machine learning} que es multicapa, es decir, continuando con el ejemplo anterior, tenemos varias capas, una capa inicial  una más profunda, otra mas profunda y así sucesivamente, donde cada capa va reconociendo detalles, por ejemplo, una capa se fija en la silueta del gato, otra capa en las orejas, otra capa en el pelaje, la cola y así sucesivamente.
+
+Gracias a este ejemplo podemos concretar que gracias a la estructura multicapa, los modelos de \textit{deep learning} son capaces de aprender representaciones mas abstractas y sobre todo mas precisas, mientras que los métodos de \textit{machine learning} dependen en mayor medida de las características manualmente diseñadas y extraídas. una vez comprendida la diferencia, proseguimos con el apartado.
+
+En estos años, el éxito del \textit{deep learning} ha transformado totalmente el campo de reconocimiento de gestos. Actualmente, se utilizan redes neuronales convolucionales (CNN) entrenadas con grandes conjuntos de datos diferenciados entre clases distintas entre sí. A diferencia de los métodos clásicos, los modelos CNN son capaces de aprender automáticamente características importantes y diferenciales de las imágenes de ese conjunto de datos (forma de los dedos, perímetro, texturas, sombras, etc.) durante el entrenamiento. Esto ha permitido que la precisión sea mucho mas alta en lugar de aprender de descriptores predefinidos debido a que estos modelos CNN son mucho mas robustos a variaciones de iluminación o fondos difíciles de diferenciar.
+
+Es cierto que en este proyecto hemos ayudado al clasificador con la librería \texttt{cvzone} basada en \texttt{MediaPipe Hands} de Google capaz de detectar 21 puntos de los nudillos y 21 aristas entre las distintas falanges de la mano y la propia palma en 3D de una mano a partir de una sola imagen en tiempo real y hasta múltiples manos (para alcanzar el objetivo de nuestro proyecto, solo se ha habilitado una mano a la vez)\cite{web:hand_landmarker}.
+
+\imagen{hand_landmarks.png}{Marcadores de mano proporcionados por \texttt{MediaPipe Hands}. \cite{img:handlandmarker}}{1}
+
+Podemos destacar que nuestro modelo diferencia hora mucho mejor las 26 clases debido a que tiene un patrón mucho mas claro ahora de nuestra mano, por lo tanto, si introducimos un conjunto de datos previamente procesados con \textit{cvzone} y además, añadimos esta librería en nuestro clasificador, el modelo va asociar con mas confianza el gesto que detecta en tiempo real con una de las clases del clasificador, por eso a la hora de realizar la inferencia en tiempo real, muestra un porcentaje tan alto de confianza que, habiendo obviado esta librería, no hubiésemos logrado. Podríamos decir que combinamos lo mejor de los dos mundos, aprovechamos un modelo pre-entrenado que nos otorga la librería \textit{cvzone} para entender la mano (reduciendo la dependencia de otras condiciones externas) y encarga nuestra red principal la tarea de reconocer unicamente el signo.
+
+Podemos concretar que el paradigma actual ha cambiado, los algoritmos basados en aprendizaje profundo dominan el reconocimiento de lenguaje de signos, debido a que son mucho mas precisos y aunque son un poco mas complejos, tienen flexibilidad para aprender e datos, sustituyendo a las técnicas primitivas que vimos anteriormente basadas en reglas fijas.
 
 
 
-\section{Listas de items}
 
-Existen tres posibilidades:
 
-\begin{itemize}
-	\item primer item.
-	\item segundo item.
-\end{itemize}
+\section{Redes neuronales convolucionales (CNN)}\label{redes-neuronales-convolucionales-cnn}
 
-\begin{enumerate}
-	\item primer item.
-	\item segundo item.
-\end{enumerate}
+Las redes neuronales convolucionales, mayormente conocidas como CNN (\textit{Convoluional Neural Networks}), se han adentrado con paso firme en el campo de la inteligencia artificial, mas concretamente en el procesamiento de imágenes por computador. Su capacidad para reconocer patrones visuales y reconocer imágenes con una precisión sorprendente ha permitido avances asombrosos en áreas como la visión artificial, el reconocimiento facial, o en otros campos externos como pueden ser la medicina o la conducción autónoma \cite{web:cnn_ue}.
 
-\begin{description}
-	\item[Primer item] más información sobre el primer item.
-	\item[Segundo item] más información sobre el segundo item.
-\end{description}
-	
-\begin{itemize}
-\item 
-\end{itemize}
+Para poder entender esto claramente tenemos que analizar antes los principios generales que hay dentro del proceso de visión, no el artificial, si no el humano. Volvamos al ejemplo de los perros y los gatos, cuando vemos a un perro por la calle, fácilmente sabemos que es lo que estamos viendo, un animal con cuatro patas, orejas caídas, que tiene ojos, hocico, boca y su cuerpo además de ser alargado tiene pelaje y cola, Esto es porque tú seguramente has escaneado la imagen que te proporcionan tus ojos y has detectado esta presencia de elementos que te dan como resultado, gracias a tu aprendizaje, la presencia de un perro. Pero, ¿Por qué sabemos que hemos detectado estos elementos que son comunes a un perro, por ejemplo, el hocico? Porque hemos detectado una serie de características que conforman un hocico, por ejemplo que suele variar entre negra y marrón, tiene forma ovalada con textura rugosa y dos orificios a los extremos del óvalo que conforma su nariz, y esto lo hemos sabido reconocer porque previamente sabemos reconocer patrones geométricos como círculos, óvalos, cambios de contrastes, tonalidades, texturas, etc. Por lo tanto, si lo analizamos dentro de nuestra cabeza, descubrimos que nuestro cerebro realiza un procesamiento en cascada donde primero se analizar esos elementos básicos y generales donde en capas posteriores estos elementos sencillos se combinan para identificar patrones bastante mas complejos e identificar con confianza los elementos que nos rodean.
 
-\section{Tablas}
+Esta breve ejemplificación es fundamental para poder entender que este tipo de red es el núcleo de la solución de imágenes propuesta. Una red CNN es un tipo de red neuronal que esta diseñada para poder procesar datos con estructura espacial. Esta estructura espacial se puede reconocer como una matriz de pixeles, su resolución nos muestra la cantidad de píxeles que hay en la imagen, por lo tanto, para poder adentrarnos a esta explicación, vamos a observar esta imagen como una matriz (que en realidad esta compuesta por tres matrices debido a que esta compuesta por los tres canales de color en nuestra red (R(Red/Rojo) G(Green/Verde) B(Blue/Azul))).
 
-Igualmente se pueden usar los comandos específicos de \LaTeX o bien usar alguno de los comandos de la plantilla.
+A diferencia de una red neuronal densa tradicional, donde cada neurona de una capa están conectadas a todas las otras neuronas de la capa anterior, en un CNN las primeras capas de una CNN aplican filtros convolucionales también llamados \textit{kernels} que actúan como detectores de patrones. Esos diferentes patrones se combinan en capas mas profundas para detectar características mucho mas complejas como bordes, texturas y formas como pudimos ver en el ejemplo anterior y así sucesivamente realizando y construyendo una jerarquía de características.
 
-\tablaSmall{Herramientas y tecnologías utilizadas en cada parte del proyecto}{l c c c c}{herramientasportipodeuso}
-{ \multicolumn{1}{l}{Herramientas} & App AngularJS & API REST & BD & Memoria \\}{ 
-HTML5 & X & & &\\
-CSS3 & X & & &\\
-BOOTSTRAP & X & & &\\
-JavaScript & X & & &\\
-AngularJS & X & & &\\
-Bower & X & & &\\
-PHP & & X & &\\
-Karma + Jasmine & X & & &\\
-Slim framework & & X & &\\
-Idiorm & & X & &\\
-Composer & & X & &\\
-JSON & X & X & &\\
-PhpStorm & X & X & &\\
-MySQL & & & X &\\
-PhpMyAdmin & & & X &\\
-Git + BitBucket & X & X & X & X\\
-Mik\TeX{} & & & & X\\
-\TeX{}Maker & & & & X\\
-Astah & & & & X\\
-Balsamiq Mockups & X & & &\\
-VersionOne & X & X & X & X\\
-} 
+\imagen{mapa_caracteristicas.png}{Mapa de caracterísicas sobre una imagen aumentada de un perro. \cite{img:mapas_caracteristicas}}{1}
+
+En nuestra red, este modelo puede aprender a diferenciar, por ejemplo,una situación en la que únicamente los dedos indice y corazón están levantados, el modelo puede clasificarlo porque gracias al aprendizaje proporcionado por las capas convolucionales, identifica dicho gesto y lo asocia, si es claro, correctamente con la etiqueta "V". Esto es algo difícil de programar si lo llegamos a realizar con reglas programadas, peor la CNN aprende gracias a todos estos conjuntos de datos anotados con etiquetas (\textit{labels}).
+
+Un modelo típico para clasificación de imagines incluye varias convolucionales con capas de \textit{pooling} (submuestreo), las cuales reducen su resolución de la representación para poder así reducir su dimensionalidad debido a que realmente no necesitamos una imagen tan detallada para realizar la tarea de clasificación. Por ejemplo, no queremos que nuestra red se fije en la textura de la pared o de las manos para poder determinar que un gesto es la letra A, o la letra B. Además estamos optimizando el modelo debido a que estamos reduciendo la dimensionalidad de los datos acelerando así el entrenamiento de nuestra red neuronal. Finalmente, una o mas capas completamente conectadas (densas) toman todas las características extraídas y muestran la decisión de la clasificación (mediante activaciones \textit{softmax} para poder obtener así las probabilidades por clase). Durante el entrenamiento, el modelo ajusta sus \textit{kernels} o filtros y pesos internos minimizando una función de pérdida (el clasificación, entropía cruzada o \textit{crossentropy}) usando gradiente descendente y \textit{backpropagation}. el resultado es un conjunto de filtros que detectan gestos específicos del \textit{dataset}.
+
+En nuestro proyecto incialmente habíamos diseñado una arquitectura CNN a medida para encajar con nuestro \textit{dataset}. El modelo constaba de 4 bloques de convolución + \textit{pooling} + normalización que iban aumentando el numero de filtros (profundidad) progresivamente como si fuese un embudo, con una capa densa intermedia y una capa de salida de 26 neuronas (una por cada letra). Se realizó un \texttt{random search} de 54 \textit{trials}. Además, aplicamos \textit{Batch Normalization} en las capas convolucionales (para acelerar e intentar estabilizar el entrenamiento) y \textit{dropout} en la capa densa (para poder evitar el sobreajuste). En fase de entrenamiento, también se incorporó \textit{Early Stopping} para detener el entrenamiento cuando la precisión de la validación deja de mejorar. Pero es cierto que aún teniendo esta estructura compleja, producía mucho desajuste y mostraba una matriz de confusión desbalanceada con muy baja densidad en la diagonal.
+
+Esta red neuronal se sustituyó por un modelo preentrenado para entrenar nuestro \textit{dataset} sobre el. Específicamente es un \texttt{EfficientNetB0} preentrenado en \texttt{Imagenet}, al que añadimos una cabecera ligera para adaptar el modelo a ASL de 26 clase (\texttt{GlobalAveragePooling2D}, \texttt{BatchNormalization}, \texttt{Dropout}). Este enfoque de transfer learning nos permite aprovechas las características ya aprendidas en millones de imágenes, reduciendo drásticamente el tiempo de entrenamiento y la necesidad de datos masivos en nuestro \textit{dataset}.
+Además, aplicamos \texttt{Data Augmentation} para añadir variedad a los datos junto a un \texttt{EarlyStopping} y \texttt{ReduceLROnPlateau}. Este modelo finalmente converge mejor con muy poco sobreajuste y una diagonal muy marcada indicándonos que la red clasifica realmente bien. 
+
+En definitiva, las CNN nos proporcionan ese "motor de reconocimiento" del sistema. una vez entrenada, se realiza la inferencia que es el proceso de tomar nuestro modelo CNN previamente entrenado, mostrarle datos nuevos para hacer que el propio modelo realice predicciones \cite{web:inferencia_oracle}. En milisegundos produce una predicción de qué letra representa ese gesto que se presenta ante la cámara. La precisión alcanzada por nuestra red neuronal convolucional en clasificación de gestos del alfabeto ASL es muy alta, y como veremos en próximos apartados más detalladamente, nuestro modelo logró aprender de manera bastante fiable diferencias entre estas 26 clases. Esta información valida el uso de las CNN como un gran modelo para el reconocimiento de lenguaje de signos ASL en imágenes.
+
+
+
+

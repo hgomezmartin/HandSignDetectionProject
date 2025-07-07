@@ -2,39 +2,376 @@
 
 \section{Introducción}
 
-Una muestra de cómo podría ser una tabla de casos de uso:
+En este capitulo se detallan todos los Objetivos generales que recogimos al inicio del proyecto para seguir una hoja de ruta en la realización del proyecto además de detallar los requisitos que tiene que cumplir la aplicación.
+
+
+
+\section{Objetivos generales}
+Los objetivos generales que se establecieron al inicio fueron:
+
+\begin{itemize} 
+\tightlist
+    \item Desarrollar un sistema que fuese capaz de traducir cada letra de las 26 que componen el abecedario del lenguaje de signos ASL a texto, centrado en el alfabeto manual, que funcione de manera autónoma y ayude a disminuir la barrera de comunicación entre personas sordas o con trastornos de audición y oyentes.
+
+    \item Demostrar la viabilidad de aplicar técnicas de visión por computador y \textit{deep learning} además de poder optimizarlas en entornos embebidos para el reconocimiento de gestos, alcanzando un rendimiento suficiente para su uso interactivo.
+
+    \item Comparar el rendimiento de distintas configuraciones y modelos dentro del proyecto, en particular evaluar mejoras obtenidas entre distintos modelos, además de evaluar el rendimiento con la respectiva optimización del modelo.
+\end{itemize}
+
+\section{Catálogo de requisitos}
+Una vez hemos interiorizado y comprendido los objetivos del proyecto, tenemos que enumerar los requisitos funcionales y no funcionales de todo el proyecto.
+
+\subsection{Requisitos funcionales}
+Son requisitos que definen que acciones debe poder llevar a cabo con éxito en nuestra aplicación:
+
+\begin{itemize}
+    \item \textbf{RF-1 Detección en tiempo real:} La aplicación debe reconocer signos de lenguaje ASL directamente desde la cámara del dispositivo.
+        \begin{itemize}
+            \item \textbf{RF-1.1 Capturar Vídeo:} Permitir al usuario poder capturar video con la cámara de su dispositivo.
+            \item \textbf{RF-1.2 Iniciar y detener captura de vídeo:} Permitir al usuario iniciar y detener la captura con un botón.
+            \item \textbf{RF-1.3 Ejecutar inferencia:} La aplicación debe ejecutar la inferencia fotograma a fotograma con un modelo \texttt{TFLite} precargado y superponer en pantalla la etiqueta del gesto y su confianza.
+            \item \textbf{RF-1.4 Mostrar FPS:} Permitir al usuario visualizar el número de FPS en todo momento durante la inferencia.
+            \item \textbf{RF-1.5 Mostrar métricas:} Permitir al usuario visualizar en tiempo real métricas de CPU, RAM y temperatura y una gráfica histórica.
+        \end{itemize}
+    \item \textbf{RF-2 Clasificar una imagen estática:} La aplicación debe ser capaz de clasificar una imagen aportada por el usuario.
+        \begin{itemize}
+            \item \textbf{RF-2.1 Admitir formatos generales:} La aplicación debe ser capaz de admitir formatos \textit{.jpg}, \textit{.jpeg} y \textit{.png}.
+            \item \textbf{RF-2.2 Preprocesar la imagen:} La aplicación deb se capaz de pre-procesar la imagen (\textit{resize} 224×224 px, normalización) y obtener la predicción.
+            \item \textbf{RF-2.3 Mostrar resultados:} Permitir al usuario visualizar la deducción y su porcentaje de confianza, además de la previsualización de la imagen y una barra de progreso.
+            \item  \textbf{RF-2.4 Ofrecer descarga:} Permitir al usuario descargar su imagen.
+        \end{itemize}
+    \item \textbf{RF-3 Entrenamiento de modelos personalizados:} Permitir al usuario entrenar su propio modelo desde la web.
+        \begin{itemize}
+            \item \textbf{RF-3.1 Definir número de clases:} Permitir al usuario poder definir la cantidad de clases que necesite para clasificar en un rango entre 2 y 26 y poder subir múltiples imágenes por clase y añadir un nombre a cada clase.
+            \item \textbf{RF-3.2 Configurar hiperparámetros:} Permitir al usuario configurar hiperparámetros como \textit{epochs}, \textit{batch size} y \textit{learning rate} dentro de unos rangos controlados por tres \textit{sliders}.
+            \item \textbf{RF-3.3 Entrenar un modelo CNN:} Permitir al usuario poder entrenar el modelo con su respectivo conjunto de datos.
+            \item \textbf{RF-3.4 Mostrar progreso:} Permitir al usuario saber en todo momento a través de una barra de progreso y gráfica en vivo de \textit{train/val accuracy}.
+            \item \textbf{RF-3.5 Permitir descarga:} Permitir al usuario descargar un comprimido (\textit{.zip}) que contiene su modelo sin optimizar (\textit{.h5}), un modelo ya optimizado a \textit{TFlite} y las etiquetas en un fichero de texto.            
+        \end{itemize}
+
+    \item \textbf{RF-4 Selección y gestión de modelos:} Permitir al usuario poder elegir el modelo de inferencia (FP16/FP32) desde la barra lateral
+
+    \item \textbf{RF-5 Interfaz y navegación:} La aplicación debe ofrecer tres secciones disponibles desde un \textit{sidebar}: \textit{Tiempo real}, \textit{foto} y \textit{entrenamiento}.
+        \begin{itemize}
+            \item \textbf{RF-5.1 Tema frontend común:} Aplicar un tema común al frontend en toda la interfaz.
+        \end{itemize}
+
+    \item \textbf{RF-6 Gestión de datos temporales:} La aplicación debe direccional las imágenes subidas por el usuario a un directorio temporal y eliminarlas al finalizar el proceso.
+\end{itemize}
+
+\subsection{Requisitos no funcionales}
+\begin{itemize}
+    \item \textbf{RNF-1 Usabilidad:} La aplicación debe establecer una interfaz de usuario clara (con distintos iconos, textos claros) y intuitiva para proporcionar una navegación sencilla y rápida. Además, todas las funcionalidades tienen que ser completadas en menos de tres clics.
+    \item \textbf{RNF-2 Rendimiento:} La aplicación debe permitir una latencia en la inferencia lo suficientemente baja como para poder detectar las letras claramente con cierta fluidez.
+    \item \textbf{RNF-3 Portabilidad:} La aplicación debe ser ejecutable sin depender o depender mínimamente de dependencias (tener Python 3.11 o superior instalado) a demás de poder ejecutarlo tanto en equipos Windows/Linux.
+    \item \textbf{RNF-4 Escalabilidad:} La aplicación debe poder recibir soporte para añadir nuevas clases o modelos sin modificar el núcleo de la aplicación.
+    \item \textbf{RNF-5 Fiabilidad:} La aplicación debe liberar explícitamente la cámara ante errores e informar al usuario sobre diferentes errores en las respectivas funcionalidades.
+    \item \textbf{RNF-6 Seguridad y privacidad:} La aplicación debe ejecutarse localmente por el momento. No se envían imágenes ni vídeo a servidores externos manteniendo así la seguridad del usuario.
+    \item \textbf{RNF-7 Mantenibilidad:} La aplicación debe tener un diseño modular con componentes aislados para poder así realizar un mantenimiento mas accesible.
+    \item \textbf{RNF-8 Eficiencia:} La aplicación debe otorgar disponibilidad de un modelo cuantizado FP16 para reducir el consumo y temperatura en dispositivos embebidos.
+\end{itemize}
+
+\section{Especificación de requisitos}
+
 
 % Caso de Uso 1 -> Consultar Experimentos.
 \begin{table}[p]
 	\centering
 	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
 		\toprule
-		\textbf{CU-1}    & \textbf{Ejemplo de caso de uso}\\
+		\textbf{CU-1}    & \textbf{Detección en tiempo real}\\
 		\toprule
 		\textbf{Versión}              & 1.0    \\
-		\textbf{Autor}                & Alumno \\
-		\textbf{Requisitos asociados} & RF-xx, RF-xx \\
-		\textbf{Descripción}          & La descripción del CU \\
-		\textbf{Precondición}         & Precondiciones (podría haber más de una) \\
+		\textbf{Autor}                & Hugo Gómez Martín \\
+		\textbf{Requisitos asociados} & RF-1, RF-1.1, RF-1.2, RF-1.3, RF-1.4, RF-1.5 \\
+		\textbf{Descripción}          & Reconoce gestos ASL en tiempo real a partir de la cámara, mostrando etiqueta, porcentaje de confianza, FPS y métricas del sistema. \\
+		\textbf{Precondición}         & El usuario debe encontrarse en la; permiso de cámara concedido; tener una cámara conectada al equipo \\
 		\textbf{Acciones}             &
 		\begin{enumerate}
 			\def\labelenumi{\arabic{enumi}.}
 			\tightlist
-			\item Pasos del CU
-			\item Pasos del CU (añadir tantos como sean necesarios)
+			\item El usuario pulsa Iniciar cámara.
+			\item EL sistema abre el flujo de vídeo.
+                \item El usuario empieza a realizar gestos ASL.
+                \item El sistema clasifica cada imagen gracias al modelo y se superpone la etiqueta + confianza.
+                \item El sistema muestra FPS y gráficas de CPU/RAM/temperatura.
+                \item El usuario pulsa Detener cámara
 		\end{enumerate}\\
-		\textbf{Postcondición}        & Postcondiciones (podría haber más de una) \\
-		\textbf{Excepciones}          & Excepciones \\
-		\textbf{Importancia}          & Alta o Media o Baja... \\
+		\textbf{Postcondición}        & Vista vuelve al estado inicial y cámara liberada. \\
+		\textbf{Excepciones}          & Cámara no encontrada, se avisa vía \texttt{Streamlit} y aborta. \\
+		\textbf{Importancia}          & Alta \\
 		\bottomrule
 	\end{tabularx}
-	\caption{CU-1 Nombre del caso de uso.}
+	\caption{CU-1 Detección en tiempo real.}
 \end{table}
 
-\section{Objetivos generales}
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-2}    & \textbf{Clasificar imagen estática}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Hugo Gómez Martín \\
+		\textbf{Requisitos asociados} & RF-2, RF-2.1, RF-2.2, RF-2.3, RF-2.4 \\
+		\textbf{Descripción}          & Clasifica una foto subida por el usuario, muestra la predicción y otorga la posibilidad de descargar la imagen. \\
+		\textbf{Precondición}         & El usuario debe encontrarse en la interfaz de clasificación por foto. \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario hace clic o arrastra una imagen con formato válido.
+			\item El sistema redimensiona y preprocesa.
+                \item El sistema realiza la inferencia y se muestra la etiqueta + confianza.
+                \item El usuario puede pulsar la opción de descargar.
+		\end{enumerate}\\
+		\textbf{Postcondición}        & La imagen se libera del guardado temporal \\
+		\textbf{Excepciones}          & Formato no soportado, se avisa vía \texttt{Streamlit}. \\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-2 Clasificar imagen estática.}
+\end{table}
 
-\section{Catálogo de requisitos}
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-3}    & \textbf{Entrenamiento de modelos personalizados}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Hugo Gómez Martín \\
+		\textbf{Requisitos asociados} & RF-3, RF-3.1, RF-3.2, RF-3.3, RF-3.4, RF-3.5 \\
+		\textbf{Descripción}          & Permite al usuario crear y descargar un modelo CNN entrenado con sus imágenes \\
+		\textbf{Precondición}         &  El usuario debe encontrarse en la interfaz de entrenamiento.\\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario puede definir la cantidad de clases que necesite además de poder otorgarlas un nómbre
+			\item El usuario puede añadir imágenes compatibles (\textit{.jpg}, \textit{.jpeg}, \textit{.png}) (CU-4 y CU-5)
+                \item El usuario pulsa el boton entrenar, se inicia y se muestra el progreso (CU-6)
+                \item El usuario puede pulsar Descargr el modelo (CU-7)
+		\end{enumerate}\\
+		\textbf{Postcondición}        & Modelo descargado en un comprimido (\textit{.zip}) y se borran los datos temporales.\\
+		\textbf{Excepciones}          & - \\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-3 Entrenamiento de modelos personalizados.}
+\end{table}
 
-\section{Especificación de requisitos}
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-4}    & \textbf{Cargar imágenes de entrenamiento}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Hugo Gómez Martín \\
+		\textbf{Requisitos asociados} & RF-3.1, RF-6 \\
+		\textbf{Descripción}          & El usuario sube imágenes compatibles y puede añadir o eliminar clases entre un mínimo de 2 y un máximo de 26. \\
+		\textbf{Precondición}         & Clases definidas \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario elige el número de clases que necesita dentro de un rango de 2 a 26
+			\item El usuario inserta las imágenes en cada clase
+                \item El sistema guarda en una carpeta principal y muestra el nombre de la imagen almacenada junto a una aspa para eliminar esa foto si el usuario así lo desea.
+                
+		\end{enumerate}\\
+		\textbf{Postcondición}        & Conjunto de datos actualizado y listo para entrenar \\
+		\textbf{Excepciones}          & Formatos no válidos o tamaño de imagen excesivo \\
+		\textbf{Importancia}          & Alta  \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-4 Cargar imágenes de entrenamiento.}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-5}    & \textbf{Configurar hiperparámetros}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Hugo Gómez Martín \\
+		\textbf{Requisitos asociados} & RF-3.2 \\
+		\textbf{Descripción}          & Ajusta el número de épocas (\textit{epochs}), el tamaño del lote (\textit{batch size}) y la tasa de aprendizaje (\textit{learning rate}) mediante la implementación de \textit{sliders} \\
+		\textbf{Precondición}         & El usuario debe encontrarse en la interfaz de entrenamiento. \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item EL usuario puede establecer estos hiperparámetros dentro del rango del \textit{slider}
+			\item El sistema guarda los valores para el posterior entrenamiento.
+		\end{enumerate}\\
+		\textbf{Postcondición}        & Parámetros definids y listos para aplicarse. \\
+		\textbf{Excepciones}          & - \\
+		\textbf{Importancia}          & Media \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-5 Configurar hiperparámetros.}
+\end{table}
 
 
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-6}    & \textbf{Visualización del progreso del entrenamiento}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Hugo Gómez Martín \\
+		\textbf{Requisitos asociados} & RF-3.4 \\
+		\textbf{Descripción}          & Muestra en tiempo real la barra de progreso y la gráfica \textit{accuracy/loss} \\
+		\textbf{Precondición}         & Entrenamiento en ejecución \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario observa como su modelo va progresando época a época.
+			\item El sistema actualiza la barra y gráfica.
+		\end{enumerate}\\
+		\textbf{Postcondición}        & Entrenamiento completado \\
+		\textbf{Excepciones}          & falta de memoria, entrenamiento abortado \\
+		\textbf{Importancia}          & Media \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-6 Visualización del progreso del entrenamiento.}
+\end{table}
+
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-7}    & \textbf{Descargar modelo entrenado}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Hugo Gómez Martín \\
+		\textbf{Requisitos asociados} & RF-3.5 \\
+		\textbf{Descripción}          & Genera y descarga un comprimido (\textit{.zip}) con \textit{.h5}, \textit{.tflite} y \textit{labels.txt} \\
+		\textbf{Precondición}         & Entrenamiento finalizado con éxito \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario pulsa el botón Descargar modelo.
+			\item El sistema empaqueta los ficheros y se inicia la descarga.
+		\end{enumerate}\\
+		\textbf{Postcondición}        & Comprimido disponible en la carpeta descargas del navegador. \\
+		\textbf{Excepciones}          & - \\
+		\textbf{Importancia}          & Media-Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-7 Descargar modelo entrenado.}
+\end{table}
+
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-8}    & \textbf{Seleccionar modelo de inferencia}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Hugo Gómez Martín \\
+		\textbf{Requisitos asociados} & RF-4 \\
+		\textbf{Descripción}          & Cambiar entre modelo FP32 y FP16 desde el sidebar. \\
+		\textbf{Precondición}         & Modelos presentes en la carpeta\\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario abre el desplegable 
+                \item El usuario elige FP32 o FP16 (mas optimizado)
+			\item El sistema recarga el modelo elegido
+		\end{enumerate}\\
+		\textbf{Postcondición}        & Cambio de modelo activo en los modos de inferencia \\
+		\textbf{Excepciones}          & - \\
+		\textbf{Importancia}          & Media \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-8 Seleccionar modelo de inferencia.}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-9}    & \textbf{Navegar entre secciones}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Hugo Gómez Martín \\
+		\textbf{Requisitos asociados} & RF-5, RF-5.1 \\
+		\textbf{Descripción}          & Muestra un menú de 4 elementos: Inicio, Tiempo real, Foto o Entrenamiento, los cuales se pueden elegir desde la barra lateral. \\
+		\textbf{Precondición}         & Aplicación abierta \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario hace clic en la opción deseada
+                \item El sistema cambia la interfaz
+		\end{enumerate}\\
+		\textbf{Postcondición}        & Nueva interfaz visible y operativa \\
+		\textbf{Excepciones}          & - \\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-9 Navegar entre secciones.}
+\end{table}
+
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-10}    & \textbf{Visualizar métricas del sistema}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Hugo Gómez Martín \\
+		\textbf{Requisitos asociados} & RF-1.5 \\
+		\textbf{Descripción}          & Representa valores y gráficas por pantalla de las métricas en tiempo real de CPU, RAM y temperatura durante la detección en tiempo real. \\
+		\textbf{Precondición}         & CU-1 en ejecución \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario observa los valores de la gráfica pudiendo descargarla en foto o ampliarla si lo desea.
+			\item El sistema actualiza los valores y la gráfica y otorga funcionalidades como ampliarla o descargarla.
+		\end{enumerate}\\
+		\textbf{Postcondición}        & Al detener la cámara,la gráfica desaparece respetando así el estado inicial de la interfaz \\
+		\textbf{Excepciones}          & si no accede al sensor: N/A \\
+		\textbf{Importancia}          & Baja \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-10 Visualizar métricas del sistema.}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-11}    & \textbf{Limpieza de datos temporales}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Hugo Gómez Martín \\
+		\textbf{Requisitos asociados} & RF-6 \\
+		\textbf{Descripción}          & Elimina los archivos subidos por el usuario tras usarlos \\
+		\textbf{Precondición}         & Existen imágenes en el fichero temporal \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario abandona Foto o termina Entrenamiento.
+			\item El sistema ejecuta un borrado del directorio temporal
+		\end{enumerate}\\
+		\textbf{Postcondición}        & Espacio liberado, no quedan datos personales \\
+		\textbf{Excepciones}          & - \\
+		\textbf{Importancia}          & Baja \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-11 Limpieza de datos temporales.}
+\end{table}

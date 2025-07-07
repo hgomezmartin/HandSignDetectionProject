@@ -1,13 +1,243 @@
 \apendice{Plan de Proyecto Software}
 
 \section{Introducción}
+En este capítulo se detallarán aspectos fundamentales del proyectos como son la planificación temporal del proyecto y su receptiva viabilidad tanto económica como legal. 
+
+La planificación temporal se establecerá un listado/cronograma de entregas con un breve resumen en cada una hasta la finalización del proyecto.
+
+El estudio de la viabilidad se desglosará en dos capítulos: \textbf{viabilidad económica} donde se estimarán y detallan distintos costes asociados al proyecto y la \textbf{viabilidad legal}, donde se examinan distintas normativas, leyes aplicables a licencias de software o distintas leyes aplicables.
 
 \section{Planificación temporal}
+El proyecto se ha ido planificando progresivamente mediante distintas entregas/sprints realizados durante prácticamente 5 meses. Cada entrega abarcó tareas concretas como análisis, implementación y prueba, progresando así desde la configuración inicial hasta la entrega del proyecto. 
+
+Todas estas entregas fueron consultadas con los tutores para establecer distintas funcionalidades y concretar fechas de cierre, aunque es cierto que estas entregas podrían alargarse debido al horario estricto y así poder concretar exitosamente estas funcionalidades.
+
+A continuación se muestra la planificación temporal:
+
+
+\subsection{Entregable inicial (9/12/2024 - 26/12/2025)}
+En esta primer a entrega se estableció la principal hoja de ruta del proyecto junto con los diferentes objetivos principales a implementar. Se decidió desarrollar inicialmente como punto de partida todo lo relacionado con la generación del conjunto de datos, desde su respectivo \textit{script}, hasta el guardado de este. Se corrigieron aspectos como cierres inesperados y la aplicación de un menú vía terminal para añadir mas clases o imágenes.
+
+Además se decidieron las clases y límites del conjunto de datos, además de implementar en el proyecto la librería \texttt{cvzone} para poder detectar la mano y recortar automáticamente la región de interés haciendo un \textit{dataset} generalizado.
+
+
+\subsection{Entregable 2 (13/1/2025 - 20/1/2025)}
+Esta entrega fue sumamente importante, debido a que abordamos en la reunión qué tipo de modelo elegir para poder clasificar el reconocimiento de gestos. Finalmente se decidió (Gracias a la experiencia de los tutores) usar para nuestro proyecto una red neuronal convolucional (CNN). 
+
+Desde ese inicio del plazo de esta entrega, se aprendieron fundamentos de redes neuronales convolucionales y \texttt{TensorFlow/Keras} para poderlo aplicar correctamente y crear una red neuronal.
+
+Al principio se implementó un esqueleto de esta red neuronal convolucional la cual fuimos actualizando para poder adaptarla al \textit{dataset} y así hacer que convergiera mejor inicialmente sin ningún tipo de optimización.
+
+
+\subsection{Entregable 3 (3/2/2024 - 16/2/2025)}
+Los distintos objetivos de esta entrega fueron: establecer correctamente el clasificador mejorando la salida por pantalla aportándole más información al usuario, y experimentar con dos nuevos conjuntos de datos públicos extraídos de \texttt{Kaggle} para ver como se comportaba nuestro modelo cuando agregábamos distintos conjuntos de datos.
+
+
+\subsection{Entregable 4 (17/3/2024 - 30/4/2025)}
+Los objetivos de esta entrega fueron: reducir el tamaño del repositorio eliminando principalmente los modelos exportados, y principalmente, ayudar a exportar nuestro modelo a otras computadoras insertando las librerías utilizadas en un fichero de texto llamado \textit{requirements} para poder exportarlo de una manera mas fácil y rápida.
+
+Es cierto que nuestra arquitectura del modelo CNN principal en fases iniciales del proyecto no estaba para nada optimizada y algunos modelos exportados llegaban a pesar bastante como para poder alojarlos en el repositorio, por eso se decidió apartarlos momentáneamente hasta poderlos optimizar.
+
+\subsection{Entregable 5 (7/4/2024 - 20/4/2025)}
+En esta entrega tuvimos como objetivos: optimizar la arquitectura previa de la CNN principal para poder exportar el modelo de una forma mas ligera sin sacrificar mucho rendimiento, y aplicar \textit{Random Search} para encontrar los mejores hipeparámetros para nuestro modelo, además de implementarlo en \textit{Jupyter Notebook} para poder realizar la búsqueda de hipe parámetros con \textit{Colab}. 
+
+Otros objetivos establecidos para este proyecto fueron: implementar las principales gráficas de pérdida/exactitud para ver visualmente la convergencia del modelo y comprobar visualmente el sobreajuste; ampliar el \textit{dataset} con fotos de una segunda persona para implementar nuevas características a las clases además de crear un \textit{script} llamado para desordenar las imágenes para el correcto \textit{split} del modelo. Se añadió la plantilla de documentación en el repositorio principal, pero se documentó totalmente en \texttt{overleaf} donde la agregaremos una vez finalizada al repositorio.
+
+Además, Implementamos el modelo exportado de \texttt{Teachable Machine} para poder compararlo con nuestro modelo además de tener un modelo auxiliar que, a lo largo del proyecto, nos resultará de gran utilidad y eliminamos el \textit{dataset} experimental después de aumentar de tamaño el nuestro.
+
+\subsection{Entregable 6 (28/4/2025 - 11/5/2025)}
+Fueron numerosos objetivos a implementar en este entregable, estos fueron: mejorar la estructura del proyecto, modificar el \textit{Random search} para poder correr en local gracias al descubrimiento de la librería \texttt{TensorFlow Metal}, convertir los modelos a dos versiones más optimizadas cuantizadas con \texttt{TFLite} (FP32 y FP16)
+
+Es cierto que los objetivos más destacados de este entregable fueron: empezar a implementar la exportación a la web, añadiendo primero el clasificador y ver como se comportaba principalmente en la Raspberry Pi con una cámara normal conectada vía USB. Además, se empezó a adaptar nuestro modelo para poder ser compatible con la cámara IA de Raspberry Pi cuantizando el modelo a \textit{INT8} además de modificar diferentes capas del modelo debido a su incompatibilidad con el conversor oficial de Sony.
+
+Finalmente, se corrigieron aspectos del código generales y se eliminaron ficheros que ya no se usaban en el modelo (fueron simplemente experimentales a la hora de aprender nuevas técnicas para mejorar el entrenamiento del modleo), como por ejemplo, el conjunto de datos aumentado \textit{augmented dataset} debido a que se descubrió que se podía hacer un \textit{augmentetion on-the-fly} es decir, mientras se cargan en el pipeline antes del entrenamiento sin ocupar espacio en el disco duro generando un conjunto de datos nuevo. 
+
+
+\subsection{Entregable 7 (19/5/2025 - 1/6/2025)}
+En este entregable se siguieron los siguientes objetivos: reestructurar de una forma clara el proyecto por segunda vez normalizando los nombres de los distintos ficheros Python que componen el proyecto y seguir intentando convertir el modelo convertido a \textit{onnx} para intentar convertir de otra forma al formato que acepta cámara IA de Raspberry pi, pero este intento no produjo los resultados esperados. Por tanto, al no obtener resultados, redirigimos el objetivo inicial de desplegar nuestro modelo en la cámara IA de Raspberry Pi, quedando su implementación inviable por el momento.
+
+
+
+\subsection{Entregable 8 (9/6/2025 - 22/6/2025)}
+Lo siguiente objetivos de la entrega 8 son: simplificar las distintas rutas y variables globales añadiendo un \textit{script} específico para el manejo de estas (config.py), implementación de la web con \textit{Streamlit} inicial con un apartado de clasificador en tiempo real con monitoreo de \textit{hardware} integrado en la interfaz, además de un apartado para la clasificación estática de imágenes y otro para poder entrenarlo en la propia aplicación añadiendo hasta 26 clases sin límite de imágenes donde podemos editar 3 hiperparámetros (\textit{learning rate}, \textit{epochs}, \textit{dropout}). En esta misma interfaz también se puede monitorear lo valores de \textit{loss} y \textit{accuracy} en cada época durante el monitoreo. Además, se le realizó mejoras al \textit{frontend} introduciendo colores oficiales de Raspberry, añadiendo un menú principal, un desplegable para seleccionar el modelo optimizado y un pié de pagina.
+
+Además otros objetivos destacables fueron: añadir scripts automatizados para que el usuario solo se tenga que preocupar para instalar la versión de Python requerida y ejecutar directamente el \textit{script} \textit{.bat} si tu sistema operativo es Windows o ejecutar el \textit{script} en \textit{bash .sh} si tu sistema está basado en Linux (en nuestro proyecto usamos \textit{pi OS}). En el modelo también establecemos una nueva forma de cargar los datos de forma mas optimizada gracias a \textit{Tensorflow Keras}.
+
+
+\subsection{Entregable Final (23/6/2024 - 8/7/2025)}
+Los objetivos finales fueron: mejora del modelo introduciendo un modelo preentrenado (converge mucho mejor que el anterior realizado desde 0) proporcionado por la librería \textit{Keras} llamado \textit{EfficientNetB0}.
+
+Como objetivo también quisimos alojar en la web nuestra aplicación, pero no fue posible debido a que la librería \texttt{OpenCV} a la hora de mostrar la inferencia en tiempo real no funcionaba una vez alojada. por lo que tuvimos que redirigir ese objetivo a realizar un ejecutable (\textit{.exe}) para que al menos el usuario pueda ejecutar la aplicación sin depender de dependencias, únicamente de tener Python 3.11 o superior instalado. Además, se creó un logo para mostrar en la web para darla identidad ademas de agregar este logo a la pestaña y al ejecutable.
+
+Como últimos objetivos fueron comentar todo el código del proyecto, finalizar a tiempo la memoria y anexos, y descartar fichero que se habían quedado obsoletos como los \textit{Jupyter Notebooks}.
+
+
+
+Echando la vista atrás, es cierto que podemos apreciar un cierto desbalance en la carga de trabajo en los diferentes \textit{sprints},  justificado por la necesidad de adaptar las estas diferentes tareas a mi disponibilidad horaria, que ha sido limitada.
+
 
 \section{Estudio de viabilidad}
+En este capitulo de detallará el estudio sobre la viabilidad económica y legal del proyecto.
 
 \subsection{Viabilidad económica}
+es importante revisar la viabilidad económica del proyecto para saber una aproximación de los gastos y beneficios que nos otorgará el proyecto. 
+
+\subsection{Costes}
+Los costes se calcularán de forma anual con una amortización total de unos 5 años.
+
+\subsubsection{costes de personal}
+Supongamos desde un punto de vista empresarial, que hemos sido contratados por una entidad o empresa durante 5 meses, unas para la realización de este proyecto.
+
+Además, contemos con que el programador es junior, por lo tanto, partamos del que su sueldo anual es de 25000€ \cite{web:salario_junior}.
+Se establecen 14 pagas: $25000 / 14 = 1785,71$€, reduciéndolo a media jornada: $1785,71/2 = 892,85$€ mensuales. Si el contrato ha sido anual, el coste del programador junior será de: $892,85 \times 12 = 10714,2$€ brutos. 
+
+Por lo tanto, el coste de personal para la empresa sería de unos: $10714,2$€ brutos.
+
+\subsubsection{Costes de hardware}
+Se ha empleado el siguiente \textit{hardware} en la realización del proyecto:
+\begin{itemize}
+    \item Ordenador Portatil ASUS ZenBook 13: $850$€
+    \item Raspberry Pi 5: $100$€
+    \item Mac Pro 6.1: $500$€
+    \item Teclado + Ratón inalámbrico: $30$€
+    \item Cámara Play Station 3 Eye: $10$€
+\end{itemize}
+
+Este es el coste sobre el precio actual de los productos en el año 2025. Se supone una amortización completa de 5 años, por lo que que coste anual para los distintos productos sería: 
+
+\begin{itemize}
+    \item Ordenador Portatil ASUS ZenBook 13: $850 / 5 = 170$€
+    \item Raspberry Pi 5: $100 / 5 = 20$€
+    \item Mac Pro 6.1: $500 / 5 = 100$€
+    \item Teclado + Ratón inalámbrico: $30 / 5 = 6$€
+    \item Cámara Play Station 3 Eye: $10 / 5 = 2$€
+\end{itemize}
+
+Por lo tanto, el coste anual del hardware ascendería a $298$€
+
+\subsubsection{Coste de sorftware}
+El único coste de software de pago utilizado en este proyecto ha sido el sistema operativo desarrollado por Microsoft:
+\begin{itemize}
+    \item Windows 10 Pro 64 bits: $130$€
+\end{itemize} 
+
+Se sigue suponiendo un amortización de 5 años, por lo que el coste anual para el software sería: 
+\begin{itemize}
+    \item Windows 10 Pro 64 bits: $200 / 5 = 40$€
+\end{itemize} 
+
+Por lo tanto, el coste anual del software sería: $40$€
+
+\subsubsection{Otros costes}
+Además, se tienen que tener en cuenta los distintos gastos que se deben realizar para la entrega del proyecto:
+\begin{itemize}
+    \item 3 Pendrives para la entrega: 30€
+    \item encuadernación de la memoria: 15€
+\end{itemize}
+
+Estos gastes están supuestos a amortizar en un año, por lo que su coste total en un año será de $45$€
+
+con todos estos costes calculados, el coste anual es:
+
+\begin{longtable}{@{} p{7cm} p{4cm} @{}}
+  \toprule
+  \rowcolor{gray!20}
+  Coste & Total \\ 
+  \midrule
+  \endhead
+  Personal  & 10714,2€ \\ 
+  \midrule
+
+  Hardware  & 298€ \\ 
+  \midrule
+
+  Software & 40€ \\ 
+  \midrule
+
+  Otros & 45€ \\ 
+  \midrule
+  \midrule
+
+  \rowcolor{red!20}
+  Total & 11097,2€ \\
+
+  \bottomrule
+  \caption{Coste anual total.}
+\end{longtable}
+
+
 
 \subsection{Viabilidad legal}
+En este capitulo se realizará la investigación las diferentes licencias que establecen las diferentes herramientas y librerías que hemos utilizado durante el proyecto exponiendo su versión y tipo de licencia.
+
+\begin{longtable}{@{} p{5cm} p{3cm}p {5cm} @{}}
+  \toprule
+  \rowcolor{gray!20}
+  Librería & Versión & Licencia \\ 
+  \midrule
+  \endhead
+
+  cvzone & 1.5.6 & MIT \\ 
+ 
+  \midrule
+
+  opencv-python & 4.10.0.84 &  Apache License 2.0 \\ 
+
+  \midrule
+
+  numpy & 1.24.3 & BSD 3-Clause License \\ 
+ 
+  \midrule
+
+  tensorflow &  2.13.1 & Apache License 2.0 \\ 
+
+  \midrule
+
+  tensorflow-metal & 0.8.0 & MIT \\ 
+
+  \midrule
+
+  mediapipe & 0.10.18 & Apache License 2.0 \\ 
+
+  \midrule 
+  
+  keras-tuner & 1.4.7 & Apache License 2.0 \\ 
+
+  \midrule
+
+  matplotlib & 3.9.4 & Python Software Foundation License \\ 
+
+  \midrule
+
+  psutil & 7.0.0 & BSD-3-Clause \\ 
+
+  \midrule
+
+  streamlit & 1.45.1 & Apache License 2.0 \\ 
+
+  \midrule
+
+  streamlit-option-menu & 0.4.0 & MIT License \\ 
+ 
+  \midrule
+
+  pandas & 2.3.0 & BSD 3-Clause License \\ 
+
+  \midrule
+
+  keras & 2.13.1 & Apache License 2.0 \\ 
+
+  \midrule
+
+  scikit-learn & 1.6.0 & BSD 3-Clause License \\ 
+
+
+  \bottomrule
+  \caption{Librerías, versiones y licencias establecidas en el proyecto.}
+\end{longtable}
+
+Todas estas librerías que han sido empleadas en el proyecto se publican bajo licencias de Software libre como MIT, APACHE 2.0 y BSD 3-Clause, por lo que su uso no dispone trabas adicionales al código que hemos desarrollado.
+
+En particular, la licencia MIR permite utilizar, modificar y distribuir el software siempre que se conserve el aviso de copyright y se cite a los autores. Por lo tanto se nos concede esa libertad de publicar nuestro proyecto con la licencia que consideremos adecuada, bastando con incluir menciones requeridas a los creadores de estas librerías que hemos integrado.
 
 

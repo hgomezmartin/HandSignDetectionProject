@@ -17,11 +17,15 @@
 % Links
 \PassOptionsToPackage{hyphens}{url}\usepackage[colorlinks]{hyperref}
 \hypersetup{
-	allcolors = {red}
+	allcolors = {blue}
 }
+
 
 % Ecuaciones
 \usepackage{amsmath}
+
+% Bibliography management
+\usepackage[numbers,sort]{natbib}
 
 % Rutas de fichero / paquete
 \newcommand{\ruta}[1]{{\sffamily #1}}
@@ -358,7 +362,7 @@
 \newcommand{\dni}{71567826Z}
 
 % Datos de portada
-\title{Reconocimiento de Lenguaje de Signos ASL mediante IA: Implementación y Comparativa de Rendimiento CPU vs NPU en Raspberry Pi.}
+\title{Reconocimiento de Lenguaje de Signos ASL mediante IA: Implementación y Comparativa de Rendimiento en Raspberry Pi.}
 \author{\nombre}
 \tutor{Fernando Rivas Navazo}
 \tutors{Daniel Urda Muñoz}
@@ -382,7 +386,7 @@
 
 \noindent Expone:
 
-\noindent Que el alumno D. \nombre, con DNI \dni, ha realizado el Trabajo final de Grado en Ingeniería Informática titulado \textit{Reconocimiento de Lenguaje de Signos ASL mediante IA: Implementación y Comparativa de Rendimiento CPU vs NPU en Raspberry Pi}. 
+\noindent Que el alumno D. \nombre, con DNI \dni, ha realizado el Trabajo final de Grado en Ingeniería Informática titulado \textit{Reconocimiento de Lenguaje de Signos ASL mediante IA: Implementación y Comparativa de Rendimiento en Raspberry Pi.}. 
 
 \noindent Y que dicho trabajo ha sido realizado por el alumno bajo la dirección del que suscribe, en virtud de lo cual se autoriza su presentación y defensa.
 
@@ -421,12 +425,14 @@ D. Urda Muñoz, Daniel
 % Abstract en castellano
 \renewcommand*\abstractname{Resumen}
 \begin{abstract}
-En este primer apartado se hace una \textbf{breve} presentación del tema que se aborda en el proyecto.
+Este proyecto presenta el desarrollo de un sistema de reconocimiento de lenguaje de signos Americano (ASL) que se basa en visión por computador y aprendizaje profundo, desplegado en una Raspberry Pi 5. Para llevarlo a cabo, combinamos la implementación de la detección de manos (\texttt{cvzone}) y la clasificación de gestos con una red neuronal convolucional (CNN) entrenada con \texttt{TensorFlow/Keras} sobre un dataset propio de 26 clases con 1000 imágenes cada una. 
+
+El modelo se prepara para su ejecución embebida con \texttt{TensorFlow Lite} y se integra en una aplicación \textit{Streamlit} que permite tanto la clasificación en tiempo real, la clasificación con una imagen estática y además implementa una interfaz para poder re-entrenar el modelo con nuevos datos.
 \end{abstract}
 
 \renewcommand*\abstractname{Descriptores}
 \begin{abstract}
-Palabras separadas por comas que identifiquen el contenido del proyecto Ej: servidor web, buscador de vuelos, android \ldots
+ASL, reconocimiento de gestos, Raspberry Pi, TensorFlow Lite, Keras, aplicación web, Redes Neuronales Convolucionales
 \end{abstract}
 
 \clearpage
@@ -434,12 +440,14 @@ Palabras separadas por comas que identifiquen el contenido del proyecto Ej: serv
 % Abstract en inglés
 \renewcommand*\abstractname{Abstract}
 \begin{abstract}
-A \textbf{brief} presentation of the topic addressed in the project.
+This project presents the development of an American Sign Lenguage (ASL) recognition system based on computer vision and deep learning, deployed in a Raspberry Pi 5. To achieve this, we combine hand detection using \texttt{cvzone} and gesture classification with a convolutional neural network (CNN) trained with \texttt{TensorFlow/Keras} on a personal dataset of 26 classes with 1000 images each.
+
+The model is prepared for embedded execution with \texttt{tensorFlow Lite} and integrated into a \texttt{Streamlit} application that supports real-time classification, single-image classification, and provides an interface for retraining the model with new data.
 \end{abstract}
 
 \renewcommand*\abstractname{Keywords}
 \begin{abstract}
-keywords separated by commas.
+ASL, gesture recognition, Raspberry Pi, TensorFlow Lite, Keras, web application, convolutional neural networks
 \end{abstract}
 
 \clearpage
@@ -467,7 +475,7 @@ keywords separated by commas.
 \
 
 
-\bibliographystyle{plain}
+\bibliographystyle{plainnat}
 \bibliography{bibliografia}
 
 

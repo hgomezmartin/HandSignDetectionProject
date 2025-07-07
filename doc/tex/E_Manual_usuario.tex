@@ -1,11 +1,131 @@
 \apendice{Documentación de usuario}
 
+
 \section{Introducción}
+En este capítulo se detallarán aspectos relacionados con el correcto funcionamiento de la aplicación, siendo explicada paso a paso con el objetivo de que un usuario inexperto pueda ejecutar y manejar la interfaz de usuario correctamente conociendo todas las funcionalidades permitidas por la aplicación.
 
 \section{Requisitos de usuarios}
+Estos son los requisitos que debe cumplir el usuario para poder ejecutar nuestra aplicación web.
+
+\begin{itemize}
+    \item Un ordenador que cuente con un sistema operativo:
+    \begin{itemize}
+        \item Windows 10 o superior
+        \item Ubuntu 22.04 o superior
+        \item Raspberry Pi OS Bookworm
+    \end{itemize}
+    En resumen, cualquier sistema operativo de 2021 en adelante con 64 bits cumple, versiones anteriores no garantizan compatibilidad con Python 3.11.
+
+    \item Una cámara conectada al dispositivo, la cual no es necesaria si no vas a usar la inferencia en tiempo real.
+    \item Al menos 1GB libre de almacenamiento para guardar los ficheros temporales (modelos + imágenes)
+    \item Un navegador que tenga JavaScript habilitado y soporte a Websockets. la mayoría de los mas conocidos como Opera, Google Chrome, Firefox, Edge lo tienen implementado.
+    
+\end{itemize}
 
 \section{Instalación}
+Para su respectiva información, hay varias formas de poder ejecutarlo.
+\subsection{Ejecutar ejecutable}
+Si estamos en Windows, la foma mas sencilla de poder ejecutar nuestra aplicación una vez Python 3.11 o superior esté instalado en nuestros equipos, es ejecutar el ejecutable \textit{.exe} del apartado de \textit{releases} en nuestro repositorio.
+
+No obstante, si estamos en Linux o la versión ejecutable en Windows nos da problemas, solo nos hará falta bajarnos la version 3.11 de Python:
+
+\begin{itemize}
+    \item \textbf{Microsoft Windows:} Ir a la página oficial de Python e instalar la versión compatible \href{https://www.python.org/downloads/release/python-3117/}{\texttt{3.11.7}}.
+
+    \item \textbf{Pi OS/ Linux:} Instalar con el siguiente comando en consola:
+    \textit{sudo apt install python3.11}
+\end{itemize}
+
+Una vez instalado correctamente, en Línux correríamos como programa \texttt{run\_app.sh} y esperaríamos a que se bajasen todas las dependencias para que la aplicación se inicie automáticamente en nuestro navegador.
+
+En Windows hacemos doble clic en \texttt{run\_app.bat} y esperamos, al igual que en Linux, a que se bajen todas las dependencias, después se ejecutará automáticamente en nuestro navegador.
+
+Si no se llegase a ejecutar automáticamente, copiaríamos la \textit{Local URL} que aparece en la terminal.
+
 
 \section{Manual del usuario}
+
+Una vez ejecutado, procedemos a explicar todos los apartados y funcionalidades de la aplicación para que el usuario pueda manejarse de forma fluida por la interfaz. Todas las explicaciones irán acompañadas por ciertas capturas para que el usuario pueda asociar las explicaciones con la interfaz.
+
+\imagen{pestana.png}{Captura de la pestaña de nuestra web con logo y título}{1}
+
+Recordemos que nuestra aplicación tiene 3 funcionalidades principales, Detectar lenguaje de signos ASL en tiempo real, Clasificación mediante foto estática y Entrenamiento con nuestro propio conjunto de datos. Una vez reordenado todo esto, procedemos a la explicación de toda la interfaz incluyendo su funcionalidad.
+
+\subsection{Página de inicio}
+
+\imagen{pagina_inicio_asl.png}{Captura de la interfaz de inicio de la aplicación}{1}
+
+Principalmente nos encontraríamos con esta interfaz donde se muestra la página de inicio y se describe todo lo que la aplicación es capaz de realizar:
+
+\imagen{explicacion.png}{Captura ampliada de la interfaz de inicio para apreciar mejor la descripción}{1}
+
+
+\subsection{Barra lateral}
+
+La barra lateral como se puede apreciar esta inicialmente desplegada (configurada inicialmente así), si en algún momento nos puede llegar a molestar, se puede esconder gracias a la flecha ubicada en la esquina superior derecha.
+
+\imagen{flecha_barra.png}{Captura de la flecha establecida en la barra lateral}{0.5}
+
+\subsubsection{Menú}
+Gracias a la implementación de este menú, el usuario podrá navegar por la interfaz de la manera mas intuitiva posible. También se establecieron nombres acortados y símbolos para que el usuario detecte rápidamente la funcionalidad de cada opción del menú
+
+\imagen{menu.png}{Captura del menú presente en la barra lateral}{0.7}
+
+\subsubsection{Desplegable Modelo}
+Para la inferencia se aportaron dos modelos que se aplicarán a todas las funcionalidades de la página web, los cuales podemos elegirlos desde un desplegable justo debajo de el menú principal integrado en la barra lateral
+
+\imagen{elegir_modelo.png}{Captura de la interfaz para elegir un modelo (FP32 o FP16)}{0.7}
+
+\subsection{Reconocimiento en tiempo real}
+En esta interfaz se muestra al usuario el titulo confirmando que está en la interfaz correcta además de implementar un botón para empezar la inferencia y una pequeña descripción para animar al usuario a pulsar el botón.
+
+\imagen{tiemporeal_web.png}{Captura de la interfaz inical de Tiempo Real}{1}
+
+Pulsamos iniciar cámara y esta es la respuesta de la web.
+
+\imagen{inferencia_tiemporeal.png}{Captura de la parte de inferencia de la interfaz Tiempo Real}{0.8}
+
+Como podemos observar en la imagen de arriba, podemos observar el botón de Detener cámara para detener la captura y volver al estado inicial. También se puede apreciar que la descripción cambió confirmando así que la cámara está lista para detectar señas. Además también se puede apreciar los FPS en la esquina superior izquierda de la imagen y nuestra mano rodeada por el \textit{bounding box} donde podemos apreciar la mano detectada (automáticamente establecida por la biblioteca \texttt{cvzone}), el número de la clase acertada, en este caso el 1 referente a la letra B, la letra acertada, que en este caso es la letra B y el porcentaje de confianza.
+
+Justo abajo tenemos todas las métricas y un gráfico que se va actualizando cada dos segundos.
+
+\imagen{metricas_tr.png}{Captura de la parte de métricas de la interfaz tiempo real}{1}
+
+Como podemos observar, la temperatura no esta disponible en Windows, pero en la Raspberry sí, por eso sigue implementado la temperatura en las métricas.
+
+\subsection{Reconocimiento por foto}
+En esta interfaz, el objetivo es clasificar una imagen estática de nuestra mano que sea \textit{.jpg}, \textit{.jpeg} o \textit{.png} 
+
+\imagen{foto_web.png}{Captura de la interfaz inicial de Foto}{1}
+
+Si intentamos subir una imagen no compatible saltará el siguiente aviso:
+
+\imagen{no_permitido.png}{Captura de la interfaz inicial foto que no acepta el fichero por incompatibilidad}{1}
+
+una vez subido una foto compatible con el formato requerido, muestra la predicción y el formato descarga por si necesitas descargarla de nuevo.
+
+\imagen{prediccion_foto.png}{Captura de la interfaz foto una vez realizada la inferencia}{1}
+
+\subsection{Entrenamiento}
+En esta interfaz se puede entrenar con nuestro propio conjunto de datos las clases cuales queramos hasta un límite de 26 clases totales además de poder modificar los tres hiperparámetros a través de \textit{sliders}.
+
+\imagen{entrenamiento_web.png}{Captura de la interfaz de entrenamiento inicial}{1}
+
+Por lo tanto, así quedaría una clase después de añadir 1000 imágenes al igual que en nuestro conjunto de datos:
+
+\imagen{clase_imagenes.png}{Captura de la interfaz entrenamiento añadiendo 1000 imágenes}{1}
+
+Vamos a iniciar el entrenamiento (voy a mostrar un entrenamiento \textit{dummy} debido a que estoy con el portátil y clasificar tantas imágenes tardaría bastante, por lo que se han elegido dos clases (perro y gato) con 8 imágenes cada una) solo para demostración.
+
+\imagen{entrenamiento_realizando.png}{Captura de la interfaz de entrenamiento en el proceso de entrenamiento}{1}
+
+Una vez finalizada, podemos descargar el fichero comprimido \texttt{.zip} el cual contiene el modelo normal, optimizado y el fichero de texto con las etiquetas.
+
+\imagen{boton_zip.png}{Captura de la interfaz de entrenamiento finalizada}{0.7}
+
+\imagen{descomprimido.png}{Captura del fichero .zip descomprimido}{1}
+
+
+
 
 

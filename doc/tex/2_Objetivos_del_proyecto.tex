@@ -1,3 +1,55 @@
 \capitulo{2}{Objetivos del proyecto}
 
-Este apartado explica de forma precisa y concisa cuales son los objetivos que se persiguen con la realización del proyecto. Se puede distinguir entre los objetivos marcados por los requisitos del software a construir y los objetivos de carácter técnico que plantea a la hora de llevar a la práctica el proyecto.
+En este apartado se van a listar y describir de forma precisa cuales son los objetivos que se persiguen con la realización del proyecto, los vamos a dividir en tres tipos de objetivos, objetivos generales, técnicos y personales.
+
+\section{Objetivos generales}\label{objetivos-generales}
+Estos tipos de objetivos son las metas principales que definen la razón de ser del proyecto y su resultado esperado desde un punto de vista funcional que han sido esenciales para guiar el desarrollo del proyecto:
+
+\begin{itemize} 
+\tightlist
+    \item Desarrollar un sistema capaz de traducir cada letra del abecedario del lenguaje de signos ASL a texto, centrado en el alfabeto manual, que funcione de manera autónoma y ayude a disminuir la barrera de comunicación entre personas sordas o con trastornos de audición y oyentes.
+
+    \item Demostrar la viabilidad de aplicar técnicas de visión por computador y \textit{deep learning} además de poder optimizarlas en entornos embebidos para el reconocimiento de gestos, alcanzando un rendimiento suficiente para su uso interactivo.
+
+    \item Comparar el rendimiento de distintas configuraciones y modelos dentro del proyecto, en particular evaluar mejoras obtenidas entre distintos modelos, además de evaluar el rendimiento con la respectiva optimización del modelo.
+\end{itemize}
+
+
+\section{Objetivos técnicos}\label{objetivos-técnicos}
+Estos objetivos a diferencia de los generales, son las metas específicas de desarrollo que se plantearon para poder lograr los objetivos generales que se citaron anteriormente. Incluyen hitos concretos, requisitos técnicos y criterios de éxito medibles:
+
+\begin{itemize}
+
+    \item \textbf{Construir un conjunto de datos propio (\textit{dataset})} de imágenes de las 26 letras del alfabeto ASL, con un volumen suficiente de imágenes (26000 imágenes) y con la variabilidad necesaria (diferentes posiciones de la mano o también, gracias al \textit{data augmentation}: iluminación, rotación, capas, etc.) para entrenar un modelo robusto. Se fijó como meta obtener al menos $\sim1000$ imágenes por cada letra, mediante captura semiautomática. 
+
+    \item \textbf{Diseñar, implementar y entrenar con ayuda de una red neuronal convolucional (CNN)} capaz de clasificar las imágenes de 26 clases (de la A a la Z) con tasas altas de precisión en datos de validación.
+
+    \item \textbf{Optimizar el proceso de entrenamiento} mediante validación y ajustes de hiperparámetros, añadiendo técnicas prácticas como \textit{Early Stopping} (parada temprana) y \textit{ReduceLROnPlateau} (ajuste adaptativo del \textit{Learning Rate} o tasa de aprendizaje) para maximizar el entrenamiento del modelo. Adicionalmente, realizar una búsqueda de hiperparámetros mediante un \textit{Random Search} para obtener los mejores y mejorar así el rendimiento del modelo base.
+
+    \item \textbf{Construir un clasificador} donde podremos cargar nuestro modelo ya entrenado y poder así clasificar en tiempo real indicándonos en todo momento cada vez que reconozca la mano que letra reconoce con su respectiva \textit{bounding box} o caja delimitadora que nos muestre que mano se esta reconociendo, la letra acertada y su confianza en porcentaje.
+
+    \item Integrar el modelo entrenado en una \textbf{aplicación ligera con interfaz gráfica en una web} usando \texttt{Streamlit}, que permita al usuario interactuar fácilmente: visualizar en vivo la clasificación de lo que muestra la cámara (con indicación de la letra reconocida y su confianza en porcentaje), cargar imágenes individuales para clasificación y acceder a una funcionalidad extra de re-entreno donde el usuario final pueda añadir hasta 20 clases y su propio conjunto de datos, además de poder editar varios hiperparámetros para que se ajuste completamente a sus necesidades.  
+
+    \item \textbf{Desplegar y ejecutar la aplicación en la Raspberry Pi 5} con el modelo infiriendo mediante \texttt{TensorFlow Lite}, verificando a través de las mediciones de \textit{hardware} que el uso de CPU y memoria es manejable además de añadir un medidor de fotogramas por segundo para comprobar su rendimiento. También, en esta fase, se añadirían  comparaciones de tiempos de inferencia del modelo en  diferentes escenarios junto a comparaciones entre modelos.
+
+    \item \textbf{Documentar} todos los procedimientos y distintos resultados obtenidos de forma rigurosa: mantener \textbf{control de versiones} de todo el proyecto utilizando \texttt{GitHub}, anotar la configuración de los distintos experimentos de entrenamiento realizados (arquitectura, hiperparámetros, tiempos de entrenamiento, métricas obtenidas), y preparar material visual de apoyo (gráficas de aprendizaje del modelo, ejemplos de predicciones, etc.) para el análisis de resultados
+\end{itemize}
+
+\section{Objetivos personales}\label{objetivos-personales}
+Además de los objetivos tanto técnicos como generales, una de las cosas mas importantes de este proyecto es el aprendizaje y el desarrollo personal para el estudiante, propios de un Trabajo Fin de Grado:
+
+\begin{itemize}
+
+    \item \textbf{Ampliar conocimientos sobre el \textit{deep learning}} y adentrarme al campo de la visión por computación pudiendo aplicar los conocimientos adquiridos de la asignatura \textit{Artificial Intelligence and Knowledge Engineering} cursada durante mi estancia Erasmus+ en Breslavia, Polonia y profundizar en nuevas herramientas (\texttt{MediaPipe}, \texttt{TensorFlow/Keras}, etc.), adquiriendo experiencia en la construcción de un sistema completo de inteligencia artificial.  
+
+    \item Desarrollar habilidades de \textbf{ingeniería de software} planificando y organizando junto a mi tutor y co-tutor con cierta envergadura por falta de tiempo conviviendo con otras asignaturas, practicando metodologías de desarrollo (control de versiones, pruebas) y buenas prácticas de codificación en \texttt{Python 3}. 
+
+    \item Mejorar la \textbf{capacidad de investigación} y auto-aprendizaje sabiendo buscar bibliografía y proyectos relacionados además de aprender a entender documentación técnica de nuevas librerías, experimentar con distintas soluciones y tomar decisiones fundamentales sobre qué dirección seguir en base a resultados.
+
+    \item \textbf{Gestionar eficientemente el tiempo y los recursos} durante el desarrollo del proyecto estableciendo un calendario, fijar hitos y sobre todo, saber adaptarse a obstáculos que puedan ocurrir, redirigiendo el trabajo sin perder de vista los objetivos principales.
+
+    \item Contribuir con una solución que tenga un \textbf{impacto social positivo}, es cierto que se trata de un prototipo académico, pero existe la motivación personal de que este proyecto sea un pequeño paso para que las tecnologías asistivas sean más comunes y accesibles para nuestra población.
+\end{itemize}
+
+Todos estos objetivos mencionados marcaron la dirección del proyecto. En los siguientes apartados se mostrará cómo se fueron abordando estos objetivos a lo largo del desarrollo y, en el apartado de conclusiones, se volverá sobre ellos para evaluar el logro de los mismos.
+
