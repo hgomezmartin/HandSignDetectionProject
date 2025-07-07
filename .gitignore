@@ -3,3 +3,6 @@
 .DS_Store
 .venv
 *.egg-info
+doc/*.lof
+doc/*.lot
+src/*.egg-info

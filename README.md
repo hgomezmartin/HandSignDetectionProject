@@ -23,7 +23,7 @@ El modelo se prepara para su ejecución embebida con TensorFlow Lite y se integr
 
 ### Atajos (Ejecuta estos para evitar comandos (Requieren Python 3.11 o superior))
 * **Windows**: `run_app.bat` o `ASL_Detection.exe` en el apartado de **Release**
-* **Linux**  : `run_app.sh`
+* **Linux**  : `run_app.sh` (antes `chmod +x run_app.sh` para conceder permisos de ejecución)
 
 #### 1. Clonar el repositorio
 `$ git clone https://github.com/hgomezmartin/HandSignDetectionProject.git`
